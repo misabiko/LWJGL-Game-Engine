@@ -14,6 +14,7 @@ public class Core {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
+	private int vaoId;
 	
 	public Core() {
 		initGL();
@@ -41,13 +42,29 @@ public class Core {
 		glClearColor(0.0f,0.0f,0.0f,0.0f);
 		
 		glViewport(0, 0, WIDTH, HEIGHT);
+		
+		vaoId = glGenVertexArrays();
 	}
 	
 	private void init() {
+		Cube cube = new Cube(-0.5f,-0.5f,0f,1f,1f,1f);
+		cube.addVertices(vaoId);
 		
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 	
 	private void update() {
+		glClear(GL_COLOR_BUFFER_BIT);
 		
+//		Binding the VAO (with the VBOs in it)
+		glBindVertexArray(vaoId);
+		
+//		Select the index 0 of the VAO (the Cube)
+		glEnableVertexAttribArray(0);
+		
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		
+		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
 	}
 }
