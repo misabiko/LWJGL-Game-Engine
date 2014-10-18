@@ -18,18 +18,18 @@ public class Cube {
 //			Vertices are set in a counterclockwise manner starting from bottom-left
 //			Front Face
 			new Vertex(x,	y,		z,		1f,	0f,	0f,	1f),
-			new Vertex(x+w,	y,		z,		1f,	0f,	0f,	1f),
-			new Vertex(x+w,	y+h,	z,		1f,	0f,	0f,	1f),
-			new Vertex(x,	y+h,	z,		1f,	0f,	0f,	1f),
+			new Vertex(x+w,	y,		z,		0f,	1f,	0f,	1f),
+			new Vertex(x+w,	y+h,	z,		0f,	0f,	1f,	1f),
+			new Vertex(x,	y+h,	z,		1f,	1f,	1f,	1f),
 //			Back Face
-			new Vertex(x,	y,		z+d,	1f,	0f,	0f,	1f),
-			new Vertex(x+w,	y,		z+d,	1f,	0f,	0f,	1f),
-			new Vertex(x+w,	y+h,	z+d,	1f,	0f,	0f,	1f),
-			new Vertex(x,	y+h,	z+d,	1f,	0f,	0f,	1f)
+			new Vertex(x,	y,		z+d,	1f,	1f,	0f,	1f),
+			new Vertex(x+w,	y,		z+d,	0f,	1f,	1f,	1f),
+			new Vertex(x+w,	y+h,	z+d,	1f,	0f,	1f,	1f),
+			new Vertex(x,	y+h,	z+d,	0f,	0f,	0f,	1f)
 		};
 		
 //		TODO Look further into Byte Buffers
-		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*8);
+		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*Vertex.elementCount);
 		for (Vertex v : vertices) {
 			verticesBuffer.put(v.xyzw);
 			verticesBuffer.put(v.rgba);
