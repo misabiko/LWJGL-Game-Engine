@@ -152,13 +152,21 @@ public class Core {
 	}
 	
 	private void cleanUp(Cube c) {
+		glUseProgram(0);
+		glDetachShader(programId,vertShaderId);
+		glDetachShader(programId,fragShaderId);
+		
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDeleteBuffers(vboId);
-		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		
+		glDeleteBuffers(vboId);
+		glDeleteBuffers(vbocId);
 		glDeleteBuffers(vboiId);
+		glDeleteProgram(programId);
+		
 		Display.destroy();
 	}
 }
