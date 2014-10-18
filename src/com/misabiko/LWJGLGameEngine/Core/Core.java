@@ -69,7 +69,7 @@ public class Core {
 			glBindBuffer(GL_ARRAY_BUFFER,vboId);
 				glBufferData(GL_ARRAY_BUFFER,c.verticesBuffer,GL_STATIC_DRAW);
 				
-				glVertexPointer(3,GL_FLOAT,0,0);
+				glVertexAttribPointer(0,3,GL_FLOAT,false,0,0);
 				
 			glBindBuffer(GL_ARRAY_BUFFER,0);
 			
@@ -88,9 +88,9 @@ public class Core {
 		
 		glBindVertexArray(vaoId);
 		
-			glEnableClientState(GL_VERTEX_ARRAY);
+			glEnableVertexAttribArray(0);
 			glBindBuffer(GL_ARRAY_BUFFER,vboId);
-			glVertexPointer(3,GL_FLOAT,0,0);
+			glVertexAttribPointer(0,3,GL_FLOAT,false,0,0);
 			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
 				
@@ -98,7 +98,7 @@ public class Core {
 			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 			glBindBuffer(GL_ARRAY_BUFFER,0);
-			glDisableClientState(GL_VERTEX_ARRAY);
+			glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
 	}
 	
