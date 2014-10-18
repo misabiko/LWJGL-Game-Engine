@@ -23,15 +23,15 @@ public class Cube {
 		float[] vertices = new float[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
-				x,			y,			z,
-				x+width,	y,			z,
-				x+width,	y+height,	z,
-				x,			y+height,	z,
+				x,			y,			z,			1f,
+				x+width,	y,			z,			1f,
+				x+width,	y+height,	z,			1f,
+				x,			y+height,	z,			1f,
 //				Back Face
-				x,			y,			z+depth,
-				x+width,	y,			z+depth,
-				x+width,	y+height,	z+depth,
-				x,			y+height,	z+depth,
+				x,			y,			z+depth,	1f,
+				x+width,	y,			z+depth,	1f,
+				x+width,	y+height,	z+depth,	1f,
+				x,			y+height,	z+depth,	1f,
 		};
 		
 //		TODO Look further into Byte Buffers
