@@ -69,23 +69,4 @@ public class Cube {
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
 	}
-	
-	public void addVertices(int vaoId) {
-//		Bind the Vertex Array Object to vaoId
-		glBindVertexArray(vaoId);
-		
-//		Generate a Vertex Buffer Object
-		int vboId = glGenBuffers();
-		
-//		Bind the VBO and add the indicesBuffer to it
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
-		
-//		Add the VBO in index 0 of the VAO, for every vertices there is 3 floats
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-		
-//		Bind the VBO and the VAO to 0, or null (unbind)
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-		glBindVertexArray(0);
-	}
 }
