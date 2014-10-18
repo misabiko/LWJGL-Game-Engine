@@ -22,9 +22,7 @@ public class Core {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
-	private int vaoId = 0;
-	private int vboId = 0;
-	private int vboiId = 0;
+	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId = 0;
 	private Cube cube;
 	
 	public Core() {
@@ -61,7 +59,7 @@ public class Core {
 	
 	private void init() {
 		cube = new Cube(-0.5f,-0.5f,0.5f,1f,1f,1f);
-		addVertices(cube);
+		setupCube(cube);
 	}
 	
 	private int loadShader(String filename, int type) {
@@ -70,14 +68,16 @@ public class Core {
 		
 //		TODO Look further into BufferedReader and such
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			BufferedReader reader = new BufferedReader(new FileReader("src/com/misabiko/LWJGLGameEngine/Shaders/"+filename));
 			String line;
 			while ((line = reader.readLine()) != null) {
 				shaderSource.append(line).append("\n");
 			}
 			reader.close();
 		} catch (IOException e) {
+			System.out.println("Couldn't read the file");
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		
 		shaderID = glCreateShader(type);
@@ -87,8 +87,20 @@ public class Core {
 		return shaderID;
 	}
 	
-	private void addVertices(Cube c) {
-			
+	private void setupCube(Cube c) {
+		vertShaderId = loadShader("vertex.glsl",GL_VERTEX_SHADER);
+		fragShaderId = loadShader("fragment.glsl",GL_FRAGMENT_SHADER);
+		
+		programId = glCreateProgram();
+		glAttachShader(programId, vertShaderId);
+		glAttachShader(programId, fragShaderId);
+		
+		glBindAttribLocation(programId, 0, "in_Position");
+		glBindAttribLocation(programId, 1, "in_Color");
+		
+		glLinkProgram(programId);
+		glValidateProgram(programId);
+		
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
