@@ -1,4 +1,4 @@
-package com.misabiko.PROGame.Core;
+package com.misabiko.LWJGLGameEngine.Core;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;

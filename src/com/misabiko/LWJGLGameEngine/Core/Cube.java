@@ -1,4 +1,4 @@
-package com.misabiko.PROGame.Core;
+package com.misabiko.LWJGLGameEngine.Core;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
