@@ -30,7 +30,7 @@ public class Core {
 		init();
 		
 		while (!Display.isCloseRequested()) {
-			update(cube);
+			update();
 			
 			Display.sync(60);
 			Display.update();
@@ -126,7 +126,7 @@ public class Core {
 		return shaderID;
 	}
 	
-	private void update(Cube c) {
+	private void update() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		glUseProgram(programId);
@@ -136,11 +136,10 @@ public class Core {
 		glEnableVertexAttribArray(1);
 		
 			glBindBuffer(GL_ARRAY_BUFFER,vboId);
-			glVertexAttribPointer(0,4,GL_FLOAT,false,0,0);
 			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
 				
-				glDrawElements(GL_TRIANGLES, c.indicesCount, GL_UNSIGNED_BYTE, 0);
+				glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
 			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 			glBindBuffer(GL_ARRAY_BUFFER,0);
