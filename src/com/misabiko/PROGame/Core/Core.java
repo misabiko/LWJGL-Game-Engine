@@ -36,13 +36,17 @@ public class Core {
 	}
 	
 	private void initGL() {
+		PixelFormat pixelFormat = new PixelFormat();
+		ContextAttribs contextAttribs = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
+		
 		try {
 			Display.setDisplayMode(new DisplayMode(800,600));
 			Display.setTitle(TITLE);
-			Display.create();
+			Display.create(pixelFormat,contextAttribs);
 			
 		} catch (LWJGLException e) {
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		
 		glClearColor(0.0f,0.0f,0.0f,0.0f);
