@@ -1,5 +1,10 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
@@ -59,7 +64,30 @@ public class Core {
 		addVertices(cube);
 	}
 	
-	public void addVertices(Cube c) {
+	private int loadShader(String filename, int type) {
+		StringBuilder shaderSource = new StringBuilder();
+		int shaderID = 0;
+		
+//		TODO Look further into BufferedReader and such
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				shaderSource.append(line).append("\n");
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		shaderID = glCreateShader(type);
+		glShaderSource(shaderID, shaderSource);
+		glCompileShader(shaderID);
+		
+		return shaderID;
+	}
+	
+	private void addVertices(Cube c) {
 			
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
