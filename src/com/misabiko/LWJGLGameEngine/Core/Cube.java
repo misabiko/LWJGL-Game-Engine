@@ -8,7 +8,7 @@ import org.lwjgl.BufferUtils;
 public class Cube {
 	
 	public float x,y,z,width,height,depth;
-	public FloatBuffer verticesBuffer;
+	public FloatBuffer verticesBuffer, colorsBuffer;
 	public ByteBuffer indicesBuffer;
 	public int indicesCount;
 	
@@ -38,6 +38,22 @@ public class Cube {
 		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
 		verticesBuffer.put(vertices);
 		verticesBuffer.flip();
+		
+		float[] colors = new float[] {
+				1f,	0f,	0f,	1f,
+				0f,	1f,	0f,	1f,
+				0f,	0f,	1f,	1f,
+				1f,	1f,	1f,	1f,
+				
+				1f,	0f,	1f,	1f,
+				1f,	1f,	0f,	1f,
+				0f,	1f,	1f,	1f,
+				0f,	0f,	0f,	1f,
+		};
+		
+		colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
+		colorsBuffer.put(colors);
+		colorsBuffer.flip();
 		
 		byte[] indices = {
 //			Sets the order in which the vertices should be used to produce triangles
