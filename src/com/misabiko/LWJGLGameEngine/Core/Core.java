@@ -59,7 +59,40 @@ public class Core {
 	
 	private void init() {
 		cube = new Cube(-0.5f,-0.5f,0.5f,1f,1f,1f);
-		setupCube(cube);
+
+		vertShaderId = loadShader("vertex.glsl",GL_VERTEX_SHADER);
+		fragShaderId = loadShader("fragment.glsl",GL_FRAGMENT_SHADER);
+		
+		programId = glCreateProgram();
+		glAttachShader(programId, vertShaderId);
+		glAttachShader(programId, fragShaderId);
+		
+		glBindAttribLocation(programId, 0, "in_Position");
+		glBindAttribLocation(programId, 1, "in_Color");
+		
+		glLinkProgram(programId);
+		glValidateProgram(programId);
+		
+		vaoId = glGenVertexArrays();
+		glBindVertexArray(vaoId);
+			
+			vboId = glGenBuffers();
+			
+			glBindBuffer(GL_ARRAY_BUFFER,vboId);
+				glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STATIC_DRAW);
+				
+				glVertexAttribPointer(0,3,GL_FLOAT,false,0,0);
+				
+			glBindBuffer(GL_ARRAY_BUFFER,0);
+			
+			vboiId = glGenBuffers();
+				
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indicesBuffer, GL_STATIC_DRAW);
+			
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+			
+		glBindVertexArray(0);
 	}
 	
 	private int loadShader(String filename, int type) {
@@ -85,42 +118,6 @@ public class Core {
 		glCompileShader(shaderID);
 		
 		return shaderID;
-	}
-	
-	private void setupCube(Cube c) {
-		vertShaderId = loadShader("vertex.glsl",GL_VERTEX_SHADER);
-		fragShaderId = loadShader("fragment.glsl",GL_FRAGMENT_SHADER);
-		
-		programId = glCreateProgram();
-		glAttachShader(programId, vertShaderId);
-		glAttachShader(programId, fragShaderId);
-		
-		glBindAttribLocation(programId, 0, "in_Position");
-		glBindAttribLocation(programId, 1, "in_Color");
-		
-		glLinkProgram(programId);
-		glValidateProgram(programId);
-		
-		vaoId = glGenVertexArrays();
-		glBindVertexArray(vaoId);
-			
-			vboId = glGenBuffers();
-			
-			glBindBuffer(GL_ARRAY_BUFFER,vboId);
-				glBufferData(GL_ARRAY_BUFFER,c.verticesBuffer,GL_STATIC_DRAW);
-				
-				glVertexAttribPointer(0,3,GL_FLOAT,false,0,0);
-				
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			
-			vboiId = glGenBuffers();
-				
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, c.indicesBuffer, GL_STATIC_DRAW);
-			
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-			
-		glBindVertexArray(0);
 	}
 	
 	private void update(Cube c) {
