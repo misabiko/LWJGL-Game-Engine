@@ -22,7 +22,7 @@ public class Core {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
-	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId = 0;
+	private int vaoId, vboId, vbocId, vboiId, vertShaderId, fragShaderId, programId = 0;
 	private Cube cube;
 	
 	public Core() {
@@ -83,6 +83,12 @@ public class Core {
 				
 				glVertexAttribPointer(0,3,GL_FLOAT,false,0,0);
 				
+			vbocId = glGenBuffers();
+			
+			glBindBuffer(GL_ARRAY_BUFFER, vbocId);
+				glBufferData(GL_ARRAY_BUFFER, cube.colorsBuffer, GL_STATIC_DRAW);
+				
+				glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 0);
 			glBindBuffer(GL_ARRAY_BUFFER,0);
 			
 			vboiId = glGenBuffers();
