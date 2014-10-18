@@ -7,49 +7,31 @@ import org.lwjgl.BufferUtils;
 
 public class Cube {
 	
-	public float x,y,z,width,height,depth;
+	public Vertex[] vertices;
 	public FloatBuffer verticesBuffer, colorsBuffer;
 	public ByteBuffer indicesBuffer;
 	public int indicesCount;
 	
 	public Cube(float x, float y, float z, float w, float h, float d) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		width = w;
-		height = h;
-		depth = d;
 		
-		float[] vertices = new float[] {
+		vertices = new Vertex[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
-				x,			y,			z,			1f,
-				x+width,	y,			z,			1f,
-				x+width,	y+height,	z,			1f,
-				x,			y+height,	z,			1f,
+				new Vertex(x,	y,		z,		1f,0f,0f,1f),
+				new Vertex(x+w,	y,		z,		1f,0f,0f,1f),
+				new Vertex(x+w,	y+h,	z,		1f,0f,0f,1f),
+				new Vertex(x,	y+h,	z,		1f,0f,0f,1f),
 //				Back Face
-				x,			y,			z+depth,	1f,
-				x+width,	y,			z+depth,	1f,
-				x+width,	y+height,	z+depth,	1f,
-				x,			y+height,	z+depth,	1f,
+				new Vertex(x,	y,		z+d,	1f,0f,0f,1f),
+				new Vertex(x+w,	y,		z+d,	1f,0f,0f,1f),
+				new Vertex(x+w,	y+h,	z+d,	1f,0f,0f,1f),
+				new Vertex(x,	y+h,	z+d,	1f,0f,0f,1f)
 		};
 		
 //		TODO Look further into Byte Buffers
 		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
 		verticesBuffer.put(vertices);
 		verticesBuffer.flip();
-		
-		float[] colors = new float[] {
-				1f,	0f,	0f,	1f,
-				0f,	1f,	0f,	1f,
-				0f,	0f,	1f,	1f,
-				1f,	1f,	1f,	1f,
-				
-				1f,	0f,	1f,	1f,
-				1f,	1f,	0f,	1f,
-				0f,	1f,	1f,	1f,
-				0f,	0f,	0f,	1f,
-		};
 		
 		colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
 		colorsBuffer.put(colors);
