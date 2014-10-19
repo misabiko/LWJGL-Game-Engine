@@ -28,7 +28,7 @@ import static org.lwjgl.opengl.GL30.*;
 public class Core {
 	
 	private static final int WIDTH = 800;
-	private static final int HEIGHT = 800;
+	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
 	private Matrix4f projectionMatrix;
 	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId, textureSelector = 0;

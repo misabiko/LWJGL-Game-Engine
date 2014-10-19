@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class Cube {
 	
@@ -11,8 +13,21 @@ public class Cube {
 	public FloatBuffer verticesBuffer;
 	public ByteBuffer indicesBuffer;
 	public int indicesCount;
+	public Matrix4f modelMatrix;
+	public Vector3f pos, angle, scale = null;
 	
 	public Cube(float x, float y, float z, float w, float h, float d) {
+		modelMatrix = new Matrix4f();
+		
+		pos = new Vector3f(0,0,0);
+		angle = new Vector3f(0,0,0);
+		scale = new Vector3f(1,1,1);
+		
+		Matrix4f.scale(scale, modelMatrix, modelMatrix);
+		Matrix4f.translate(pos, modelMatrix, modelMatrix);
+		Matrix4f.rotate((float)Math.toRadians(angle.z), new Vector3f(0, 0, 1), modelMatrix, modelMatrix);
+		Matrix4f.rotate((float)Math.toRadians(angle.y), new Vector3f(0, 1, 0), modelMatrix, modelMatrix);
+		Matrix4f.rotate((float)Math.toRadians(angle.x), new Vector3f(1, 0, 0), modelMatrix, modelMatrix);
 		
 		vertices = new TexturedVertex[] {
 //			Vertices are set in a counterclockwise manner starting from bottom-left
