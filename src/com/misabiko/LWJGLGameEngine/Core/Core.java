@@ -103,7 +103,7 @@ public class Core {
 	
 	private void initMatrices() {
 		projectionMatrix = new Matrix4f();
-		float fov = 70f;
+		float fov = 150f;
 		float aspectRatio = (float) WIDTH / (float) HEIGHT;
 		float nearPlane = 0.1f;
 		float farPlane = 100f;
@@ -116,7 +116,7 @@ public class Core {
 		projectionMatrix.m11 = yScale;
 		projectionMatrix.m22 = -((farPlane + nearPlane) / frustumLength);
 		projectionMatrix.m23 = -1;
-		projectionMatrix.m32 = -((4 * nearPlane * farPlane) / frustumLength);
+		projectionMatrix.m32 = -((2 * nearPlane * farPlane) / frustumLength);
 		projectionMatrix.m33 = 0;
 		
 		matrixBuffer = BufferUtils.createFloatBuffer(16);
