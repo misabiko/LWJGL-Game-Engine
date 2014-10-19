@@ -7,14 +7,14 @@ import org.lwjgl.BufferUtils;
 
 public class Cube {
 	
-	public Vertex[] vertices;
+	public TexturedVertex[] vertices;
 	public FloatBuffer verticesBuffer;
 	public ByteBuffer indicesBuffer;
 	public int indicesCount;
 	
 	public Cube(float x, float y, float z, float w, float h, float d) {
 		
-		vertices = new Vertex[] {
+		vertices = new TexturedVertex[] {
 //			Vertices are set in a counterclockwise manner starting from bottom-left
 //			Front Face
 			new TexturedVertex(x,	y,		z,	1f,	0f,	0f,	1f, 	0f, 1f),
@@ -30,8 +30,8 @@ public class Cube {
 		
 //		TODO Look further into Byte Buffers
 		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*TexturedVertex.elementCount);
-		for (Vertex v : vertices) {
-			verticesBuffer.put(((TexturedVertex)v).getElements());
+		for (TexturedVertex v : vertices) {
+			verticesBuffer.put(v.getElements());
 		}
 		verticesBuffer.flip();
 		
