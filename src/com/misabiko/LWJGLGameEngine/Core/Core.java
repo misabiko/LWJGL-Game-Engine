@@ -81,8 +81,8 @@ public class Core {
 			glBindBuffer(GL_ARRAY_BUFFER,vboId);
 				glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STATIC_DRAW);
 				
-				glVertexAttribPointer(0,4,GL_FLOAT,false, Vertex.sizeInBytes,0);
-				glVertexAttribPointer(1, 4,GL_FLOAT, false, Vertex.sizeInBytes, Vertex.sizeInBytes/2);
+				glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
+				glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.bytesPerFloat*Vertex.colorElementCount);
 			glBindBuffer(GL_ARRAY_BUFFER,0);
 			
 			vboiId = glGenBuffers();
