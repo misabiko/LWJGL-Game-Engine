@@ -71,7 +71,7 @@ public class Core {
 			System.exit(-1);
 		}
 		
-		glClearColor(0.0f,0.0f,0.0f,0.0f);
+		glClearColor(0.0f,0.5f,1f,1f);
 		
 		glViewport(0, 0, WIDTH, HEIGHT);
 	}
@@ -221,11 +221,7 @@ public class Core {
 	
 	private void update() {
 		
-		Matrix4f.scale(cube.scale, cube.modelMatrix, cube.modelMatrix);
 		Matrix4f.translate(cube.pos, cube.modelMatrix, cube.modelMatrix);
-		Matrix4f.rotate((float)Math.toRadians(cube.angle.z), new Vector3f(0, 0, 1), cube.modelMatrix, cube.modelMatrix);
-		Matrix4f.rotate((float)Math.toRadians(cube.angle.y), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
-		Matrix4f.rotate((float)Math.toRadians(cube.angle.x), new Vector3f(1, 0, 0), cube.modelMatrix, cube.modelMatrix);
 		
 		glUseProgram(programId);
 		
