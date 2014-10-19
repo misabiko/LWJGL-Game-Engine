@@ -1,18 +1,23 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
+import de.matthiasmann.twl.utils.PNGDecoder;
+import de.matthiasmann.twl.utils.PNGDecoder.Format;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -20,9 +25,10 @@ import static org.lwjgl.opengl.GL30.*;
 public class Core {
 	
 	private static final int WIDTH = 800;
-	private static final int HEIGHT = 600;
+	private static final int HEIGHT = 800;
 	private static final String TITLE = "PROGame";
-	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId = 0;
+	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId, textureSelector = 0;
+	private int[] texIds = new int[2];
 	private Cube cube;
 	
 	public Core() {
@@ -43,7 +49,7 @@ public class Core {
 		ContextAttribs contextAttribs = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
 		
 		try {
-			Display.setDisplayMode(new DisplayMode(800,600));
+			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.setTitle(TITLE);
 			Display.create(pixelFormat,contextAttribs);
 			
@@ -74,6 +80,9 @@ public class Core {
 		glLinkProgram(programId);
 		glValidateProgram(programId);
 		
+		texIds[0] = loadTexture("ash_uvgrid01.png", GL_TEXTURE0);
+		texIds[1] = loadTexture("ash_uvgrid08.png", GL_TEXTURE0);
+		
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
@@ -81,7 +90,7 @@ public class Core {
 			
 			glBindBuffer(GL_ARRAY_BUFFER,vboId);
 				glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STATIC_DRAW);
-				
+				System.out.println(TexturedVertex.stOffset);
 				glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 				glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 				glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
@@ -122,14 +131,74 @@ public class Core {
 		return shaderID;
 	}
 	
+	private int loadTexture(String filename, int textureUnit) {
+		int texWidth = 0;
+		int texHeight = 0;
+		ByteBuffer buffer = null;
+		
+		try {
+			InputStream input = new FileInputStream("src/com/misabiko/LWJGLGameEngine/Resources/Textures/"+filename);
+			
+			PNGDecoder decoder = new PNGDecoder(input);
+			texWidth = decoder.getWidth();
+			texHeight = decoder.getHeight();
+			
+			buffer = ByteBuffer.allocateDirect(4*texWidth*texHeight);
+			decoder.decode(buffer, texWidth*4, Format.RGBA);
+			
+			buffer.flip();
+			
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
+		int texId = glGenTextures();
+		glActiveTexture(textureUnit);
+		glBindTexture(GL_TEXTURE_2D, texId);
+		
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,buffer);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		
+		return texId;
+	}
+	
 	private void update() {
+			
+		while(Keyboard.next()) {
+			if(!Keyboard.getEventKeyState())
+				continue;
+			
+			switch (Keyboard.getEventKey()) {
+				case Keyboard.KEY_1:
+					textureSelector = 0;
+					break;
+				case Keyboard.KEY_2:
+					textureSelector = 1;
+					break;
+			}
+		}
+		
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		glUseProgram(programId);
 		
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texIds[textureSelector]);
+		
 		glBindVertexArray(vaoId);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 		
 			glBindBuffer(GL_ARRAY_BUFFER,vboId);
 			
@@ -142,6 +211,7 @@ public class Core {
 			
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 		glBindVertexArray(0);
 		glUseProgram(0);
 	}
@@ -160,6 +230,8 @@ public class Core {
 		glDeleteBuffers(vboId);
 		glDeleteBuffers(vboiId);
 		glDeleteProgram(programId);
+		glDeleteTextures(texIds[0]);
+		glDeleteTextures(texIds[1]);
 		
 		Display.destroy();
 	}
