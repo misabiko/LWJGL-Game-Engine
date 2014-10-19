@@ -15,6 +15,7 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.util.vector.Matrix4f;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
@@ -29,6 +30,7 @@ public class Core {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 800;
 	private static final String TITLE = "PROGame";
+	private Matrix4f projectionMatrix;
 	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId, textureSelector = 0;
 	private int[] texIds = new int[2];
 	private Cube cube;
@@ -37,6 +39,7 @@ public class Core {
 		initGL();
 		initShaders();
 		initTextures();
+		initMatrices();
 		init();
 		
 		while (!Display.isCloseRequested()) {
@@ -87,6 +90,25 @@ public class Core {
 	private void initTextures() {
 		texIds[0] = loadTexture("ash_uvgrid01.png", GL_TEXTURE0);
 		texIds[1] = loadTexture("ash_uvgrid08.png", GL_TEXTURE0);
+	}
+	
+	private void initMatrices() {
+		projectionMatrix = new Matrix4f();
+		float fov = 60f;
+		float aspectRatio = (float) WIDTH / (float) HEIGHT;
+		float nearPlane = 0.1f;
+		float farPlane = 100f;
+		
+		float yScale = (float) Math.atan(Math.toRadians(fov/2f));
+		float xScale = yScale / aspectRatio;
+		float frustumLength = farPlane - nearPlane;
+		
+		projectionMatrix.m00 = xScale;
+		projectionMatrix.m11 = yScale;
+		projectionMatrix.m22 = -((farPlane + nearPlane) / frustumLength);
+		projectionMatrix.m23 = -1;
+		projectionMatrix.m32 = -((2 * nearPlane * farPlane) / frustumLength);
+		projectionMatrix.m33 = 0;
 	}
 	
 	private void init() {
