@@ -233,15 +233,21 @@ public class Core {
 		}
 			
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			Matrix4f.translate(new Vector3f(0,0,0.01f), camera.viewMatrix, camera.viewMatrix);
+			Matrix4f.translate(new Vector3f(0,0,0.005f), camera.viewMatrix, camera.viewMatrix);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			Matrix4f.translate(new Vector3f(0,0,-0.01f), camera.viewMatrix, camera.viewMatrix);
+			Matrix4f.translate(new Vector3f(0,0,-0.005f), camera.viewMatrix, camera.viewMatrix);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			Matrix4f.translate(new Vector3f(0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
 			Matrix4f.translate(new Vector3f(-0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+			Matrix4f.rotate((float)Math.toRadians(1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+			Matrix4f.rotate((float)Math.toRadians(-1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
 		}
 		
 		Matrix4f.scale(cube.scale, cube.modelMatrix, cube.modelMatrix);
