@@ -18,4 +18,18 @@ public class Vertex {
 	public Vertex(float x, float y, float z) {
 		this(x,y,z,1f,1f,1f,1f);
  	}
+	
+	public float[] getElements() {
+		return new float[] {
+				xyzw[0],
+				xyzw[1],
+				xyzw[2],
+				xyzw[3],
+				
+				rgba[0],
+				rgba[1],
+				rgba[2],
+				rgba[3]
+		};
+	}
 }
