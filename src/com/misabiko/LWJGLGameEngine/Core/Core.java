@@ -47,6 +47,7 @@ public class Core {
 		initMatrices();
 		
 		while (!Display.isCloseRequested()) {
+			input();
 			update();
 			render();
 			
@@ -126,7 +127,9 @@ public class Core {
 	private void init() {
 		cube = new Cube(-0.5f,-0.5f,0.5f,1f,1f,1f);
 		camera = new Camera();
-
+		
+		glEnable(GL_CULL_FACE);
+		
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
@@ -211,44 +214,12 @@ public class Core {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 		
 		return texId;
 	}
 	
 	private void update() {
-			
-		while(Keyboard.next()) {
-			if(!Keyboard.getEventKeyState())
-				continue;
-			
-			switch (Keyboard.getEventKey()) {
-				case Keyboard.KEY_1:
-					textureSelector = 0;
-					break;
-				case Keyboard.KEY_2:
-					textureSelector = 1;
-					break;
-			}
-		}
-			
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			Matrix4f.translate(new Vector3f(0,0,0.005f), camera.viewMatrix, camera.viewMatrix);
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			Matrix4f.translate(new Vector3f(0,0,-0.005f), camera.viewMatrix, camera.viewMatrix);
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			Matrix4f.translate(new Vector3f(0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
-			Matrix4f.translate(new Vector3f(-0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			Matrix4f.rotate((float)Math.toRadians(1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-			Matrix4f.rotate((float)Math.toRadians(-1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
-		}
 		
 		Matrix4f.scale(cube.scale, cube.modelMatrix, cube.modelMatrix);
 		Matrix4f.translate(cube.pos, cube.modelMatrix, cube.modelMatrix);
@@ -294,6 +265,48 @@ public class Core {
 //		}
 //		
 //		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	
+	private void input() {
+		
+		while(Keyboard.next()) {
+			if(!Keyboard.getEventKeyState())
+				continue;
+			
+			switch (Keyboard.getEventKey()) {
+				case Keyboard.KEY_1:
+					textureSelector = 0;
+					break;
+				case Keyboard.KEY_2:
+					textureSelector = 1;
+					break;
+			}
+		}
+			
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			Matrix4f.translate(new Vector3f(0,0,0.005f), camera.viewMatrix, camera.viewMatrix);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
+			Matrix4f.translate(new Vector3f(0,0,-0.005f), camera.viewMatrix, camera.viewMatrix);
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			Matrix4f.translate(new Vector3f(0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
+			Matrix4f.translate(new Vector3f(-0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+			Matrix4f.rotate((float)Math.toRadians(1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+			Matrix4f.rotate((float)Math.toRadians(-1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			Matrix4f.translate(new Vector3f(0,-0.01f,0), camera.viewMatrix, camera.viewMatrix);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
+			Matrix4f.translate(new Vector3f(0,0.01f,0), camera.viewMatrix, camera.viewMatrix);
+		}
+		
 	}
 	
 	private void render() {

@@ -56,14 +56,14 @@ public class Cube {
 			0,4,3,
 			3,4,7,
 //			Right Face
-			1,5,2,
-			5,6,2,
+			1,2,5,
+			5,2,6,
 //			Bottom Face
 			0,1,4,
 			1,5,4,
 //			Top Face
-			3,2,7,
-			2,6,7
+			3,7,2,
+			2,7,6
 		};
 		indicesCount = indices.length;
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
