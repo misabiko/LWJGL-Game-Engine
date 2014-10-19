@@ -35,6 +35,8 @@ public class Core {
 	
 	public Core() {
 		initGL();
+		initShaders();
+		initTextures();
 		init();
 		
 		while (!Display.isCloseRequested()) {
@@ -66,9 +68,7 @@ public class Core {
 		glViewport(0, 0, WIDTH, HEIGHT);
 	}
 	
-	private void init() {
-		cube = new Cube(-0.5f,-0.5f,0.5f,1f,1f,1f);
-
+	private void initShaders() {
 		vertShaderId = loadShader("vertex.glsl",GL_VERTEX_SHADER);
 		fragShaderId = loadShader("fragment.glsl",GL_FRAGMENT_SHADER);
 		
@@ -82,10 +82,16 @@ public class Core {
 		
 		glLinkProgram(programId);
 		glValidateProgram(programId);
-		
+	}
+	
+	private void initTextures() {
 		texIds[0] = loadTexture("ash_uvgrid01.png", GL_TEXTURE0);
 		texIds[1] = loadTexture("ash_uvgrid08.png", GL_TEXTURE0);
-		
+	}
+	
+	private void init() {
+		cube = new Cube(-0.5f,-0.5f,0.5f,1f,1f,1f);
+
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
