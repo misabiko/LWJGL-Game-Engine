@@ -89,8 +89,8 @@ public class Core {
 			vboId = glGenBuffers();
 			
 			glBindBuffer(GL_ARRAY_BUFFER,vboId);
-				glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STATIC_DRAW);
-				System.out.println(TexturedVertex.stOffset);
+				glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STREAM_DRAW);
+				
 				glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 				glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 				glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
@@ -99,7 +99,7 @@ public class Core {
 			vboiId = glGenBuffers();
 				
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indicesBuffer, GL_STATIC_DRAW);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indicesBuffer, GL_STREAM_DRAW);
 			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 			
