@@ -11,6 +11,7 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -223,6 +224,9 @@ public class Core {
 		
 		Matrix4f.translate(camera.vel, camera.viewMatrix, camera.viewMatrix);
 		
+		Matrix4f.rotate(camera.angleY, new Vector3f(0f,1f,0f), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0f,0f), camera.viewMatrix, camera.viewMatrix);
+		
 		glUseProgram(programId);
 		
 			projectionMatrix.store(matrixBuffer);
@@ -283,9 +287,19 @@ public class Core {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			Matrix4f.rotate((float)Math.toRadians(1), new Vector3f(0, 1, 0), camera.viewMatrix, camera.viewMatrix);
+			camera.angleY = camera.speed*2;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-			Matrix4f.rotate((float)Math.toRadians(-1), new Vector3f(0, 1, 0), camera.viewMatrix, camera.viewMatrix);
+			camera.angleY = -camera.speed*2;
+		}else {
+			camera.angleY = 0;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+			camera.angleX = camera.speed*2;
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+			camera.angleX = -camera.speed*2;
+		}else {
+			camera.angleX = 0;
 		}
 		
 	}
