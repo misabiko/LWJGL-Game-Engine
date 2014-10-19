@@ -8,7 +8,7 @@ public class Camera {
 	public Vector3f vel = new Vector3f(0,0,-1);
 	public int angle = 0;
 	public float speed = 0.01f;
-	public Camera() {
-		
+	public Camera(float x, float y, float z) {
+		Matrix4f.translate(new Vector3f(x,y,z), viewMatrix, viewMatrix);
 	}
 }
