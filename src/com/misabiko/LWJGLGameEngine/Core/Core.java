@@ -125,7 +125,7 @@ public class Core {
 	}
 	
 	private void init() {
-		cube = new Cube(-0.5f,-0.5f,0.5f,1f,1f,1f);
+		cube = new Cube(-0.5f,-0.5f,-1f,1f,1f,1f);
 		camera = new Camera();
 		
 		glEnable(GL_CULL_FACE);
@@ -243,28 +243,7 @@ public class Core {
 		
 		glUseProgram(0);
 		
-//		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-//		
-//		for (int i = 0;i<cube.vertices.length; i++) {
-//			TexturedVertex vert = cube.vertices[i];
-//			
-//			float offsetX = (float) (Math.cos(Math.PI * Math.random()) *0.1);
-//			float offsetY = (float) (Math.sin(Math.PI * Math.random()) *0.1);
-//			
-//			vert.xyzw[0] += offsetX;
-//			vert.xyzw[1] += offsetY;
-//			
-//			FloatBuffer vertFloatBuffer = BufferUtils.createFloatBuffer(TexturedVertex.elementCount);
-//			vertFloatBuffer.put(vert.getElements());
-//			vertFloatBuffer.flip();
-//			
-//			glBufferSubData(GL_ARRAY_BUFFER, i*TexturedVertex.bytesPerFloat*TexturedVertex.elementCount, vertFloatBuffer);
-//			
-//			vert.xyzw[0] -= offsetX;
-//			vert.xyzw[1] -= offsetY;
-//		}
-//		
-//		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
 	}
 	
 	private void input() {
