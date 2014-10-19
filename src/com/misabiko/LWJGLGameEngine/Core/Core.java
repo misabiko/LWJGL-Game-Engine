@@ -37,6 +37,7 @@ public class Core {
 		
 		while (!Display.isCloseRequested()) {
 			update();
+			render();
 			
 			Display.sync(60);
 			Display.update();
@@ -188,6 +189,10 @@ public class Core {
 			}
 		}
 		
+		
+	}
+	
+	private void render() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		glUseProgram(programId);
