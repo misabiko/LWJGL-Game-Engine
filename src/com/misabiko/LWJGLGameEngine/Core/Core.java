@@ -120,8 +120,6 @@ public class Core {
 		projectionMatrix.m33 = 0;
 		
 		matrixBuffer = BufferUtils.createFloatBuffer(16);
-		
-		Matrix4f.translate(camera.pos, camera.viewMatrix, camera.viewMatrix);
 	}
 	
 	private void init() {
@@ -223,6 +221,8 @@ public class Core {
 		
 		Matrix4f.translate(cube.pos, cube.modelMatrix, cube.modelMatrix);
 		
+		Matrix4f.translate(camera.vel, camera.viewMatrix, camera.viewMatrix);
+		
 		glUseProgram(programId);
 		
 			projectionMatrix.store(matrixBuffer);
@@ -259,27 +259,33 @@ public class Core {
 		}
 			
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			Matrix4f.translate(new Vector3f(0,0,0.005f), camera.viewMatrix, camera.viewMatrix);
+			camera.vel.z = camera.speed/2;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			Matrix4f.translate(new Vector3f(0,0,-0.005f), camera.viewMatrix, camera.viewMatrix);
+			camera.vel.z = -camera.speed/2;
+		}else {
+			camera.vel.z = 0;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			Matrix4f.translate(new Vector3f(0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
+			camera.vel.x = camera.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
-			Matrix4f.translate(new Vector3f(-0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
+			camera.vel.x = -camera.speed;
+		}else {
+			camera.vel.x = 0;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			camera.vel.y = -camera.speed;
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
+			camera.vel.y = camera.speed;
+		}else {
+			camera.vel.y = 0;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			Matrix4f.rotate((float)Math.toRadians(1), new Vector3f(0, 1, 0), camera.viewMatrix, camera.viewMatrix);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
 			Matrix4f.rotate((float)Math.toRadians(-1), new Vector3f(0, 1, 0), camera.viewMatrix, camera.viewMatrix);
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			Matrix4f.translate(new Vector3f(0,-0.01f,0), camera.viewMatrix, camera.viewMatrix);
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			Matrix4f.translate(new Vector3f(0,0.01f,0), camera.viewMatrix, camera.viewMatrix);
 		}
 		
 	}
