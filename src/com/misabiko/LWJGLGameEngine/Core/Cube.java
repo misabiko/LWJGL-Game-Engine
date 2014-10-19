@@ -23,12 +23,6 @@ public class Cube {
 		angle = new Vector3f(0,0,0);
 		scale = new Vector3f(1,1,1);
 		
-		Matrix4f.scale(scale, modelMatrix, modelMatrix);
-		Matrix4f.translate(pos, modelMatrix, modelMatrix);
-		Matrix4f.rotate((float)Math.toRadians(angle.z), new Vector3f(0, 0, 1), modelMatrix, modelMatrix);
-		Matrix4f.rotate((float)Math.toRadians(angle.y), new Vector3f(0, 1, 0), modelMatrix, modelMatrix);
-		Matrix4f.rotate((float)Math.toRadians(angle.x), new Vector3f(1, 0, 0), modelMatrix, modelMatrix);
-		
 		vertices = new TexturedVertex[] {
 //			Vertices are set in a counterclockwise manner starting from bottom-left
 //			Front Face

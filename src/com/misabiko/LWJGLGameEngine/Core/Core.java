@@ -16,6 +16,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
@@ -31,16 +32,19 @@ public class Core {
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
 	private Matrix4f projectionMatrix;
-	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId, textureSelector = 0;
+	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId, textureSelector,
+		projectionMatrixLocation, viewMatrixLocation, modelMatrixLocation = 0;
+	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
 	private Cube cube;
+	private Camera camera;
 	
 	public Core() {
 		initGL();
+		init();
 		initShaders();
 		initTextures();
 		initMatrices();
-		init();
 		
 		while (!Display.isCloseRequested()) {
 			update();
@@ -85,6 +89,10 @@ public class Core {
 		
 		glLinkProgram(programId);
 		glValidateProgram(programId);
+		
+		projectionMatrixLocation = glGetUniformLocation(programId, "projectionMatrix");
+		viewMatrixLocation = glGetUniformLocation(programId, "viewMatrix");
+		modelMatrixLocation = glGetUniformLocation(programId, "modelMatrix");
 	}
 	
 	private void initTextures() {
@@ -109,10 +117,15 @@ public class Core {
 		projectionMatrix.m23 = -1;
 		projectionMatrix.m32 = -((2 * nearPlane * farPlane) / frustumLength);
 		projectionMatrix.m33 = 0;
+		
+		matrixBuffer = BufferUtils.createFloatBuffer(16);
+		
+		Matrix4f.translate(camera.pos, camera.viewMatrix, camera.viewMatrix);
 	}
 	
 	private void init() {
 		cube = new Cube(-0.5f,-0.5f,0.5f,1f,1f,1f);
+		camera = new Camera();
 
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
@@ -218,29 +231,63 @@ public class Core {
 					break;
 			}
 		}
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		
-		for (int i = 0;i<cube.vertices.length; i++) {
-			TexturedVertex vert = cube.vertices[i];
 			
-			float offsetX = (float) (Math.cos(Math.PI * Math.random()) *0.1);
-			float offsetY = (float) (Math.sin(Math.PI * Math.random()) *0.1);
-			
-			vert.xyzw[0] += offsetX;
-			vert.xyzw[1] += offsetY;
-			
-			FloatBuffer vertFloatBuffer = BufferUtils.createFloatBuffer(TexturedVertex.elementCount);
-			vertFloatBuffer.put(vert.getElements());
-			vertFloatBuffer.flip();
-			
-			glBufferSubData(GL_ARRAY_BUFFER, i*TexturedVertex.bytesPerFloat*TexturedVertex.elementCount, vertFloatBuffer);
-			
-			vert.xyzw[0] -= offsetX;
-			vert.xyzw[1] -= offsetY;
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			Matrix4f.translate(new Vector3f(0,0,0.01f), camera.viewMatrix, camera.viewMatrix);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
+			Matrix4f.translate(new Vector3f(0,0,-0.01f), camera.viewMatrix, camera.viewMatrix);
 		}
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			Matrix4f.translate(new Vector3f(0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
+			Matrix4f.translate(new Vector3f(-0.01f,0,0), camera.viewMatrix, camera.viewMatrix);
+		}
+		
+		Matrix4f.scale(cube.scale, cube.modelMatrix, cube.modelMatrix);
+		Matrix4f.translate(cube.pos, cube.modelMatrix, cube.modelMatrix);
+		Matrix4f.rotate((float)Math.toRadians(cube.angle.z), new Vector3f(0, 0, 1), cube.modelMatrix, cube.modelMatrix);
+		Matrix4f.rotate((float)Math.toRadians(cube.angle.y), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
+		Matrix4f.rotate((float)Math.toRadians(cube.angle.x), new Vector3f(1, 0, 0), cube.modelMatrix, cube.modelMatrix);
+		
+		glUseProgram(programId);
+		
+			projectionMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(projectionMatrixLocation, false, matrixBuffer);
+			
+			camera.viewMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(viewMatrixLocation, false, matrixBuffer);
+			
+			cube.modelMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(modelMatrixLocation, false, matrixBuffer);
+		
+		glUseProgram(0);
+		
+//		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+//		
+//		for (int i = 0;i<cube.vertices.length; i++) {
+//			TexturedVertex vert = cube.vertices[i];
+//			
+//			float offsetX = (float) (Math.cos(Math.PI * Math.random()) *0.1);
+//			float offsetY = (float) (Math.sin(Math.PI * Math.random()) *0.1);
+//			
+//			vert.xyzw[0] += offsetX;
+//			vert.xyzw[1] += offsetY;
+//			
+//			FloatBuffer vertFloatBuffer = BufferUtils.createFloatBuffer(TexturedVertex.elementCount);
+//			vertFloatBuffer.put(vert.getElements());
+//			vertFloatBuffer.flip();
+//			
+//			glBufferSubData(GL_ARRAY_BUFFER, i*TexturedVertex.bytesPerFloat*TexturedVertex.elementCount, vertFloatBuffer);
+//			
+//			vert.xyzw[0] -= offsetX;
+//			vert.xyzw[1] -= offsetY;
+//		}
+//		
+//		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	
 	private void render() {
