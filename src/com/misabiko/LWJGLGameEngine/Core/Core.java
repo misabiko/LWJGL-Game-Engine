@@ -275,9 +275,9 @@ public class Core {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			Matrix4f.rotate((float)Math.toRadians(1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
+			Matrix4f.rotate((float)Math.toRadians(1), new Vector3f(0, 1, 0), camera.viewMatrix, camera.viewMatrix);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-			Matrix4f.rotate((float)Math.toRadians(-1), new Vector3f(0, 1, 0), cube.modelMatrix, cube.modelMatrix);
+			Matrix4f.rotate((float)Math.toRadians(-1), new Vector3f(0, 1, 0), camera.viewMatrix, camera.viewMatrix);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
