@@ -69,6 +69,7 @@ public class Core {
 		
 		glBindAttribLocation(programId, 0, "in_Position");
 		glBindAttribLocation(programId, 1, "in_Color");
+		glBindAttribLocation(programId, 2, "in_TextureCoord");
 		
 		glLinkProgram(programId);
 		glValidateProgram(programId);
