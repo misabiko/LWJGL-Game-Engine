@@ -26,15 +26,35 @@ public class Cube {
 		vertices = new TexturedVertex[] {
 //			Vertices are set in a counterclockwise manner starting from bottom-left
 //			Front Face
-			new TexturedVertex(x,	y,		z+d,	1f,	1f,	0f,	1f, 	0f, 1f),
-			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	1f,	1f, 	1f, 1f),
-			new TexturedVertex(x+w,	y+h,	z+d,	1f,	0f,	1f,	1f, 	1f, 0f),
-			new TexturedVertex(x,	y+h,	z+d,	0f,	0f,	0f,	1f, 	0f, 0f),
+			new TexturedVertex(x,	y,		z+d,	1f,	1f,	0f,	1f, 	0f, 1f),	//0
+			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	1f,	1f, 	1f, 1f),	//1
+			new TexturedVertex(x+w,	y+h,	z+d,	1f,	0f,	1f,	1f, 	1f, 0f),	//2
+			new TexturedVertex(x,	y+h,	z+d,	0f,	0f,	0f,	1f, 	0f, 0f),	//3
 //			Back Face
-			new TexturedVertex(x,	y,		z,	1f,	0f,	0f,	1f, 	1f, 1f),
-			new TexturedVertex(x+w,	y,		z,	0f,	1f,	0f,	1f, 	0f, 1f),
-			new TexturedVertex(x+w,	y+h,	z,	0f,	0f,	1f,	1f, 	0f, 0f),
-			new TexturedVertex(x,	y+h,	z,	1f,	1f,	1f,	1f, 	1f, 0f)
+			new TexturedVertex(x,	y,		z,		1f,	0f,	0f,	1f, 	1f, 1f),	//4
+			new TexturedVertex(x+w,	y,		z,		0f,	1f,	0f,	1f, 	0f, 1f),	//5
+			new TexturedVertex(x+w,	y+h,	z,		0f,	0f,	1f,	1f, 	0f, 0f),	//6
+			new TexturedVertex(x,	y+h,	z,		1f,	1f,	1f,	1f, 	1f, 0f),	//7
+//			Left Face
+			new TexturedVertex(x,	y,		z,		1f,	1f,	0f,	1f, 	0f, 1f),	//8
+			new TexturedVertex(x,	y,		z+d,	0f,	1f,	1f,	1f, 	1f, 1f),	//9
+			new TexturedVertex(x,	y+h,	z+d,	1f,	0f,	1f,	1f, 	1f, 0f),	//10
+			new TexturedVertex(x,	y+h,	z,		0f,	0f,	0f,	1f, 	0f, 0f),	//11
+//			Right Face
+			new TexturedVertex(x+w,	y,		z+d,	1f,	1f,	0f,	1f, 	0f, 1f),	//12
+			new TexturedVertex(x+w,	y,		z,		0f,	1f,	1f,	1f, 	1f, 1f),	//13
+			new TexturedVertex(x+w,	y+h,	z,		1f,	0f,	1f,	1f, 	1f, 0f),	//14
+			new TexturedVertex(x+w,	y+h,	z+d,	0f,	0f,	0f,	1f, 	0f, 0f),	//15
+//			Top Face
+			new TexturedVertex(x,	y+h,	z,		1f,	1f,	0f,	1f, 	0f, 0f),	//16
+			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	1f,	1f, 	1f, 0f),	//17
+			new TexturedVertex(x+w,	y+h,	z+d,	1f,	0f,	1f,	1f, 	1f, 1f),	//18
+			new TexturedVertex(x,	y+h,	z+d,	0f,	0f,	0f,	1f, 	0f, 1f),	//19
+//			Bottom Face
+			new TexturedVertex(x,	y,		z,		1f,	1f,	0f,	1f, 	0f, 1f),	//20
+			new TexturedVertex(x+w,	y,		z,		0f,	1f,	1f,	1f, 	1f, 1f),	//21
+			new TexturedVertex(x+w,	y,		z+d,	1f,	0f,	1f,	1f, 	1f, 0f),	//22
+			new TexturedVertex(x,	y,		z+d,	0f,	0f,	0f,	1f, 	0f, 0f)		//23
 		};
 		
 //		TODO Look further into Byte Buffers
@@ -53,17 +73,17 @@ public class Cube {
 			4,7,5,
 			5,7,6,
 //			Left Face
-			0,3,4,
-			3,7,4,
+			8,9,11,
+			9,10,11,
 //			Right Face
-			1,5,2,
-			5,6,2,
-//			Bottom Face
-			0,4,1,
-			1,4,5,
+			12,13,15,
+			13,14,15,
 //			Top Face
-			3,2,7,
-			2,6,7
+			16,19,17,
+			19,18,17,
+//			Bottom Face
+			20,21,23,
+			21,22,23
 		};
 		indicesCount = indices.length;
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
