@@ -6,7 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.ContextAttribs;
@@ -189,7 +191,28 @@ public class Core {
 			}
 		}
 		
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		
+		for (int i = 0;i<cube.vertices.length; i++) {
+			TexturedVertex vert = cube.vertices[i];
+			
+			float offsetX = (float) (Math.cos(Math.PI * Math.random()) *0.1);
+			float offsetY = (float) (Math.sin(Math.PI * Math.random()) *0.1);
+			
+			vert.xyzw[0] += offsetX;
+			vert.xyzw[1] += offsetY;
+			
+			FloatBuffer vertFloatBuffer = BufferUtils.createFloatBuffer(TexturedVertex.elementCount);
+			vertFloatBuffer.put(vert.getElements());
+			vertFloatBuffer.flip();
+			
+			glBufferSubData(GL_ARRAY_BUFFER, i*TexturedVertex.bytesPerFloat*TexturedVertex.elementCount, vertFloatBuffer);
+			
+			vert.xyzw[0] -= offsetX;
+			vert.xyzw[1] -= offsetY;
+		}
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	
 	private void render() {
