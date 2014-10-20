@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import java.awt.Color;
+
 public class TexturedVertex extends Vertex{
 	
 	public float[] st;
@@ -10,6 +12,11 @@ public class TexturedVertex extends Vertex{
 	
 	public TexturedVertex(float x, float y, float z, float r, float g, float b, float a, float s, float t) {
 		super(x, y, z, r, g, b, a);
+		st = new float[] {s,t};
+	}
+	
+	public TexturedVertex(float x, float y, float z, Color color, float s, float t) {
+		super(x, y, z, color);
 		st = new float[] {s,t};
 	}
 	

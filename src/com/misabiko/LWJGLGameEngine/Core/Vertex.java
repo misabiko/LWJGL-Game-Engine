@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import java.awt.Color;
+
 public class Vertex {
 	public float[] xyzw,rgba;
 	public static final int posElementCount = 4;
@@ -13,6 +15,11 @@ public class Vertex {
 	public Vertex(float x, float y, float z, float r, float g, float b, float a) {
 		xyzw = new float[] {x,y,z,1f};
 		rgba = new float[] {r,g,b,a};
+ 	}
+	
+	public Vertex(float x, float y, float z, Color color) {
+		xyzw = new float[] {x,y,z,1f};
+		rgba = new float[] {color.getRed()/255,color.getGreen()/255,color.getBlue()/255,color.getAlpha()/255};
  	}
 	
 	public Vertex(float x, float y, float z) {

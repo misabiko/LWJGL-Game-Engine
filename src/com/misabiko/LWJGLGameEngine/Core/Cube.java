@@ -1,5 +1,6 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
@@ -16,8 +17,9 @@ public class Cube {
 	public float speed = 0.05f;
 	public Matrix4f modelMatrix;
 	public Vector3f pos;
+	private static Color defaultColor = Color.WHITE;
 	
-	public Cube(float x, float y, float z, float w, float h, float d) {
+	public Cube(float x, float y, float z, float w, float h, float d, Color[] colors) {
 		modelMatrix = new Matrix4f();
 		
 		pos = new Vector3f(x,y,z);
@@ -25,35 +27,35 @@ public class Cube {
 		vertices = new TexturedVertex[] {
 //			Vertices are set in a counterclockwise manner starting from bottom-left
 //			Front Face
-			new TexturedVertex(x,	y,		z+d,	0f,	1f,	0f,	1f, 	0f, 1f),	//0
-			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	0f,	1f, 	1f, 1f),	//1
-			new TexturedVertex(x+w,	y+h,	z+d,	0f, 1f,	0f,	1f, 	1f, 0f),	//2
-			new TexturedVertex(x,	y+h,	z+d,	0f,	1f,	0f,	1f, 	0f, 0f),	//3
+			new TexturedVertex(x,	y,		z+d,	colors[0], 	0f, 1f),	//0
+			new TexturedVertex(x+w,	y,		z+d,	colors[0], 	1f, 1f),	//1
+			new TexturedVertex(x+w,	y+h,	z+d,	colors[0], 	1f, 0f),	//2
+			new TexturedVertex(x,	y+h,	z+d,	colors[0], 	0f, 0f),	//3
 //			Back Face
-			new TexturedVertex(x,	y,		z,		0f,	1f,	0f,	1f, 	1f, 1f),	//4
-			new TexturedVertex(x+w,	y,		z,		0f,	1f,	0f,	1f, 	0f, 1f),	//5
-			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	0f,	1f, 	0f, 0f),	//6
-			new TexturedVertex(x,	y+h,	z,		0f,	1f,	0f,	1f, 	1f, 0f),	//7
+			new TexturedVertex(x,	y,		z,		colors[1], 	1f, 1f),	//4
+			new TexturedVertex(x+w,	y,		z,		colors[1], 	0f, 1f),	//5
+			new TexturedVertex(x+w,	y+h,	z,		colors[1], 	0f, 0f),	//6
+			new TexturedVertex(x,	y+h,	z,		colors[1], 	1f, 0f),	//7
 //			Left Face
-			new TexturedVertex(x,	y,		z,		0f,	1f,	0f,	1f, 	0f, 1f),	//8
-			new TexturedVertex(x,	y,		z+d,	0f,	1f,	0f,	1f, 	1f, 1f),	//9
-			new TexturedVertex(x,	y+h,	z+d,	0f,	1f,	0f,	1f, 	1f, 0f),	//10
-			new TexturedVertex(x,	y+h,	z,		0f,	1f,	0f,	1f, 	0f, 0f),	//11
+			new TexturedVertex(x,	y,		z,		colors[2], 	0f, 1f),	//8
+			new TexturedVertex(x,	y,		z+d,	colors[2], 	1f, 1f),	//9
+			new TexturedVertex(x,	y+h,	z+d,	colors[2], 	1f, 0f),	//10
+			new TexturedVertex(x,	y+h,	z,		colors[2], 	0f, 0f),	//11
 //			Right Face
-			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	0f,	1f, 	0f, 1f),	//12
-			new TexturedVertex(x+w,	y,		z,		0f,	1f,	0f,	1f, 	1f, 1f),	//13
-			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	0f,	1f, 	1f, 0f),	//14
-			new TexturedVertex(x+w,	y+h,	z+d,	0f,	1f,	0f,	1f, 	0f, 0f),	//15
+			new TexturedVertex(x+w,	y,		z+d,	colors[3], 	0f, 1f),	//12
+			new TexturedVertex(x+w,	y,		z,		colors[3], 	1f, 1f),	//13
+			new TexturedVertex(x+w,	y+h,	z,		colors[3], 	1f, 0f),	//14
+			new TexturedVertex(x+w,	y+h,	z+d,	colors[3], 	0f, 0f),	//15
 //			Top Face
-			new TexturedVertex(x,	y+h,	z,		0f,	1f,	0f,	1f, 	0f, 0f),	//16
-			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	0f,	1f, 	1f, 0f),	//17
-			new TexturedVertex(x+w,	y+h,	z+d,	0f,	1f,	0f,	1f, 	1f, 1f),	//18
-			new TexturedVertex(x,	y+h,	z+d,	0f,	1f,	0f,	1f, 	0f, 1f),	//19
+			new TexturedVertex(x,	y+h,	z,		colors[4], 	0f, 0f),	//16
+			new TexturedVertex(x+w,	y+h,	z,		colors[4], 	1f, 0f),	//17
+			new TexturedVertex(x+w,	y+h,	z+d,	colors[4], 	1f, 1f),	//18
+			new TexturedVertex(x,	y+h,	z+d,	colors[4], 	0f, 1f),	//19
 //			Bottom Face
-			new TexturedVertex(x,	y,		z,		0f,	1f,	0f,	1f, 	0f, 1f),	//20
-			new TexturedVertex(x+w,	y,		z,		0f,	1f,	0f,	1f, 	1f, 1f),	//21
-			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	0f,	1f, 	1f, 0f),	//22
-			new TexturedVertex(x,	y,		z+d,	0f,	1f,	0f,	1f, 	0f, 0f)		//23
+			new TexturedVertex(x,	y,		z,		colors[5], 	0f, 1f),	//20
+			new TexturedVertex(x+w,	y,		z,		colors[5], 	1f, 1f),	//21
+			new TexturedVertex(x+w,	y,		z+d,	colors[5], 	1f, 0f),	//22
+			new TexturedVertex(x,	y,		z+d,	colors[5], 	0f, 0f)		//23
 		};
 		
 //		TODO Look further into Byte Buffers
@@ -88,5 +90,41 @@ public class Cube {
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
+	}
+	
+	public Cube(float x, float y, float z, float w, float h, float d, float r, float g, float b, float a) {
+		this(x,y,z,w,h,d, new Color[] {
+				new Color(r,g,b,a),
+				new Color(r,g,b,a),
+				new Color(r,g,b,a),
+				new Color(r,g,b,a),
+				new Color(r,g,b,a),
+				new Color(r,g,b,a)
+			}
+		);
+	}
+	
+	public Cube(float x, float y, float z, float w, float h, float d, Color color) {
+		this(x,y,z,w,h,d, new Color[] {
+				color,
+				color,
+				color,
+				color,
+				color,
+				color
+			}
+		);
+	}
+	
+	public Cube(float x, float y, float z, float w, float h, float d) {
+		this(x,y,z,w,h,d, new Color[] {
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor
+			}
+		);
 	}
 }

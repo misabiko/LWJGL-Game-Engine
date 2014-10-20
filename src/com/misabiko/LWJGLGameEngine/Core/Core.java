@@ -127,6 +127,8 @@ public class Core {
 		cuby = new Cube(-1f, -1.5f, -1f, 0.5f,0.5f,0.5f);
 		cubes.add(cuby);
 		
+		
+		
 		cubes.add(new Cube(-0.5f,-0.5f,-1f,1f,1f,1f));
 		cubes.add(new Cube(-3f, -2f, -2f, 8f,0.5f,4f));
 		
