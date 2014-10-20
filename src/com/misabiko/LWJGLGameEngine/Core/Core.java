@@ -48,7 +48,7 @@ public class Core {
 		initMatrices();
 		
 		while (!Display.isCloseRequested()) {
-			glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			input();
 			
 			for (Cube cube : cubes) {
@@ -81,6 +81,9 @@ public class Core {
 		glClearColor(0.0f,0.5f,1f,1f);
 		
 		glViewport(0, 0, WIDTH, HEIGHT);
+		
+		glEnable(GL_DEPTH_TEST);
+//		glEnable(GL_CULL_FACE);
 	}
 	
 	private void initShaders() {
@@ -134,9 +137,6 @@ public class Core {
 		cubes.add(new Cube(0.5f, 0.5f, -1f, 1f,1f,1f));
 		
 		camera = new Camera(0f,0f,-1f);
-		
-//		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
 		
 		
 		vaoId = glGenVertexArrays();
