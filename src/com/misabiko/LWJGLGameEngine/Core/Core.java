@@ -33,8 +33,8 @@ public class Core {
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
 	private Matrix4f projectionMatrix;
-	private int vaoId, vertShaderId, fragShaderId, programId,
-		projectionMatrixLocation, viewMatrixLocation, modelMatrixLocation = 0;
+	private int vaoId = 0;
+	private Program colProgram, texProgram;
 	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
 	private ArrayList<Cube> cubes = new ArrayList<Cube>();;
@@ -53,7 +53,9 @@ public class Core {
 			
 			for (Cube cube : cubes) {
 				update(cube);
+				
 				render(cube);
+				
 			}
 			
 			
@@ -83,27 +85,15 @@ public class Core {
 		glViewport(0, 0, WIDTH, HEIGHT);
 		
 		glEnable(GL_DEPTH_TEST);
-//		glEnable(GL_CULL_FACE);
 	}
 	
 	private void initShaders() {
-		vertShaderId = loadShader("vertex.glsl",GL_VERTEX_SHADER);
-		fragShaderId = loadShader("fragment.glsl",GL_FRAGMENT_SHADER);
+		int vertShaderId = loadShader("vertex.glsl", GL_VERTEX_SHADER);
+		int fragShaderId = loadShader("fragment.glsl", GL_FRAGMENT_SHADER);
+		int texFragShaderId = loadShader("texfragment.glsl", GL_FRAGMENT_SHADER);
 		
-		programId = glCreateProgram();
-		glAttachShader(programId, vertShaderId);
-		glAttachShader(programId, fragShaderId);
-		
-		glBindAttribLocation(programId, 0, "in_Position");
-		glBindAttribLocation(programId, 1, "in_Color");
-		glBindAttribLocation(programId, 2, "in_TextureCoord");
-		
-		glLinkProgram(programId);
-		glValidateProgram(programId);
-		
-		projectionMatrixLocation = glGetUniformLocation(programId, "projectionMatrix");
-		viewMatrixLocation = glGetUniformLocation(programId, "viewMatrix");
-		modelMatrixLocation = glGetUniformLocation(programId, "modelMatrix");
+		colProgram = new Program(new int[] {vertShaderId, fragShaderId});
+		texProgram = new Program(new int[] {vertShaderId, texFragShaderId});
 	}
 	
 	private void initTextures() {
@@ -288,63 +278,107 @@ public class Core {
 		Matrix4f.rotate(camera.angleY, new Vector3f(0f,1f,0f), camera.viewMatrix, camera.viewMatrix);
 		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0f,0f), camera.viewMatrix, camera.viewMatrix);
 		
-		glUseProgram(programId);
-		
-			projectionMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(projectionMatrixLocation, false, matrixBuffer);
+		if (cubes.indexOf(cube) == 2) {
+			glUseProgram(colProgram.id);
 			
-			camera.viewMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(viewMatrixLocation, false, matrixBuffer);
+				projectionMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(colProgram.projectionMatrixLocation, false, matrixBuffer);
+				
+				camera.viewMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
+				
+				cube.modelMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
+				
 			
-			cube.modelMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(modelMatrixLocation, false, matrixBuffer);
+			glUseProgram(0);
+		} else {
+			glUseProgram(texProgram.id);
 			
-		
-		glUseProgram(0);
-		
+				projectionMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(texProgram.projectionMatrixLocation, false, matrixBuffer);
+				
+				camera.viewMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
+				
+				cube.modelMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
+				
+			
+			glUseProgram(0);
+		}
 		
 	}
 	
 	private void render(Cube cube) {
-		
-		glUseProgram(programId);
-		
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texIds[cubes.indexOf(cube)]);
-			
-			glBindVertexArray(vaoId);
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-			glEnableVertexAttribArray(2);
-			
-				glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
+		if (cubes.indexOf(cube) == 2) {
+			glUseProgram(colProgram.id);
 				
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
+				glBindVertexArray(vaoId);
+				glEnableVertexAttribArray(0);
+				glEnableVertexAttribArray(1);
+				glEnableVertexAttribArray(2);
 				
-					glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
-					glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
-					glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+					glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
 					
-					glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
+					
+						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
+						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
+						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+						
+						glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
+						
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+					glBindBuffer(GL_ARRAY_BUFFER,0);
 				
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-				glBindBuffer(GL_ARRAY_BUFFER,0);
+				glDisableVertexAttribArray(0);
+				glDisableVertexAttribArray(1);
+				glDisableVertexAttribArray(2);
+				glBindVertexArray(0);
 			
-			glDisableVertexAttribArray(0);
-			glDisableVertexAttribArray(1);
-			glDisableVertexAttribArray(2);
-			glBindVertexArray(0);
-		
-		glUseProgram(0);
+			glUseProgram(0);
+		}else {
+			glUseProgram(texProgram.id);
+			
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, texIds[0]);
+				
+				glBindVertexArray(vaoId);
+				glEnableVertexAttribArray(0);
+				glEnableVertexAttribArray(1);
+				glEnableVertexAttribArray(2);
+				
+					glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
+					
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
+					
+						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
+						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
+						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+						
+						glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
+					
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+					glBindBuffer(GL_ARRAY_BUFFER,0);
+				
+				glDisableVertexAttribArray(0);
+				glDisableVertexAttribArray(1);
+				glDisableVertexAttribArray(2);
+				glBindVertexArray(0);
+			
+			glUseProgram(0);
+		}
 	}
 	
 	private void cleanUp() {
 		glUseProgram(0);
-		glDetachShader(programId,vertShaderId);
-		glDetachShader(programId,fragShaderId);
 		
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
@@ -357,9 +391,11 @@ public class Core {
 			glDeleteBuffers(cube.vboiId);
 		}
 		
-		glDeleteProgram(programId);
 		glDeleteTextures(texIds[0]);
 		glDeleteTextures(texIds[1]);
+		
+		colProgram.cleanUp();
+		texProgram.cleanUp();
 		
 		Display.destroy();
 	}
