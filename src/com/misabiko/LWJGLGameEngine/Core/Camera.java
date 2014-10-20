@@ -10,6 +10,6 @@ public class Camera {
 	public Camera(float x, float y, float z) {
 		pos = new Vector3f(x,y,z);
 		
-		Matrix4f.translate(pos, viewMatrix, viewMatrix);
+//		Matrix4f.translate(pos, viewMatrix, viewMatrix);
 	}
 }

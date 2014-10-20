@@ -17,7 +17,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
@@ -124,10 +123,10 @@ public class Core {
 	}
 	
 	private void init() {
-		cuby = new Box(-1f, -1.5f, -1f, 0.5f,0.5f,0.5f);
+		cuby = new Box(0, 0, 0, 0.5f,0.5f,0.5f);
 		Boxs.add(cuby);
 		
-		Boxs.add(new Box(-0.5f,-0.5f,-1f,1f,1f,1f));
+		Boxs.add(new Box(-1f, -1.5f, -1f,1f,1f,1f));
 		Boxs.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
 		
 		camera = new Camera(-1f, -1.5f, -1f);
@@ -224,6 +223,12 @@ public class Core {
 	
 	private void input() {
 		
+		if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
+			cuby.pos.x = 0;
+			cuby.pos.y = 0;
+			cuby.pos.z = 0;
+		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			cuby.pos.x -= cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
@@ -235,6 +240,7 @@ public class Core {
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
 			cuby.pos.y -= cuby.speed;
 		}
+		
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			cuby.pos.z -= cuby.speed/2;
@@ -252,9 +258,9 @@ public class Core {
 		
 		System.out.println(cuby.pos.toString());
 		
-		camera.viewMatrix.m30 = -cuby.pos.x+0.75f;
-		camera.viewMatrix.m31 = -cuby.pos.y+1f;
-		camera.viewMatrix.m32 = -cuby.pos.z-1f;
+		camera.viewMatrix.m30 = -cuby.pos.x;
+		camera.viewMatrix.m31 = -cuby.pos.y;
+		camera.viewMatrix.m32 = -cuby.pos.z - 1f;
 		
 		if (Boxs.indexOf(Box) == 2) {
 			glUseProgram(colProgram.id);
