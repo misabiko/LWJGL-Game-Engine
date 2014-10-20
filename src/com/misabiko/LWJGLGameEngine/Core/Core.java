@@ -37,8 +37,8 @@ public class Core {
 	private Program colProgram, texProgram;
 	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
-	private Cube cuby;
-	private ArrayList<Cube> cubes = new ArrayList<Cube>();;
+	private Box cuby;
+	private ArrayList<Box> Boxs = new ArrayList<Box>();;
 	private Camera camera;
 	
 	public Core() {
@@ -52,10 +52,10 @@ public class Core {
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			input();
 			
-			for (Cube cube : cubes) {
-				update(cube);
+			for (Box Box : Boxs) {
+				update(Box);
 				
-				render(cube);
+				render(Box);
 				
 			}
 			
@@ -124,13 +124,11 @@ public class Core {
 	}
 	
 	private void init() {
-		cuby = new Cube(-1f, -1.5f, -1f, 0.5f,0.5f,0.5f);
-		cubes.add(cuby);
+		cuby = new Box(-1f, -1.5f, -1f, 0.5f,0.5f,0.5f);
+		Boxs.add(cuby);
 		
-		
-		
-		cubes.add(new Cube(-0.5f,-0.5f,-1f,1f,1f,1f));
-		cubes.add(new Cube(-3f, -2f, -2f, 8f,0.5f,4f));
+		Boxs.add(new Box(-0.5f,-0.5f,-1f,1f,1f,1f));
+		Boxs.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
@@ -138,19 +136,19 @@ public class Core {
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
-			for (Cube cube : cubes) {
-				cube.vboId = glGenBuffers();
+			for (Box Box : Boxs) {
+				Box.vboId = glGenBuffers();
 				
-				glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
+				glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
 				
-					glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STATIC_DRAW);
+					glBufferData(GL_ARRAY_BUFFER,Box.verticesBuffer,GL_STATIC_DRAW);
 					
 				glBindBuffer(GL_ARRAY_BUFFER,0);
 				
-				cube.vboiId = glGenBuffers();
+				Box.vboiId = glGenBuffers();
 					
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indicesBuffer, GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, Box.indicesBuffer, GL_STATIC_DRAW);
 				
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 			}
@@ -246,7 +244,7 @@ public class Core {
 		
 	}
 	
-	private void update(Cube cube) {
+	private void update(Box Box) {
 		
 		cuby.modelMatrix.m30 = cuby.pos.x;
 		cuby.modelMatrix.m31 = cuby.pos.y;
@@ -258,7 +256,7 @@ public class Core {
 		camera.viewMatrix.m31 = -cuby.pos.y+1f;
 		camera.viewMatrix.m32 = -cuby.pos.z-1f;
 		
-		if (cubes.indexOf(cube) == 2) {
+		if (Boxs.indexOf(Box) == 2) {
 			glUseProgram(colProgram.id);
 			
 				projectionMatrix.store(matrixBuffer);
@@ -269,7 +267,7 @@ public class Core {
 				matrixBuffer.flip();
 				glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
 				
-				cube.modelMatrix.store(matrixBuffer);
+				Box.modelMatrix.store(matrixBuffer);
 				matrixBuffer.flip();
 				glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
 				
@@ -286,7 +284,7 @@ public class Core {
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
 				
-				cube.modelMatrix.store(matrixBuffer);
+				Box.modelMatrix.store(matrixBuffer);
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
 				
@@ -296,8 +294,8 @@ public class Core {
 		
 	}
 	
-	private void render(Cube cube) {
-		if (cubes.indexOf(cube) == 2) {
+	private void render(Box Box) {
+		if (Boxs.indexOf(Box) == 2) {
 			glUseProgram(colProgram.id);
 				
 				glBindVertexArray(vaoId);
@@ -305,15 +303,15 @@ public class Core {
 				glEnableVertexAttribArray(1);
 				glEnableVertexAttribArray(2);
 				
-					glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
+					glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
 					
 						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
 						
-						glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
+						glDrawElements(GL_TRIANGLES, Box.indicesCount, GL_UNSIGNED_BYTE, 0);
 						
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 					glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -335,15 +333,15 @@ public class Core {
 				glEnableVertexAttribArray(1);
 				glEnableVertexAttribArray(2);
 				
-					glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
+					glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
 					
 						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
 						
-						glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
+						glDrawElements(GL_TRIANGLES, Box.indicesCount, GL_UNSIGNED_BYTE, 0);
 					
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 					glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -366,9 +364,9 @@ public class Core {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
-		for (Cube cube : cubes) {
-			glDeleteBuffers(cube.vboId);
-			glDeleteBuffers(cube.vboiId);
+		for (Box Box : Boxs) {
+			glDeleteBuffers(Box.vboId);
+			glDeleteBuffers(Box.vboiId);
 		}
 		
 		glDeleteTextures(texIds[0]);

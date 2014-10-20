@@ -8,7 +8,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-public class Cube {
+public class Box {
 	
 	public TexturedVertex[] vertices;
 	public FloatBuffer verticesBuffer;
@@ -19,7 +19,7 @@ public class Cube {
 	public Vector3f pos;
 	private static Color defaultColor = Color.WHITE;
 	
-	public Cube(float x, float y, float z, float w, float h, float d, Color[] colors) {
+	public Box(float x, float y, float z, float w, float h, float d, Color[] colors) {
 		modelMatrix = new Matrix4f();
 		
 		pos = new Vector3f(x,y,z);
@@ -92,7 +92,7 @@ public class Cube {
 		indicesBuffer.flip();
 	}
 	
-	public Cube(float x, float y, float z, float w, float h, float d, float r, float g, float b, float a) {
+	public Box(float x, float y, float z, float w, float h, float d, float r, float g, float b, float a) {
 		this(x,y,z,w,h,d, new Color[] {
 				new Color(r,g,b,a),
 				new Color(r,g,b,a),
@@ -104,7 +104,7 @@ public class Cube {
 		);
 	}
 	
-	public Cube(float x, float y, float z, float w, float h, float d, Color color) {
+	public Box(float x, float y, float z, float w, float h, float d, Color color) {
 		this(x,y,z,w,h,d, new Color[] {
 				color,
 				color,
@@ -116,7 +116,7 @@ public class Cube {
 		);
 	}
 	
-	public Cube(float x, float y, float z, float w, float h, float d) {
+	public Box(float x, float y, float z, float w, float h, float d) {
 		this(x,y,z,w,h,d, new Color[] {
 				defaultColor,
 				defaultColor,
