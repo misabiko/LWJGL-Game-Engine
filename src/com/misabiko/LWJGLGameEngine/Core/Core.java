@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -32,11 +33,11 @@ public class Core {
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
 	private Matrix4f projectionMatrix;
-	private int vaoId, vertShaderId, fragShaderId, programId, textureSelector,
+	private int vaoId, vertShaderId, fragShaderId, programId,
 		projectionMatrixLocation, viewMatrixLocation, modelMatrixLocation = 0;
 	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
-	private Cube[] cubes;
+	private ArrayList<Cube> cubes = new ArrayList<Cube>();;
 	private Camera camera;
 	
 	public Core() {
@@ -47,9 +48,14 @@ public class Core {
 		initMatrices();
 		
 		while (!Display.isCloseRequested()) {
+			glClear(GL_COLOR_BUFFER_BIT);
 			input();
-			update();
-			render();
+			
+			for (Cube cube : cubes) {
+				update(cube);
+				render(cube);
+			}
+			
 			
 			Display.sync(60);
 			Display.update();
@@ -124,14 +130,12 @@ public class Core {
 	}
 	
 	private void init() {
-		cubes = new Cube[] {
-			new Cube(-0.5f,-0.5f,-1f,1f,1f,1f),
-			new Cube(0.5f, 0.5f, -1f, 1f,1f,1f)
-		};
-		
+		cubes.add(new Cube(-0.5f,-0.5f,-1f,1f,1f,1f));
+		cubes.add(new Cube(0.5f, 0.5f, -1f, 1f,1f,1f));
 		
 		camera = new Camera(0f,0f,-1f);
 		
+//		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		
 		
@@ -224,60 +228,14 @@ public class Core {
 		return texId;
 	}
 	
-	private void update() {
-		for (Cube cube : cubes) {
-			Matrix4f.translate(cube.vel, cube.modelMatrix, cube.modelMatrix);
-		}
-		
-		Matrix4f.translate(camera.vel, camera.viewMatrix, camera.viewMatrix);
-		
-		Matrix4f.rotate(camera.angleY, new Vector3f(0f,1f,0f), camera.viewMatrix, camera.viewMatrix);
-		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0f,0f), camera.viewMatrix, camera.viewMatrix);
-		
-		glUseProgram(programId);
-		
-			projectionMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(projectionMatrixLocation, false, matrixBuffer);
-			
-			camera.viewMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(viewMatrixLocation, false, matrixBuffer);
-			
-			for (Cube cube : cubes) {
-				cube.modelMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(modelMatrixLocation, false, matrixBuffer);
-			}
-			
-		
-		glUseProgram(0);
-		
-		
-	}
-	
 	private void input() {
 		
-		while(Keyboard.next()) {
-			if(!Keyboard.getEventKeyState())
-				continue;
-			
-			switch (Keyboard.getEventKey()) {
-				case Keyboard.KEY_1:
-					textureSelector = 0;
-					break;
-				case Keyboard.KEY_2:
-					textureSelector = 1;
-					break;
-			}
-		}
-		
 		if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
-			cubes[1].vel.x = -camera.speed;
+			cubes.get(1).vel.x = -camera.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_L)){
-			cubes[1].vel.x = camera.speed;
+			cubes.get(1).vel.x = camera.speed;
 		}else {
-			cubes[1].vel.x = 0;
+			cubes.get(1).vel.x = 0;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
@@ -322,30 +280,55 @@ public class Core {
 		
 	}
 	
-	private void render() {
-		glClear(GL_COLOR_BUFFER_BIT);
+	private void update(Cube cube) {
+		Matrix4f.translate(cube.vel, cube.modelMatrix, cube.modelMatrix);
+		
+		Matrix4f.translate(camera.vel, camera.viewMatrix, camera.viewMatrix);
+		
+		Matrix4f.rotate(camera.angleY, new Vector3f(0f,1f,0f), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0f,0f), camera.viewMatrix, camera.viewMatrix);
 		
 		glUseProgram(programId);
 		
-		for (int i = 0; i < cubes.length; i++) {
+			projectionMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(projectionMatrixLocation, false, matrixBuffer);
 			
+			camera.viewMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(viewMatrixLocation, false, matrixBuffer);
+			
+			cube.modelMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(modelMatrixLocation, false, matrixBuffer);
+			
+		
+		glUseProgram(0);
+		
+		
+	}
+	
+	private void render(Cube cube) {
+		
+		glUseProgram(programId);
+		
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texIds[i]);
+			glBindTexture(GL_TEXTURE_2D, texIds[cubes.indexOf(cube)]);
 			
 			glBindVertexArray(vaoId);
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
 			
-				glBindBuffer(GL_ARRAY_BUFFER,cubes[i].vboId);
+				glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
 				
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubes[i].vboiId);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
 				
 					glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 					glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 					glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
 					
-					glDrawElements(GL_TRIANGLES, cubes[i].indicesCount, GL_UNSIGNED_BYTE, 0);
+					glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
 				
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 				glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -355,7 +338,6 @@ public class Core {
 			glDisableVertexAttribArray(2);
 			glBindVertexArray(0);
 		
-		}
 		glUseProgram(0);
 	}
 	
