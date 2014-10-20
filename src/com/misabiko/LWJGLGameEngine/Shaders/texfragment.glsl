@@ -9,5 +9,5 @@ in vec2 pass_TextureCoord;
 out vec4 out_Color;
 
 void main(void) {
-		out_Color = pass_Color;
+		out_Color = texture(texture_diffuse, pass_TextureCoord);
 }
