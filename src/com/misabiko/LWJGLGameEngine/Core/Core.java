@@ -11,7 +11,6 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -33,11 +32,11 @@ public class Core {
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "PROGame";
 	private Matrix4f projectionMatrix;
-	private int vaoId, vboId, vboiId, vertShaderId, fragShaderId, programId, textureSelector,
+	private int vaoId, vertShaderId, fragShaderId, programId, textureSelector,
 		projectionMatrixLocation, viewMatrixLocation, modelMatrixLocation = 0;
 	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
-	private Cube cube;
+	private Cube[] cubes;
 	private Camera camera;
 	
 	public Core() {
@@ -55,7 +54,8 @@ public class Core {
 			Display.sync(60);
 			Display.update();
 		}
-		cleanUp(cube);
+		
+		cleanUp();
 	}
 	
 	private void initGL() {
@@ -124,32 +124,38 @@ public class Core {
 	}
 	
 	private void init() {
-		cube = new Cube(-0.5f,-0.5f,-1f,1f,1f,1f);
+		cubes = new Cube[] {
+			new Cube(-0.5f,-0.5f,-1f,1f,1f,1f),
+			new Cube(0.5f, 0.5f, -1f, 1f,1f,1f)
+		};
+		
+		
 		camera = new Camera(0f,0f,-1f);
 		
 		glEnable(GL_CULL_FACE);
 		
+		
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
-			vboId = glGenBuffers();
-			
-			glBindBuffer(GL_ARRAY_BUFFER,vboId);
-				glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STREAM_DRAW);
+			for (Cube cube : cubes) {
+				cube.vboId = glGenBuffers();
 				
-				glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
-				glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
-				glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			
-			vboiId = glGenBuffers();
+				glBindBuffer(GL_ARRAY_BUFFER,cube.vboId);
 				
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indicesBuffer, GL_STREAM_DRAW);
-			
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-			
+					glBufferData(GL_ARRAY_BUFFER,cube.verticesBuffer,GL_STATIC_DRAW);
+					
+				glBindBuffer(GL_ARRAY_BUFFER,0);
+				
+				cube.vboiId = glGenBuffers();
+					
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube.vboiId);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, cube.indicesBuffer, GL_STATIC_DRAW);
+				
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+			}
 		glBindVertexArray(0);
+		
 	}
 	
 	private int loadShader(String filename, int type) {
@@ -219,8 +225,9 @@ public class Core {
 	}
 	
 	private void update() {
-		
-		Matrix4f.translate(cube.pos, cube.modelMatrix, cube.modelMatrix);
+		for (Cube cube : cubes) {
+			Matrix4f.translate(cube.vel, cube.modelMatrix, cube.modelMatrix);
+		}
 		
 		Matrix4f.translate(camera.vel, camera.viewMatrix, camera.viewMatrix);
 		
@@ -237,9 +244,12 @@ public class Core {
 			matrixBuffer.flip();
 			glUniformMatrix4(viewMatrixLocation, false, matrixBuffer);
 			
-			cube.modelMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(modelMatrixLocation, false, matrixBuffer);
+			for (Cube cube : cubes) {
+				cube.modelMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(modelMatrixLocation, false, matrixBuffer);
+			}
+			
 		
 		glUseProgram(0);
 		
@@ -261,7 +271,15 @@ public class Core {
 					break;
 			}
 		}
-			
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
+			cubes[1].vel.x = -camera.speed;
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_L)){
+			cubes[1].vel.x = camera.speed;
+		}else {
+			cubes[1].vel.x = 0;
+		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			camera.vel.z = camera.speed/2;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
@@ -309,31 +327,39 @@ public class Core {
 		
 		glUseProgram(programId);
 		
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texIds[textureSelector]);
-		
-		glBindVertexArray(vaoId);
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-		
-			glBindBuffer(GL_ARRAY_BUFFER,vboId);
+		for (int i = 0; i < cubes.length; i++) {
 			
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboiId);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texIds[i]);
+			
+			glBindVertexArray(vaoId);
+			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(2);
+			
+				glBindBuffer(GL_ARRAY_BUFFER,cubes[i].vboId);
 				
-				glDrawElements(GL_TRIANGLES, cube.indicesCount, GL_UNSIGNED_BYTE, 0);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubes[i].vboiId);
+				
+					glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
+					glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
+					glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+					
+					glDrawElements(GL_TRIANGLES, cubes[i].indicesCount, GL_UNSIGNED_BYTE, 0);
+				
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+				glBindBuffer(GL_ARRAY_BUFFER,0);
 			
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-		glBindVertexArray(0);
+			glDisableVertexAttribArray(0);
+			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(2);
+			glBindVertexArray(0);
+		
+		}
 		glUseProgram(0);
 	}
 	
-	private void cleanUp(Cube c) {
+	private void cleanUp() {
 		glUseProgram(0);
 		glDetachShader(programId,vertShaderId);
 		glDetachShader(programId,fragShaderId);
@@ -344,8 +370,11 @@ public class Core {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
-		glDeleteBuffers(vboId);
-		glDeleteBuffers(vboiId);
+		for (Cube cube : cubes) {
+			glDeleteBuffers(cube.vboId);
+			glDeleteBuffers(cube.vboiId);
+		}
+		
 		glDeleteProgram(programId);
 		glDeleteTextures(texIds[0]);
 		glDeleteTextures(texIds[1]);

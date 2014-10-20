@@ -12,14 +12,14 @@ public class Cube {
 	public TexturedVertex[] vertices;
 	public FloatBuffer verticesBuffer;
 	public ByteBuffer indicesBuffer;
-	public int indicesCount;
+	public int indicesCount, vboId, vboiId = 0;
 	public Matrix4f modelMatrix;
-	public Vector3f pos, angle, scale = null;
+	public Vector3f vel, angle, scale = null;
 	
 	public Cube(float x, float y, float z, float w, float h, float d) {
 		modelMatrix = new Matrix4f();
 		
-		pos = new Vector3f(0,0,0);
+		vel = new Vector3f(0,0,0);
 		angle = new Vector3f(0,0,0);
 		scale = new Vector3f(1,1,1);
 		
