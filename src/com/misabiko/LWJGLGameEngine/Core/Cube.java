@@ -26,35 +26,35 @@ public class Cube {
 		vertices = new TexturedVertex[] {
 //			Vertices are set in a counterclockwise manner starting from bottom-left
 //			Front Face
-			new TexturedVertex(x,	y,		z+d,	1f,	1f,	0f,	1f, 	0f, 1f),	//0
-			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	1f,	1f, 	1f, 1f),	//1
-			new TexturedVertex(x+w,	y+h,	z+d,	1f,	0f,	1f,	1f, 	1f, 0f),	//2
-			new TexturedVertex(x,	y+h,	z+d,	0f,	0f,	0f,	1f, 	0f, 0f),	//3
+			new TexturedVertex(x,	y,		z+d,	0f,	1f,	0f,	1f, 	0f, 1f),	//0
+			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	0f,	1f, 	1f, 1f),	//1
+			new TexturedVertex(x+w,	y+h,	z+d,	0f, 1f,	0f,	1f, 	1f, 0f),	//2
+			new TexturedVertex(x,	y+h,	z+d,	0f,	1f,	0f,	1f, 	0f, 0f),	//3
 //			Back Face
-			new TexturedVertex(x,	y,		z,		1f,	0f,	0f,	1f, 	1f, 1f),	//4
+			new TexturedVertex(x,	y,		z,		0f,	1f,	0f,	1f, 	1f, 1f),	//4
 			new TexturedVertex(x+w,	y,		z,		0f,	1f,	0f,	1f, 	0f, 1f),	//5
-			new TexturedVertex(x+w,	y+h,	z,		0f,	0f,	1f,	1f, 	0f, 0f),	//6
-			new TexturedVertex(x,	y+h,	z,		1f,	1f,	1f,	1f, 	1f, 0f),	//7
+			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	0f,	1f, 	0f, 0f),	//6
+			new TexturedVertex(x,	y+h,	z,		0f,	1f,	0f,	1f, 	1f, 0f),	//7
 //			Left Face
-			new TexturedVertex(x,	y,		z,		1f,	1f,	0f,	1f, 	0f, 1f),	//8
-			new TexturedVertex(x,	y,		z+d,	0f,	1f,	1f,	1f, 	1f, 1f),	//9
-			new TexturedVertex(x,	y+h,	z+d,	1f,	0f,	1f,	1f, 	1f, 0f),	//10
-			new TexturedVertex(x,	y+h,	z,		0f,	0f,	0f,	1f, 	0f, 0f),	//11
+			new TexturedVertex(x,	y,		z,		0f,	1f,	0f,	1f, 	0f, 1f),	//8
+			new TexturedVertex(x,	y,		z+d,	0f,	1f,	0f,	1f, 	1f, 1f),	//9
+			new TexturedVertex(x,	y+h,	z+d,	0f,	1f,	0f,	1f, 	1f, 0f),	//10
+			new TexturedVertex(x,	y+h,	z,		0f,	1f,	0f,	1f, 	0f, 0f),	//11
 //			Right Face
-			new TexturedVertex(x+w,	y,		z+d,	1f,	1f,	0f,	1f, 	0f, 1f),	//12
-			new TexturedVertex(x+w,	y,		z,		0f,	1f,	1f,	1f, 	1f, 1f),	//13
-			new TexturedVertex(x+w,	y+h,	z,		1f,	0f,	1f,	1f, 	1f, 0f),	//14
-			new TexturedVertex(x+w,	y+h,	z+d,	0f,	0f,	0f,	1f, 	0f, 0f),	//15
+			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	0f,	1f, 	0f, 1f),	//12
+			new TexturedVertex(x+w,	y,		z,		0f,	1f,	0f,	1f, 	1f, 1f),	//13
+			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	0f,	1f, 	1f, 0f),	//14
+			new TexturedVertex(x+w,	y+h,	z+d,	0f,	1f,	0f,	1f, 	0f, 0f),	//15
 //			Top Face
-			new TexturedVertex(x,	y+h,	z,		1f,	1f,	0f,	1f, 	0f, 0f),	//16
-			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	1f,	1f, 	1f, 0f),	//17
-			new TexturedVertex(x+w,	y+h,	z+d,	1f,	0f,	1f,	1f, 	1f, 1f),	//18
-			new TexturedVertex(x,	y+h,	z+d,	0f,	0f,	0f,	1f, 	0f, 1f),	//19
+			new TexturedVertex(x,	y+h,	z,		0f,	1f,	0f,	1f, 	0f, 0f),	//16
+			new TexturedVertex(x+w,	y+h,	z,		0f,	1f,	0f,	1f, 	1f, 0f),	//17
+			new TexturedVertex(x+w,	y+h,	z+d,	0f,	1f,	0f,	1f, 	1f, 1f),	//18
+			new TexturedVertex(x,	y+h,	z+d,	0f,	1f,	0f,	1f, 	0f, 1f),	//19
 //			Bottom Face
-			new TexturedVertex(x,	y,		z,		1f,	1f,	0f,	1f, 	0f, 1f),	//20
-			new TexturedVertex(x+w,	y,		z,		0f,	1f,	1f,	1f, 	1f, 1f),	//21
-			new TexturedVertex(x+w,	y,		z+d,	1f,	0f,	1f,	1f, 	1f, 0f),	//22
-			new TexturedVertex(x,	y,		z+d,	0f,	0f,	0f,	1f, 	0f, 0f)		//23
+			new TexturedVertex(x,	y,		z,		0f,	1f,	0f,	1f, 	0f, 1f),	//20
+			new TexturedVertex(x+w,	y,		z,		0f,	1f,	0f,	1f, 	1f, 1f),	//21
+			new TexturedVertex(x+w,	y,		z+d,	0f,	1f,	0f,	1f, 	1f, 0f),	//22
+			new TexturedVertex(x,	y,		z+d,	0f,	1f,	0f,	1f, 	0f, 0f)		//23
 		};
 		
 //		TODO Look further into Byte Buffers

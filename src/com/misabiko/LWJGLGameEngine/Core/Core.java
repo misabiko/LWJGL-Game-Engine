@@ -126,6 +126,8 @@ public class Core {
 		cubes.add(new Cube(-0.5f,-0.5f,-1f,1f,1f,1f));
 		cubes.add(new Cube(0.5f, 0.5f, -1f, 1f,1f,1f));
 		
+		cubes.add(new Cube(-3f, -2f, -2f, 8f,0.5f,4f));
+		
 		camera = new Camera(0f,0f,-1f);
 		
 		
