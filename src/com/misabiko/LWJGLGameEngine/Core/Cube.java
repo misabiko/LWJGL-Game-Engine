@@ -13,15 +13,14 @@ public class Cube {
 	public FloatBuffer verticesBuffer;
 	public ByteBuffer indicesBuffer;
 	public int indicesCount, vboId, vboiId = 0;
+	public float speed = 0.05f;
 	public Matrix4f modelMatrix;
-	public Vector3f vel, angle, scale = null;
+	public Vector3f pos;
 	
 	public Cube(float x, float y, float z, float w, float h, float d) {
 		modelMatrix = new Matrix4f();
 		
-		vel = new Vector3f(0,0,0);
-		angle = new Vector3f(0,0,0);
-		scale = new Vector3f(1,1,1);
+		pos = new Vector3f(x,y,z);
 		
 		vertices = new TexturedVertex[] {
 //			Vertices are set in a counterclockwise manner starting from bottom-left

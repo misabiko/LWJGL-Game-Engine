@@ -37,6 +37,7 @@ public class Core {
 	private Program colProgram, texProgram;
 	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
+	private Cube cuby;
 	private ArrayList<Cube> cubes = new ArrayList<Cube>();;
 	private Camera camera;
 	
@@ -123,12 +124,13 @@ public class Core {
 	}
 	
 	private void init() {
-		cubes.add(new Cube(-0.5f,-0.5f,-1f,1f,1f,1f));
-		cubes.add(new Cube(0.5f, 0.5f, -1f, 1f,1f,1f));
+		cuby = new Cube(-1f, -1.5f, -1f, 0.5f,0.5f,0.5f);
+		cubes.add(cuby);
 		
+		cubes.add(new Cube(-0.5f,-0.5f,-1f,1f,1f,1f));
 		cubes.add(new Cube(-3f, -2f, -2f, 8f,0.5f,4f));
 		
-		camera = new Camera(0f,0f,-1f);
+		camera = new Camera(-1f, -1.5f, -1f);
 		
 		
 		vaoId = glGenVertexArrays();
@@ -222,63 +224,37 @@ public class Core {
 	
 	private void input() {
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
-			cubes.get(1).vel.x = -camera.speed;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_L)){
-			cubes.get(1).vel.x = camera.speed;
-		}else {
-			cubes.get(1).vel.x = 0;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			camera.vel.z = camera.speed/2;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			camera.vel.z = -camera.speed/2;
-		}else {
-			camera.vel.z = 0;
-		}
-		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			camera.vel.x = camera.speed;
+			cuby.pos.x -= cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
-			camera.vel.x = -camera.speed;
-		}else {
-			camera.vel.x = 0;
+			cuby.pos.x += cuby.speed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			camera.vel.y = -camera.speed;
+			cuby.pos.y += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			camera.vel.y = camera.speed;
-		}else {
-			camera.vel.y = 0;
+			cuby.pos.y -= cuby.speed;
 		}
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			camera.angleY = camera.speed*2;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-			camera.angleY = -camera.speed*2;
-		}else {
-			camera.angleY = 0;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			camera.angleX = camera.speed*2;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-			camera.angleX = -camera.speed*2;
-		}else {
-			camera.angleX = 0;
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			cuby.pos.z -= cuby.speed/2;
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
+			cuby.pos.z += cuby.speed/2;
 		}
 		
 	}
 	
 	private void update(Cube cube) {
-		Matrix4f.translate(cube.vel, cube.modelMatrix, cube.modelMatrix);
 		
-		Matrix4f.translate(camera.vel, camera.viewMatrix, camera.viewMatrix);
+		cuby.modelMatrix.m30 = cuby.pos.x;
+		cuby.modelMatrix.m31 = cuby.pos.y;
+		cuby.modelMatrix.m32 = cuby.pos.z;
 		
-		Matrix4f.rotate(camera.angleY, new Vector3f(0f,1f,0f), camera.viewMatrix, camera.viewMatrix);
-		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0f,0f), camera.viewMatrix, camera.viewMatrix);
+		System.out.println(cuby.pos.toString());
+		
+		camera.viewMatrix.m30 = -cuby.pos.x+0.75f;
+		camera.viewMatrix.m31 = -cuby.pos.y+1f;
+		camera.viewMatrix.m32 = -cuby.pos.z-1f;
 		
 		if (cubes.indexOf(cube) == 2) {
 			glUseProgram(colProgram.id);
