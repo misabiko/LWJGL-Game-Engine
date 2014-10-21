@@ -31,7 +31,7 @@ public class Core {
 	
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
-	private static final String TITLE = "PROGame";
+	private static final String TITLE = "LWJGL Game Engine";
 	private Matrix4f projectionMatrix;
 	private int vaoId = 0;
 	private Program colProgram, texProgram;
