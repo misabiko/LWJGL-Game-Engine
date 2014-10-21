@@ -17,6 +17,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
@@ -37,8 +38,10 @@ public class Core {
 	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
 	private Box cuby;
-	private ArrayList<Box> Boxs = new ArrayList<Box>();;
+	private ArrayList<Box> Boxes = new ArrayList<Box>();;
 	private Camera camera;
+	
+//	TODO make viewMatrix translation independant from rotation
 	
 	public Core() {
 		initGL();
@@ -51,7 +54,7 @@ public class Core {
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			input();
 			
-			for (Box Box : Boxs) {
+			for (Box Box : Boxes) {
 				update(Box);
 				
 				render(Box);
@@ -124,10 +127,10 @@ public class Core {
 	
 	private void init() {
 		cuby = new Box(0, 0, 0, 0.5f,0.5f,0.5f);
-		Boxs.add(cuby);
+		Boxes.add(cuby);
 		
-		Boxs.add(new Box(-1f, -1.5f, -1f,1f,1f,1f));
-		Boxs.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
+		Boxes.add(new Box(-1f, -1.5f, -1f,1f,1f,1f));
+		Boxes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
@@ -135,7 +138,7 @@ public class Core {
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
-			for (Box Box : Boxs) {
+			for (Box Box : Boxes) {
 				Box.vboId = glGenBuffers();
 				
 				glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
@@ -223,10 +226,20 @@ public class Core {
 	
 	private void input() {
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
-			cuby.pos.x = 0;
-			cuby.pos.y = 0;
-			cuby.pos.z = 0;
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+			camera.angleX += camera.rotateSpeed;
+		}else {
+			if (camera.angleX > 0) {
+				camera.angleX -= camera.rotateSpeed;
+			}
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+			camera.angleX -= camera.rotateSpeed;
+		}else {
+			if (camera.angleX < 0) {
+				camera.angleX += camera.rotateSpeed;
+			}
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
@@ -256,13 +269,13 @@ public class Core {
 		cuby.modelMatrix.m31 = cuby.pos.y;
 		cuby.modelMatrix.m32 = cuby.pos.z;
 		
-		System.out.println(cuby.pos.toString());
-		
 		camera.viewMatrix.m30 = -cuby.pos.x;
 		camera.viewMatrix.m31 = -cuby.pos.y;
 		camera.viewMatrix.m32 = -cuby.pos.z - 1f;
 		
-		if (Boxs.indexOf(Box) == 2) {
+		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
+		
+		if (Boxes.indexOf(Box) == 2) {
 			glUseProgram(colProgram.id);
 			
 				projectionMatrix.store(matrixBuffer);
@@ -301,7 +314,7 @@ public class Core {
 	}
 	
 	private void render(Box Box) {
-		if (Boxs.indexOf(Box) == 2) {
+		if (Boxes.indexOf(Box) == 2) {
 			glUseProgram(colProgram.id);
 				
 				glBindVertexArray(vaoId);
@@ -370,7 +383,7 @@ public class Core {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
-		for (Box Box : Boxs) {
+		for (Box Box : Boxes) {
 			glDeleteBuffers(Box.vboId);
 			glDeleteBuffers(Box.vboiId);
 		}
