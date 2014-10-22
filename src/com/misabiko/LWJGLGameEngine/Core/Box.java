@@ -17,6 +17,7 @@ public class Box {
 	public float speed = 0.05f;
 	public Matrix4f modelMatrix;
 	public Vector3f pos;
+	public boolean textured = false;
 	private static Color defaultColor = Color.WHITE;
 	
 	public Box(float x, float y, float z, float w, float h, float d, Color[] colors) {

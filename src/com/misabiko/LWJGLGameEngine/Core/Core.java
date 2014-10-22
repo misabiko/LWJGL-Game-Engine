@@ -130,7 +130,10 @@ public class Core {
 		Boxes.add(cuby);
 		
 		Boxes.add(new Box(-1f, -1.5f, -1f,1f,1f,1f));
+		
 		Boxes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
+		
+		Boxes.get(0).textured = true;
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
@@ -271,28 +274,11 @@ public class Core {
 		
 		camera.viewMatrix.m30 = -cuby.pos.x;
 		camera.viewMatrix.m31 = -cuby.pos.y;
-		camera.viewMatrix.m32 = -cuby.pos.z - 1f;
+		camera.viewMatrix.m32 = -cuby.pos.z;
 		
-		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.rotate(camera.angleX, new Vector3f(cuby.pos.x,0,0), camera.viewMatrix, camera.viewMatrix);
 		
-		if (Boxes.indexOf(Box) == 2) {
-			glUseProgram(colProgram.id);
-			
-				projectionMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(colProgram.projectionMatrixLocation, false, matrixBuffer);
-				
-				camera.viewMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
-				
-				Box.modelMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
-				
-			
-			glUseProgram(0);
-		} else {
+		if (Box.textured) {
 			glUseProgram(texProgram.id);
 			
 				projectionMatrix.store(matrixBuffer);
@@ -309,39 +295,29 @@ public class Core {
 				
 			
 			glUseProgram(0);
+		} else {
+			glUseProgram(colProgram.id);
+			
+			projectionMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(colProgram.projectionMatrixLocation, false, matrixBuffer);
+			
+			camera.viewMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
+			
+			Box.modelMatrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
+			
+		
+		glUseProgram(0);
 		}
 		
 	}
 	
 	private void render(Box Box) {
-		if (Boxes.indexOf(Box) == 2) {
-			glUseProgram(colProgram.id);
-				
-				glBindVertexArray(vaoId);
-				glEnableVertexAttribArray(0);
-				glEnableVertexAttribArray(1);
-				glEnableVertexAttribArray(2);
-				
-					glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
-					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
-					
-						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
-						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
-						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
-						
-						glDrawElements(GL_TRIANGLES, Box.indicesCount, GL_UNSIGNED_BYTE, 0);
-						
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-					glBindBuffer(GL_ARRAY_BUFFER,0);
-				
-				glDisableVertexAttribArray(0);
-				glDisableVertexAttribArray(1);
-				glDisableVertexAttribArray(2);
-				glBindVertexArray(0);
-			
-			glUseProgram(0);
-		}else {
+		if (Box.textured) {
 			glUseProgram(texProgram.id);
 			
 				glActiveTexture(GL_TEXTURE0);
@@ -371,6 +347,33 @@ public class Core {
 				glBindVertexArray(0);
 			
 			glUseProgram(0);
+		}else {
+			glUseProgram(colProgram.id);
+			
+			glBindVertexArray(vaoId);
+			glEnableVertexAttribArray(0);
+			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(2);
+			
+				glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
+				
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
+				
+					glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
+					glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
+					glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+					
+					glDrawElements(GL_TRIANGLES, Box.indicesCount, GL_UNSIGNED_BYTE, 0);
+					
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+				glBindBuffer(GL_ARRAY_BUFFER,0);
+			
+			glDisableVertexAttribArray(0);
+			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(2);
+			glBindVertexArray(0);
+		
+		glUseProgram(0);
 		}
 	}
 	
