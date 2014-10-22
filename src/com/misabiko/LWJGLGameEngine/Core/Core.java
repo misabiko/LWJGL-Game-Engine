@@ -39,16 +39,18 @@ public class Core {
 	private FloatBuffer matrixBuffer;
 	private int[] texIds = new int[2];
 	private Box cuby;
-	private ArrayList<Box> Boxes = new ArrayList<Box>();;
+	private ArrayList<Mesh> Meshes = new ArrayList<Mesh>();;
 	private Camera camera;
 	
 //	Short term todos
 //	TODO put textures into the box objects
-//	TODO make a mesh class as a superclass of box
 //	TODO make a line class that extends the mesh class
+//	TODO Maybe move the stuff messing with opengl into another class (crowded core class is crowded)
 	
 //	Long term todos
 //	TODO make a light shader/engine ( or at least something to see the meshes' borders )
+//	TODO Physic Engine
+//	TODO Custom (Blender) models?
 	
 	public Core() {
 		initGL();
@@ -61,10 +63,10 @@ public class Core {
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			input();
 			
-			for (Box Box : Boxes) {
-				update(Box);
+			for (Mesh mesh : Meshes) {
+				update(mesh);
 				
-				render(Box);
+				render(mesh);
 				
 			}
 			
@@ -134,15 +136,15 @@ public class Core {
 	
 	private void init() {
 		cuby = new Box(0, 0, 0, 0.5f,0.5f,0.5f, 0, 1f, 1f, 0.5f);
-		Boxes.add(cuby);
+		Meshes.add(cuby);
 		
-//		Boxes.add(new Box(0, 0, 0,1f,1f,1f));
+//		Meshes.add(new Box(0, 0, 0,1f,1f,1f));
 		
-		Boxes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
+		Meshes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
 		
-		Boxes.get(0).isTextured = true;
-		Boxes.get(1).isTextured = true;
-//		Boxes.get(2).isTextured = true;
+		Meshes.get(0).isTextured = true;
+		Meshes.get(1).isTextured = true;
+//		Meshes.get(2).isTextured = true;
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
@@ -150,19 +152,19 @@ public class Core {
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
-			for (Box Box : Boxes) {
-				Box.vboId = glGenBuffers();
+			for (Mesh mesh : Meshes) {
+				mesh.vboId = glGenBuffers();
 				
-				glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
+				glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
 				
-					glBufferData(GL_ARRAY_BUFFER,Box.verticesBuffer,GL_STATIC_DRAW);
+					glBufferData(GL_ARRAY_BUFFER,mesh.verticesBuffer,GL_STATIC_DRAW);
 					
 				glBindBuffer(GL_ARRAY_BUFFER,0);
 				
-				Box.vboiId = glGenBuffers();
+				mesh.vboiId = glGenBuffers();
 					
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, Box.indicesBuffer, GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indicesBuffer, GL_STATIC_DRAW);
 				
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 			}
@@ -270,7 +272,7 @@ public class Core {
 		
 	}
 	
-	private void update(Box Box) {
+	private void update(Mesh mesh) {
 		
 		Matrix4f.setIdentity(camera.viewMatrix);
 		Matrix4f.setIdentity(cuby.modelMatrix);
@@ -283,7 +285,7 @@ public class Core {
 		
 		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
 		
-		if (Box.isTextured) {
+		if (mesh.isTextured) {
 			glUseProgram(texProgram.id);
 			
 				projectionMatrix.store(matrixBuffer);
@@ -294,7 +296,7 @@ public class Core {
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
 				
-				Box.modelMatrix.store(matrixBuffer);
+				mesh.modelMatrix.store(matrixBuffer);
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
 				
@@ -311,7 +313,7 @@ public class Core {
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
 			
-			Box.modelMatrix.store(matrixBuffer);
+			mesh.modelMatrix.store(matrixBuffer);
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
 			
@@ -321,8 +323,8 @@ public class Core {
 		
 	}
 	
-	private void render(Box Box) {
-		if (Box.isTextured) {
+	private void render(Mesh mesh) {
+		if (mesh.isTextured) {
 			glUseProgram(texProgram.id);
 			
 				glActiveTexture(GL_TEXTURE0);
@@ -333,15 +335,15 @@ public class Core {
 				glEnableVertexAttribArray(1);
 				glEnableVertexAttribArray(2);
 				
-					glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
+					glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
 					
 						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
 						
-						glDrawElements(GL_TRIANGLES, Box.indicesCount, GL_UNSIGNED_BYTE, 0);
+						glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
 					
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 					glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -360,15 +362,15 @@ public class Core {
 			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
 			
-				glBindBuffer(GL_ARRAY_BUFFER,Box.vboId);
+				glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
 				
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Box.vboiId);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
 				
 					glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 					glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 					glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
 					
-					glDrawElements(GL_TRIANGLES, Box.indicesCount, GL_UNSIGNED_BYTE, 0);
+					glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
 					
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 				glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -391,9 +393,9 @@ public class Core {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
-		for (Box Box : Boxes) {
-			glDeleteBuffers(Box.vboId);
-			glDeleteBuffers(Box.vboiId);
+		for (Mesh mesh : Meshes) {
+			glDeleteBuffers(mesh.vboId);
+			glDeleteBuffers(mesh.vboiId);
 		}
 		
 		glDeleteTextures(texIds[0]);
