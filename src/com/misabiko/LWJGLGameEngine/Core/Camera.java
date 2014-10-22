@@ -7,7 +7,7 @@ public class Camera {
 	public Matrix4f viewMatrix = new Matrix4f();
 	public Vector3f pos;
 	public float angleY, angleX = 0;
-	public float rotateSpeed = 0.0001f;
+	public float rotateSpeed = 0.01f;
 	public Camera(float x, float y, float z) {
 		pos = new Vector3f(x,y,z);
 		
