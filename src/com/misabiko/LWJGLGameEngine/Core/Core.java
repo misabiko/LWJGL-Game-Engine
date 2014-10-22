@@ -43,12 +43,14 @@ public class Core {
 	private Camera camera;
 	
 //	Short term todos
-//	TODO put textures into the box objects
+//	TODO make a texture class, to easily manage textures (duh)
+//	TODO put textures into the mesh objects
 //	TODO make a line class that extends the mesh class
 //	TODO Maybe move the stuff messing with opengl into another class (crowded core class is crowded)
 	
 //	Long term todos
 //	TODO make a light shader/engine ( or at least something to see the meshes' borders )
+//	TODO learn to manage the projection matrix because that shizza is but' ugly
 //	TODO Physic Engine
 //	TODO Custom (Blender) models?
 	
@@ -243,7 +245,7 @@ public class Core {
 		
 		if (Mouse.isButtonDown(0)) {
 			camera.angleX += ((float) Mouse.getDY()/100);
-			camera.angleY += ((float) Mouse.getDX()/100);
+			camera.angleY -= ((float) Mouse.getDX()/100);
 		}else {
 			Mouse.getDX();
 			Mouse.getDY();
