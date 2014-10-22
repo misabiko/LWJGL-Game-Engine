@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -235,21 +236,23 @@ public class Core {
 	
 	private void input() {
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			camera.angleX += camera.rotateSpeed;
-		}
+//		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+//			camera.angleX += camera.rotateSpeed;
+//		}
+//		
+//		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+//			camera.angleX -= camera.rotateSpeed;
+//		}
+//		
+//		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+//			camera.angleY -= camera.rotateSpeed;
+//		}
+//		
+//		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+//			camera.angleY += camera.rotateSpeed;
+//		}
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			camera.angleX -= camera.rotateSpeed;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			camera.angleY -= camera.rotateSpeed;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			camera.angleY += camera.rotateSpeed;
-		}
+		camera.zoom += ((float) Mouse.getDWheel()/1000);
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			cuby.pos.x -= cuby.speed;
@@ -278,7 +281,7 @@ public class Core {
 		Matrix4f.setIdentity(cuby.modelMatrix);
 		
 		Matrix4f.translate(cuby.pos, cuby.modelMatrix, cuby.modelMatrix);
-		Matrix4f.translate(new Vector3f(0,0,-1f), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.translate(new Vector3f(0,0,-camera.zoom), camera.viewMatrix, camera.viewMatrix);
 		
 		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
 		Matrix4f.rotate(camera.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);

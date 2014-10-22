@@ -8,6 +8,7 @@ public class Camera {
 	public Vector3f pos;
 	public float angleY, angleX = 0;
 	public float rotateSpeed = 0.01f;
+	public float zoom = 1f;
 	public Camera(float x, float y, float z) {
 		pos = new Vector3f(x,y,z);
 		
