@@ -42,11 +42,13 @@ public class Core {
 	private ArrayList<Box> Boxes = new ArrayList<Box>();;
 	private Camera camera;
 	
-//	TODO set viewMatrix rotation axis
-//	TODO make viewMatrix translation independant from rotation
+//	Short term todos
 //	TODO put textures into the box objects
 //	TODO make a mesh class as a superclass of box
 //	TODO make a line class that extends the mesh class
+	
+//	Long term todos
+//	TODO make a light shader/engine ( or at least something to see the meshes' borders )
 	
 	public Core() {
 		initGL();
@@ -131,16 +133,16 @@ public class Core {
 	}
 	
 	private void init() {
-		cuby = new Box(0, 0, 0, 0.5f,0.5f,0.5f);
+		cuby = new Box(0, 0, 0, 0.5f,0.5f,0.5f, 0, 1f, 1f, 0.5f);
 		Boxes.add(cuby);
 		
 //		Boxes.add(new Box(0, 0, 0,1f,1f,1f));
 		
 		Boxes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
 		
-		Boxes.get(0).textured = true;
-		Boxes.get(1).textured = true;
-//		Boxes.get(2).textured = true;
+		Boxes.get(0).isTextured = true;
+		Boxes.get(1).isTextured = true;
+//		Boxes.get(2).isTextured = true;
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
@@ -248,22 +250,22 @@ public class Core {
 		camera.zoom -= ((float) Mouse.getDWheel()/1000);
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			cuby.pos.x -= cuby.speed;
+			cuby.pos.x -= camera.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
-			cuby.pos.x += cuby.speed;
+			cuby.pos.x += camera.speed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			cuby.pos.y += cuby.speed;
+			cuby.pos.y += camera.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			cuby.pos.y -= cuby.speed;
+			cuby.pos.y -= camera.speed;
 		}
 		
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			cuby.pos.z -= cuby.speed/2;
+			cuby.pos.z -= camera.speed/2;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			cuby.pos.z += cuby.speed/2;
+			cuby.pos.z += camera.speed/2;
 		}
 		
 	}
@@ -281,7 +283,7 @@ public class Core {
 		
 		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
 		
-		if (Box.textured) {
+		if (Box.isTextured) {
 			glUseProgram(texProgram.id);
 			
 				projectionMatrix.store(matrixBuffer);
@@ -320,7 +322,7 @@ public class Core {
 	}
 	
 	private void render(Box Box) {
-		if (Box.textured) {
+		if (Box.isTextured) {
 			glUseProgram(texProgram.id);
 			
 				glActiveTexture(GL_TEXTURE0);
