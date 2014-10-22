@@ -236,23 +236,16 @@ public class Core {
 	
 	private void input() {
 		
-//		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-//			camera.angleX += camera.rotateSpeed;
-//		}
-//		
-//		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-//			camera.angleX -= camera.rotateSpeed;
-//		}
-//		
-//		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-//			camera.angleY -= camera.rotateSpeed;
-//		}
-//		
-//		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-//			camera.angleY += camera.rotateSpeed;
-//		}
 		
-		camera.zoom += ((float) Mouse.getDWheel()/1000);
+		if (Mouse.isButtonDown(0)) {
+			camera.angleX += ((float) Mouse.getDY()/100);
+			camera.angleY += ((float) Mouse.getDX()/100);
+		}else {
+			Mouse.getDX();
+			Mouse.getDY();
+		}
+		
+		camera.zoom -= ((float) Mouse.getDWheel()/1000);
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			cuby.pos.x -= cuby.speed;
