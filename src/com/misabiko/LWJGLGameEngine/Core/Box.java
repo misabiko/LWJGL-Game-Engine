@@ -93,7 +93,7 @@ public class Box {
 		indicesBuffer.flip();
 	}
 	
-	public Box(float x, float y, float z, float w, float h, float d, float r, float g, float b, float a) {
+	public Box(float x, float y, float z, float w, float h, float d, int r, int g, int b, int a) {
 		this(x,y,z,w,h,d, new Color[] {
 				new Color(r,g,b,a),
 				new Color(r,g,b,a),
