@@ -12,6 +12,8 @@ public abstract class Mesh {
 	public Matrix4f modelMatrix;
 	
 	public Vector3f pos;
+	public Vector3f prevPos = new Vector3f();
+	public Vector3f vel = new Vector3f();
 	
 	public float angleX, angleY = 0;
 	
@@ -28,7 +30,6 @@ public abstract class Mesh {
 		modelMatrix = new Matrix4f();
 		
 		pos = new Vector3f(x,y,z);
-		
 		
 		
 //		TODO Look further into Byte Buffers
