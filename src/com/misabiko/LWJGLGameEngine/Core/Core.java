@@ -55,6 +55,7 @@ public class Core {
 //	TODO learn to manage the projection matrix because that shizza is but' ugly
 //	TODO Physic Engine (Collision, gravity, etc)
 //	TODO Custom (Blender) models?
+//	TODO sound manager
 //	TODO well, you know, game stuff
 	
 	public Core() {
