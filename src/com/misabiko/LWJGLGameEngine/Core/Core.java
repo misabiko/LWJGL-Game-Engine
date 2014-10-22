@@ -148,10 +148,6 @@ public class Core {
 		
 		Meshes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
 		
-		Meshes.get(0).isTextured = true;
-		Meshes.get(1).isTextured = true;
-//		Meshes.get(2).isTextured = true;
-		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
 		
@@ -248,6 +244,10 @@ public class Core {
 		
 //		Dat clean input method :O
 		
+		if (Keyboard.getEventKey() == Keyboard.KEY_J && Keyboard.getEventKeyState()) {
+			camera.freeMovement = !camera.freeMovement;
+		}
+		
 		if (Mouse.isButtonDown(0)) {
 			camera.angleX += ((float) Mouse.getDY()/100);
 			camera.angleY -= ((float) Mouse.getDX()/100);
@@ -280,17 +280,20 @@ public class Core {
 	}
 	
 	private void update(Mesh mesh) {
-		
 		Matrix4f.setIdentity(camera.viewMatrix);
 		Matrix4f.setIdentity(cuby.modelMatrix);
 		
 		Matrix4f.translate(cuby.pos, cuby.modelMatrix, cuby.modelMatrix);
+		
+		Matrix4f.rotate(-camera.angleY, cuby.pos.normalise(new Vector3f()), cuby.modelMatrix, cuby.modelMatrix);
+//		Matrix4f.rotate(-camera.angleX, new Vector3f(1f,0,0), cuby.modelMatrix, cuby.modelMatrix);
+		
 		Matrix4f.translate(new Vector3f(0,0,-camera.zoom), camera.viewMatrix, camera.viewMatrix);
 		
-		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
-		Matrix4f.rotate(camera.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
-		
-		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
+//		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
+//		Matrix4f.rotate(camera.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
+//		
+//		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
 		
 		if (mesh.isTextured) {
 			glUseProgram(texProgram.id);

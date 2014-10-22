@@ -13,6 +13,8 @@ public abstract class Mesh {
 	
 	public Vector3f pos;
 	
+	public float angleX, angleY = 0;
+	
 	public boolean isTextured = true;
 	
 	public FloatBuffer verticesBuffer;
