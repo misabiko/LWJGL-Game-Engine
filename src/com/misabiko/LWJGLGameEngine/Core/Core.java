@@ -43,6 +43,8 @@ public class Core {
 	private Camera camera;
 	
 //	Short term todos
+//	TODO make the camera grab actually move the player orientation
+//	TODO added a button (F5?) to grab camera freely (like it was at first)
 //	TODO make a texture class, to easily manage textures (duh)
 //	TODO put textures into the mesh objects
 //	TODO make a line class that extends the mesh class
@@ -51,8 +53,9 @@ public class Core {
 //	Long term todos
 //	TODO make a light shader/engine ( or at least something to see the meshes' borders )
 //	TODO learn to manage the projection matrix because that shizza is but' ugly
-//	TODO Physic Engine
+//	TODO Physic Engine (Collision, gravity, etc)
 //	TODO Custom (Blender) models?
+//	TODO well, you know, game stuff
 	
 	public Core() {
 		initGL();
@@ -242,6 +245,7 @@ public class Core {
 	
 	private void input() {
 		
+//		Dat clean input method :O
 		
 		if (Mouse.isButtonDown(0)) {
 			camera.angleX += ((float) Mouse.getDY()/100);
