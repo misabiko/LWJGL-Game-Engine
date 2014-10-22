@@ -44,6 +44,8 @@ public class Core {
 //	TODO set viewMatrix rotation axis
 //	TODO make viewMatrix translation independant from rotation
 //	TODO put textures into the box objects
+//	TODO make a mesh class as a superclass of box
+//	TODO make a line class that extends the mesh class
 	
 	public Core() {
 		initGL();
@@ -131,13 +133,13 @@ public class Core {
 		cuby = new Box(0, 0, 0, 0.5f,0.5f,0.5f);
 		Boxes.add(cuby);
 		
-		Boxes.add(new Box(-1f, -1.5f, -1f,1f,1f,1f));
+//		Boxes.add(new Box(0, 0, 0,1f,1f,1f));
 		
 		Boxes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
 		
 		Boxes.get(0).textured = true;
 		Boxes.get(1).textured = true;
-		Boxes.get(2).textured = true;
+//		Boxes.get(2).textured = true;
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
@@ -236,38 +238,18 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			camera.angleX += camera.rotateSpeed;
 		}
-//		else {
-//			if (camera.angleX > 0) {
-//				camera.angleX -= camera.rotateSpeed;
-//			}
-//		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			camera.angleX -= camera.rotateSpeed;
 		}
-//		else {
-//			if (camera.angleX < 0) {
-//				camera.angleX += camera.rotateSpeed;
-//			}
-//		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			camera.angleY -= camera.rotateSpeed;
 		}
-//		else {
-//			if (camera.angleY < 0) {
-//				camera.angleY += camera.rotateSpeed;
-//			}
-//		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 			camera.angleY += camera.rotateSpeed;
 		}
-//		else {
-//			if (camera.angleY > 0) {
-//				camera.angleY -= camera.rotateSpeed;
-//			}
-//		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			cuby.pos.x -= cuby.speed;
@@ -296,14 +278,12 @@ public class Core {
 		Matrix4f.setIdentity(cuby.modelMatrix);
 		
 		Matrix4f.translate(cuby.pos, cuby.modelMatrix, cuby.modelMatrix);
-		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.translate(new Vector3f(0,0,-1f), camera.viewMatrix, camera.viewMatrix);
 		
-		Matrix4f.rotate(camera.angleX, new Vector3f(-cuby.pos.x,0,0), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
 		Matrix4f.rotate(camera.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
 		
-//		Matrix4f.translate(new Vector3f(0,0,-1f), camera.viewMatrix, camera.viewMatrix);
-		
-//		Matrix4f.translate(new Vector3f(0f,0f,-1f), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
 		
 		if (Box.textured) {
 			glUseProgram(texProgram.id);
