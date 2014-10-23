@@ -244,15 +244,13 @@ public class Core {
 		
 //		Dat clean input method :O
 		
-		cuby.prevPos = cuby.pos;
-		
 		if (Keyboard.getEventKey() == Keyboard.KEY_J && Keyboard.getEventKeyState()) {
 			camera.freeMovement = !camera.freeMovement;
 		}
 		
 		if (Mouse.isButtonDown(0)) {
-			camera.angleX += ((float) Mouse.getDY()/100);
-			camera.angleY -= ((float) Mouse.getDX()/100);
+			cuby.angleX -= ((float) Mouse.getDY()/100);
+			cuby.angleY += ((float) Mouse.getDX()/100);
 		}else {
 			Mouse.getDX();
 			Mouse.getDY();
@@ -260,76 +258,47 @@ public class Core {
 		
 		camera.zoom -= ((float) Mouse.getDWheel()/1000);
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			cuby.pos.x -= camera.speed;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
-			cuby.pos.x += camera.speed;
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+//			Vector3f.add(cuby.pos, new Vector3f(camera.speed,0,0), cuby.pos);
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
+//			Vector3f.add(cuby.pos, new Vector3f(-camera.speed,0,0), cuby.pos);
 		}
-//		else {
-//			if (cuby.vel.x < 1f && cuby.vel.x > -1f) {
-//				cuby.vel.x = 0;
-//			}else if (cuby.vel.x < -1f) {
-//				cuby.vel.x += camera.speed;
-//			}else if (cuby.vel.x > 1f) {
-//				cuby.vel.x -= camera.speed;
-//			}
-//		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			cuby.pos.y += camera.speed;
+//			Vector3f.add(cuby.pos, new Vector3f(0,camera.speed,0), cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			cuby.pos.y -= camera.speed;
+//			Vector3f.add(cuby.pos, new Vector3f(0,-camera.speed,0), cuby.pos);
 		}
-//		else {
-//			if (cuby.vel.y < 1f && cuby.vel.y > -1f) {
-//				cuby.vel.y = 0;
-//			}else if (cuby.vel.y < -1f) {
-//				cuby.vel.y += camera.speed;
-//			}else if (cuby.vel.y > 1f) {
-//				cuby.vel.y -= camera.speed;
-//			}
-//		}
-		
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			cuby.pos.z -= camera.speed/2;
+			Vector3f vel = cuby.getAngle();
+			vel.scale(0.05f);
+			Vector3f.sub(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			cuby.pos.z += camera.speed/2;
+			Vector3f vel = cuby.getAngle();
+			vel.scale(0.01f);
+			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}
-//		else {
-//			if (cuby.vel.z < 1f && cuby.vel.z > -1f) {
-//				cuby.vel.z = 0;
-//			}else if (cuby.vel.z < -1f) {
-//				cuby.vel.z += camera.speed;
-//			}else if (cuby.vel.z > 1f) {
-//				cuby.vel.z -= camera.speed;
-//			}
-//		}
 		
 	}
 	
 	private void update(Mesh mesh) {
-//		System.out.println(cuby.vel.toString());
+//		System.out.println(cuby.pos.toString());
 		
 		Matrix4f.setIdentity(camera.viewMatrix);
 		Matrix4f.setIdentity(cuby.modelMatrix);
 		
-		Matrix4f.translate(cuby.prevPos, cuby.modelMatrix, cuby.modelMatrix);
+		Matrix4f.translate(cuby.pos, cuby.modelMatrix, cuby.modelMatrix);
 		
-		Matrix4f.rotate(-camera.angleY, new Vector3f(0,1f,0), cuby.modelMatrix, cuby.modelMatrix);
-		Matrix4f.rotate(-camera.angleX, new Vector3f(1f,0,0), cuby.modelMatrix, cuby.modelMatrix);
+		Matrix4f.rotate(cuby.angleY, new Vector3f(0,1f,0), cuby.modelMatrix, cuby.modelMatrix);
+		Matrix4f.rotate(cuby.angleX, new Vector3f(1f,0,0), cuby.modelMatrix, cuby.modelMatrix);
 		
-		Matrix4f.translate(Vector3f.sub(cuby.pos, cuby.prevPos, new Vector3f()), cuby.modelMatrix, cuby.modelMatrix);
+		Matrix4f.translate(new Vector3f(0,0,-camera.zoom), camera.viewMatrix, camera.viewMatrix);
 		
-		Vector3f.add(cuby.pos, cuby.vel, cuby.pos);
-		cuby.vel.set(0, 0, 0);
+		Matrix4f.rotate(-cuby.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.rotate(-cuby.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
 		
-//		Matrix4f.translate(new Vector3f(0,0,-camera.zoom), camera.viewMatrix, camera.viewMatrix);
-		
-//		Matrix4f.rotate(camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
-//		Matrix4f.rotate(camera.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
-		
-//		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
 		
 		if (mesh.isTextured) {
 			glUseProgram(texProgram.id);
