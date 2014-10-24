@@ -44,12 +44,13 @@ public class Core {
 	private ArrayList<Mesh> Meshes = new ArrayList<Mesh>();;
 	private Camera camera;
 	
+	private boolean F5isHeld = false;
+	
 //	Short term todos
-//	TODO make the camera grab actually move the player orientation
-//	TODO added a button (F5?) to grab camera freely (like it was at first)
+//	TODO what is the x angle for the vector (1,0,0)
 //	TODO make a texture class, to easily manage textures (duh)
 //	TODO put textures into the mesh objects
-//	TODO make a line class that extends the mesh class
+//	TODO make a line class
 //	TODO Maybe move the stuff messing with opengl into another class (crowded core class is crowded)
 	
 //	Long term todos
@@ -246,23 +247,23 @@ public class Core {
 		
 //		Dat clean input method :O
 		
-		if (Keyboard.getEventKey() == Keyboard.KEY_J && Keyboard.getEventKeyState()) {
-			camera.freeMovement = !camera.freeMovement;
-		}
-		
 		if (Mouse.isButtonDown(0)) {
-			cuby.angleX -= ((float) Mouse.getDY()/100);
-			cuby.angleY += ((float) Mouse.getDX()/100);
+			camera.angleX -= ((float) Mouse.getDY()/100);
+			camera.angleY += ((float) Mouse.getDX()/100);
 			
-			if (cuby.angleX > Math.PI*2) {
-				cuby.angleX = cuby.angleX - (float) (Math.PI*2);
-			}else if (cuby.angleX < -(Math.PI*2)) {
-				cuby.angleX = cuby.angleX + (float) (Math.PI*2);
+			if (camera.angleX > Math.PI*2) {
+				camera.angleX = camera.angleX - (float) (Math.PI*2);
+			}else if (camera.angleX < -(Math.PI*2)) {
+				camera.angleX = camera.angleX + (float) (Math.PI*2);
 			}
-			if (cuby.angleY > Math.PI*2) {
-				cuby.angleY = cuby.angleY - (float) (Math.PI*2);
-			}else if (cuby.angleY < -(Math.PI*2)) {
-				cuby.angleY = cuby.angleY + (float) (Math.PI*2);
+			if (camera.angleY > Math.PI*2) {
+				camera.angleY = camera.angleY - (float) (Math.PI*2);
+			}else if (camera.angleY < -(Math.PI*2)) {
+				camera.angleY = camera.angleY + (float) (Math.PI*2);
+			}
+			
+			if (!camera.freeMovement) {
+				cuby.angleY = camera.angleY;
 			}
 		}else {
 			Mouse.getDX();
@@ -271,25 +272,43 @@ public class Core {
 		
 		camera.zoom -= ((float) Mouse.getDWheel()/1000);
 		
+		if (Keyboard.isKeyDown(Keyboard.KEY_F5)) {
+			if (!F5isHeld) {
+				if (camera.freeMovement) {
+					camera.angleX = cuby.angleX;
+					camera.angleY = cuby.angleY;
+					camera.angleZ = cuby.angleZ;
+				}
+				camera.freeMovement = !camera.freeMovement;
+			}
+			F5isHeld = true;
+		}else {
+			F5isHeld = false;
+		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY+90f);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY+(float)(Math.PI/2));
+			System.out.println(vel.toString());
 			vel.scale(camera.speed);
 			
 			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY-90f);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY-(float)(Math.PI/2));
+			System.out.println(vel.toString());
 			vel.scale(camera.speed);
 			
 			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			Vector3f vel = Util.angleToVector3f(cuby.angleX+90f, cuby.angleY);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX-(float)(Math.PI/2), cuby.angleY);
+			System.out.println(vel.toString());
 			vel.scale(camera.speed);
 			
 			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			Vector3f vel = Util.angleToVector3f(cuby.angleX-90f, cuby.angleY);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX+(float)(Math.PI/2), cuby.angleY);
+			System.out.println(vel.toString());
 			vel.scale(camera.speed);
 			
 			Vector3f.add(cuby.pos, vel, cuby.pos);
@@ -310,8 +329,6 @@ public class Core {
 	}
 	
 	private void update(Mesh mesh) {
-		System.out.println("AngleX: "+cuby.angleX+" AngleY: "+cuby.angleY);
-		
 		Matrix4f.setIdentity(camera.viewMatrix);
 		Matrix4f.setIdentity(cuby.modelMatrix);
 		
@@ -322,8 +339,8 @@ public class Core {
 		
 		Matrix4f.translate(new Vector3f(0,0,-camera.zoom), camera.viewMatrix, camera.viewMatrix);
 		
-		Matrix4f.rotate(-cuby.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
-		Matrix4f.rotate(-cuby.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.rotate(-camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
+		Matrix4f.rotate(-camera.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
 		
 		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
 		
