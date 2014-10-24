@@ -10,7 +10,7 @@ public class Camera {
 	public float angleY, angleX, angleZ = 0;
 	public float rotateSpeed = 0.01f;
 	public float zoom = 1f;
-	public float speed = 0.0005f;
+	public float speed = 0.05f;
 	public boolean freeMovement = false;
 	
 	public Camera(float x, float y, float z) {

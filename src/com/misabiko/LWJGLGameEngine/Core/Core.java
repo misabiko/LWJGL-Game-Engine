@@ -20,6 +20,8 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Utils.Util;
+
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
 import static org.lwjgl.opengl.GL11.*;
@@ -251,6 +253,17 @@ public class Core {
 		if (Mouse.isButtonDown(0)) {
 			cuby.angleX -= ((float) Mouse.getDY()/100);
 			cuby.angleY += ((float) Mouse.getDX()/100);
+			
+			if (cuby.angleX > Math.PI*2) {
+				cuby.angleX = cuby.angleX - (float) (Math.PI*2);
+			}else if (cuby.angleX < -(Math.PI*2)) {
+				cuby.angleX = cuby.angleX + (float) (Math.PI*2);
+			}
+			if (cuby.angleY > Math.PI*2) {
+				cuby.angleY = cuby.angleY - (float) (Math.PI*2);
+			}else if (cuby.angleY < -(Math.PI*2)) {
+				cuby.angleY = cuby.angleY + (float) (Math.PI*2);
+			}
 		}else {
 			Mouse.getDX();
 			Mouse.getDY();
@@ -259,31 +272,45 @@ public class Core {
 		camera.zoom -= ((float) Mouse.getDWheel()/1000);
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-//			Vector3f.add(cuby.pos, new Vector3f(camera.speed,0,0), cuby.pos);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY+90f);
+			vel.scale(camera.speed);
+			
+			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-//			Vector3f.add(cuby.pos, new Vector3f(-camera.speed,0,0), cuby.pos);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY-90f);
+			vel.scale(camera.speed);
+			
+			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-//			Vector3f.add(cuby.pos, new Vector3f(0,camera.speed,0), cuby.pos);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX+90f, cuby.angleY);
+			vel.scale(camera.speed);
+			
+			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-//			Vector3f.add(cuby.pos, new Vector3f(0,-camera.speed,0), cuby.pos);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX-90f, cuby.angleY);
+			vel.scale(camera.speed);
+			
+			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			Vector3f vel = cuby.getAngle();
-			vel.scale(0.05f);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
+			vel.scale(camera.speed);
+			
 			Vector3f.sub(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			Vector3f vel = cuby.getAngle();
-			vel.scale(0.01f);
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
+			vel.scale(camera.speed);
+			
 			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}
 		
 	}
 	
 	private void update(Mesh mesh) {
-//		System.out.println(cuby.pos.toString());
+		System.out.println("AngleX: "+cuby.angleX+" AngleY: "+cuby.angleY);
 		
 		Matrix4f.setIdentity(camera.viewMatrix);
 		Matrix4f.setIdentity(cuby.modelMatrix);

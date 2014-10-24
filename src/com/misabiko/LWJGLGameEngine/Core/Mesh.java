@@ -45,18 +45,4 @@ public abstract class Mesh {
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
 	}
-	
-	public Vector3f getAngle() {
-		Matrix4f mat = new Matrix4f();
-		
-		mat.translate(new Vector3f(0,0,1f));
-		
-		Matrix4f.rotate(angleX, new Vector3f(1f,0,0), mat, mat);
-		Matrix4f.rotate(angleY, new Vector3f(0,1f,0), mat, mat);
-		Matrix4f.rotate(angleZ, new Vector3f(0,0,1f), mat, mat);
-		
-		System.out.println(mat.toString());
-		
-		return new Vector3f(mat.m20,mat.m21,mat.m22);
-	}
 }
