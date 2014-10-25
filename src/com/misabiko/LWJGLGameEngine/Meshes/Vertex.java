@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Core;
+package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.awt.Color;
 

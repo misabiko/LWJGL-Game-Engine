@@ -2,8 +2,6 @@ package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.awt.Color;
 
-import com.misabiko.LWJGLGameEngine.Core.TexturedVertex;
-
 public class Box extends Mesh{
 	
 	public Box(float x, float y, float z, float w, float h, float d, Color[] colors) {

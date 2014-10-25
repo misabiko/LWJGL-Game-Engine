@@ -10,8 +10,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.misabiko.LWJGLGameEngine.Core.TexturedVertex;
-import com.misabiko.LWJGLGameEngine.Core.Vertex;
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 
 public abstract class Mesh {

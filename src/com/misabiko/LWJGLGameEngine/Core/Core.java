@@ -19,6 +19,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
+import com.misabiko.LWJGLGameEngine.Meshes.TexturedVertex;
+import com.misabiko.LWJGLGameEngine.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Shaders.Program;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 
