@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Core;
+package com.misabiko.LWJGLGameEngine.Meshes;
 
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
@@ -10,6 +10,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Core.TexturedVertex;
+import com.misabiko.LWJGLGameEngine.Core.Vertex;
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 
 public abstract class Mesh {
@@ -29,7 +31,7 @@ public abstract class Mesh {
 	
 	public Texture texture = defaultTexture;
 
-	protected static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
+	public static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
 	protected static Color defaultColor = Color.WHITE;
 	
 	public Mesh	(float x, float y, float z, float w, float h, float d, Vertex[] vertices, byte[] indices) {

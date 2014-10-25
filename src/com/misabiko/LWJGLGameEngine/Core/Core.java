@@ -17,6 +17,8 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Meshes.Box;
+import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 import static org.lwjgl.opengl.GL11.*;
