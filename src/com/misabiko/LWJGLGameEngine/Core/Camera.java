@@ -1,7 +1,6 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {

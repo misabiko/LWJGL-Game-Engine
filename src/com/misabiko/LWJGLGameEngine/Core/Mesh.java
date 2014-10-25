@@ -1,13 +1,16 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+
 import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+
+import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 
 public abstract class Mesh {
 	public Matrix4f modelMatrix;
@@ -23,14 +26,16 @@ public abstract class Mesh {
 	public ByteBuffer indicesBuffer;
 	
 	public int indicesCount, vboId, vboiId = 0;
+	
+	public Texture texture = defaultTexture;
 
+	protected static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
 	protected static Color defaultColor = Color.WHITE;
 	
 	public Mesh	(float x, float y, float z, float w, float h, float d, Vertex[] vertices, byte[] indices) {
 		modelMatrix = new Matrix4f();
 		
 		pos = new Vector3f(x,y,z);
-		
 		
 //		TODO Look further into Byte Buffers
 		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*TexturedVertex.elementCount);
