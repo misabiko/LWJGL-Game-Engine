@@ -17,6 +17,7 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -47,13 +48,13 @@ public class Core {
 	private boolean F5isHeld = false;
 	
 //	Short term todos
-//	TODO what is the x angle for the vector (1,0,0)
 //	TODO make a texture class, to easily manage textures (duh)
 //	TODO put textures into the mesh objects
 //	TODO make a line class
 //	TODO Maybe move the stuff messing with opengl into another class (crowded core class is crowded)
 	
 //	Long term todos
+//	TODO what is the x angle for the vector (1,0,0)
 //	TODO make a light shader/engine ( or at least something to see the meshes' borders )
 //	TODO learn to manage the projection matrix because that shizza is but' ugly
 //	TODO Physic Engine (Collision, gravity, etc)
@@ -262,9 +263,9 @@ public class Core {
 				camera.angleY = camera.angleY + (float) (Math.PI*2);
 			}
 			
-			if (!camera.freeMovement) {
-				cuby.angleY = camera.angleY;
-			}
+//			if (!camera.freeMovement) {
+//				cuby.angleY = camera.angleY;
+//			}
 		}else {
 			Mouse.getDX();
 			Mouse.getDY();
@@ -287,43 +288,41 @@ public class Core {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY+(float)(Math.PI/2));
-			System.out.println(vel.toString());
+			cuby.angleY = camera.angleY + ((float) (Math.PI/2));
+			
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
 			vel.scale(camera.speed);
 			
 			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY-(float)(Math.PI/2));
-			System.out.println(vel.toString());
+			cuby.angleY = camera.angleY - ((float) (Math.PI/2));
+			
+			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
 			vel.scale(camera.speed);
 			
 			Vector3f.add(cuby.pos, vel, cuby.pos);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			Vector3f vel = Util.angleToVector3f(cuby.angleX-(float)(Math.PI/2), cuby.angleY);
-			System.out.println(vel.toString());
-			vel.scale(camera.speed);
-			
-			Vector3f.add(cuby.pos, vel, cuby.pos);
+			Vector3f.add(cuby.pos, new Vector3f(0,camera.speed,0), cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			Vector3f vel = Util.angleToVector3f(cuby.angleX+(float)(Math.PI/2), cuby.angleY);
-			System.out.println(vel.toString());
-			vel.scale(camera.speed);
-			
-			Vector3f.add(cuby.pos, vel, cuby.pos);
+			Vector3f.sub(cuby.pos, new Vector3f(0,camera.speed,0), cuby.pos);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			cuby.angleY = camera.angleY;
+			
 			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
 			vel.scale(camera.speed);
 			
 			Vector3f.sub(cuby.pos, vel, cuby.pos);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
+			cuby.angleY = camera.angleY + (float) Math.PI;
+			
 			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
 			vel.scale(camera.speed);
 			
-			Vector3f.add(cuby.pos, vel, cuby.pos);
+			Vector3f.sub(cuby.pos, vel, cuby.pos);
 		}
 		
 	}
