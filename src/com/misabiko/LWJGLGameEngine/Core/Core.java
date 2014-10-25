@@ -249,8 +249,8 @@ public class Core {
 //		Dat clean input method :O
 		
 		if (Mouse.isButtonDown(0)) {
-			camera.angleX -= ((float) Mouse.getDY()/100);
-			camera.angleY += ((float) Mouse.getDX()/100);
+			camera.angleX += ((float) Mouse.getDY()/100);
+			camera.angleY -= ((float) Mouse.getDX()/100);
 			
 			if (camera.angleX > Math.PI*2) {
 				camera.angleX = camera.angleX - (float) (Math.PI*2);
