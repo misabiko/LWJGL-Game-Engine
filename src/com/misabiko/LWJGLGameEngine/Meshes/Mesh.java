@@ -18,7 +18,7 @@ public abstract class Mesh {
 	public Vector3f pos;
 	public Vector3f vel = new Vector3f();
 	
-	public float angleX, angleY, angleZ = 0;
+	public float angleX, angleY, angleZ, xRotVel = 0;
 	
 	public boolean isTextured = true;
 	
