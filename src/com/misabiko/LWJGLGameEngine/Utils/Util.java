@@ -17,7 +17,18 @@ public abstract class Util {
 		return angle;
 	}
 	
-	
+	public static Vector3f angleToVector2f(float angle) {
+		Vector3f vec = new Vector3f();
+		
+//		Turning on Y axis
+		vec.z = (float) Math.cos(angle);
+		vec.x = (float) Math.sin(angleY);
+		
+//		Turning on X axis
+		vec.y = (float) -Math.sin(angleX);
+		
+		return vec;
+	}
 	
 	public static void mulMatrix4fVector3f(Matrix4f mat, Vector3f vec) {
 		vec.setX((vec.x*mat.m00)+(vec.x*mat.m01)+(vec.x*mat.m02));

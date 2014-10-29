@@ -17,9 +17,10 @@ public abstract class Mesh {
 	public Matrix4f modelMatrix;
 	
 	public Vector3f pos;
-	public Vector3f Yvel = new Vector3f(0,0,0);
+	public Vector2f xzVel = new Vector2f(0,0);
+	public Vector3f vel = new Vector3f(0,0,0);
 	
-	public float angleX, angleY, angleZ, xRotVel, yVel = 0;
+	public float angleX, angleY, angleZ, yVel = 0;
 	
 	public boolean isTextured = true;
 	public boolean isOnGround = false;
@@ -54,8 +55,9 @@ public abstract class Mesh {
 	}
 	
 	public void update() {
-		Vector3f.sub(pos, Xvel, pos);
-		Vector3f.sub(pos, Yvel, pos);
+		vel.set(xzVel.x, yVel, xzVel.y);
+		
+		Vector3f.add(pos, vel, pos);
 		
 		Matrix4f.setIdentity(modelMatrix);
 		
