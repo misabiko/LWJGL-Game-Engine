@@ -1,6 +1,8 @@
 package com.misabiko.LWJGLGameEngine.Meshes;
 
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.awt.Color;
 import java.nio.ByteBuffer;
@@ -49,5 +51,9 @@ public abstract class Mesh {
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
+	}
+	
+	public void update() {
+		
 	}
 }

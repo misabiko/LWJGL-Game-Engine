@@ -18,6 +18,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
+import com.misabiko.LWJGLGameEngine.Meshes.Cuby;
 import com.misabiko.LWJGLGameEngine.Meshes.Line;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Meshes.TexturedVertex;
@@ -36,14 +37,14 @@ public class Core {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "LWJGL Game Engine";
-	private Program colProgram, texProgram;
-	private Matrix4f projectionMatrix;
-	private FloatBuffer matrixBuffer;
+	public static Program colProgram, texProgram;
+	public static Matrix4f projectionMatrix;
+	public static FloatBuffer matrixBuffer;
 	private int vaoId = 0;
 	private ArrayList<Mesh> Meshes = new ArrayList<Mesh>();
 	private ArrayList<Line> Lines = new ArrayList<Line>();
-	private Camera camera;
-	private Box cuby;
+	public static Camera camera;
+	private Cuby cuby;
 	
 	private boolean F5isHeld, EscIsHeld = false;
 	
@@ -141,7 +142,7 @@ public class Core {
 	}
 	
 	private void init() {
-		cuby = new Box(0, 0, 0, 0.5f,0.5f,0.5f, 0, 1f, 1f, 0.5f);
+		cuby = new Cuby();
 		Meshes.add(cuby);
 		
 		Meshes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
@@ -302,56 +303,7 @@ public class Core {
 	
 	private void update(Mesh mesh) {
 		
-		Matrix4f.setIdentity(camera.viewMatrix);
-		Matrix4f.setIdentity(cuby.modelMatrix);
 		
-		Matrix4f.translate(cuby.pos, cuby.modelMatrix, cuby.modelMatrix);
-		
-		Matrix4f.rotate(cuby.angleY, new Vector3f(0,1f,0), cuby.modelMatrix, cuby.modelMatrix);
-		Matrix4f.rotate(cuby.angleX, new Vector3f(1f,0,0), cuby.modelMatrix, cuby.modelMatrix);
-		
-		Matrix4f.translate(new Vector3f(0,0,-camera.zoom), camera.viewMatrix, camera.viewMatrix);
-		
-		Matrix4f.rotate(-camera.angleX, new Vector3f(1f,0,0), camera.viewMatrix, camera.viewMatrix);
-		Matrix4f.rotate(-camera.angleY, new Vector3f(0,1f,0), camera.viewMatrix, camera.viewMatrix);
-		
-		Matrix4f.translate(cuby.pos.negate(new Vector3f()), camera.viewMatrix, camera.viewMatrix);
-		
-		if (mesh.isTextured) {
-			glUseProgram(texProgram.id);
-			
-				projectionMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(texProgram.projectionMatrixLocation, false, matrixBuffer);
-				
-				camera.viewMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
-				
-				mesh.modelMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
-				
-			
-			glUseProgram(0);
-		} else {
-			glUseProgram(colProgram.id);
-			
-			projectionMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(colProgram.projectionMatrixLocation, false, matrixBuffer);
-			
-			camera.viewMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
-			
-			mesh.modelMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
-			
-		
-		glUseProgram(0);
-		}
 		
 	}
 	

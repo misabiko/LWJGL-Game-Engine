@@ -17,4 +17,16 @@ public class Camera {
 		
 //		Matrix4f.translate(pos, viewMatrix, viewMatrix);
 	}
+	
+	public void update() {
+		Matrix4f.setIdentity(viewMatrix);
+		
+		Matrix4f.translate(new Vector3f(0,0,-zoom), viewMatrix, viewMatrix);
+		
+		Matrix4f.rotate(-angleX, new Vector3f(1f,0,0), viewMatrix, viewMatrix);
+		Matrix4f.rotate(-angleY, new Vector3f(0,1f,0), viewMatrix, viewMatrix);
+		
+		Matrix4f.translate(pos.negate(new Vector3f()), viewMatrix, viewMatrix);
+		
+	}
 }
