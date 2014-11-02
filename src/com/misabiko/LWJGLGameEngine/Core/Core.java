@@ -15,6 +15,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
@@ -265,13 +266,11 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			cuby.angleY = camera.angleY;
 			
-			cuby.Yvel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
-			cuby.Yvel.scale(cuby.speed);
+			Vector2f.add(cuby.xzVel, Util.angleToVector2f(cuby.angleY, cuby.speed), cuby.xzVel);
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
 			cuby.angleY = camera.angleY;
 			
-			cuby.Yvel = Util.angleToVector3f(cuby.angleX, cuby.angleY-(float) Math.PI);
-			cuby.Yvel.scale(cuby.speed);
+			Vector2f.sub(cuby.xzVel, Util.angleToVector2f(cuby.angleY, cuby.speed), cuby.xzVel);
 		}
 		
 	}
