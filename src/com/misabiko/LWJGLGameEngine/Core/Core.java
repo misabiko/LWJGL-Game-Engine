@@ -241,20 +241,10 @@ public class Core {
 			F5isHeld = false;
 		}
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			cuby.angleY = camera.angleY + ((float) (Math.PI/2));
-			
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
-			vel.scale(camera.speed);
-			
-			Vector3f.add(cuby.pos, vel, cuby.pos);
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-			cuby.angleY = camera.angleY - ((float) (Math.PI/2));
-			
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
-			vel.scale(camera.speed);
-			
-			Vector3f.add(cuby.pos, vel, cuby.pos);
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			cuby.xVel -= cuby.speed;
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_D)){
+			cuby.xVel += cuby.speed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
@@ -266,11 +256,11 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			cuby.angleY = camera.angleY;
 			
-			Vector2f.add(cuby.xzVel, Util.angleToVector2f(cuby.angleY, cuby.speed), cuby.xzVel);
+			cuby.zVel -= cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
 			cuby.angleY = camera.angleY;
 			
-			Vector2f.sub(cuby.xzVel, Util.angleToVector2f(cuby.angleY, cuby.speed), cuby.xzVel);
+			cuby.zVel += cuby.speed;
 		}
 		
 	}

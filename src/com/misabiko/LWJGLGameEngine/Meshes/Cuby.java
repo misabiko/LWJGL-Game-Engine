@@ -6,7 +6,7 @@ import com.misabiko.LWJGLGameEngine.Utils.Util;
 public class Cuby extends Box{
 	
 	private float jumpStrength = 0.05f;
-	public float speed = 0.05f;
+	public float speed = 0.005f;
 	
 	public Cuby() {
 		super(0, 0, 0, 0.5f,0.5f,0.5f);
@@ -17,8 +17,7 @@ public class Cuby extends Box{
 	}
 	
 	public void update() {
-		super.update();
-		
 		Physic.update(this);
+		super.update();
 	}
 }
