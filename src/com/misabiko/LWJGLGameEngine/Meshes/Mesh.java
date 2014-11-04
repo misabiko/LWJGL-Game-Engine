@@ -1,8 +1,6 @@
 package com.misabiko.LWJGLGameEngine.Meshes;
 
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4;
-import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.awt.Color;
 import java.nio.ByteBuffer;
@@ -10,6 +8,7 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
@@ -18,11 +17,12 @@ public abstract class Mesh {
 	public Matrix4f modelMatrix;
 	
 	public Vector3f pos;
-	public Vector3f vel = new Vector3f();
+	public Vector3f vel = new Vector3f(0,0,0);
 	
-	public float angleX, angleY, angleZ, xRotVel = 0;
+	public float angleX, angleY, angleZ, xVel, yVel, zVel = 0;
 	
 	public boolean isTextured = true;
+	public boolean isOnGround = false;
 	
 	public FloatBuffer verticesBuffer;
 	public ByteBuffer indicesBuffer;
@@ -54,6 +54,15 @@ public abstract class Mesh {
 	}
 	
 	public void update() {
+		vel.set(xVel, yVel, -zVel);
+		System.out.println(vel.toString());
+		Vector3f.add(pos, vel, pos);
 		
+		Matrix4f.setIdentity(modelMatrix);
+		
+		Matrix4f.translate(pos, modelMatrix, modelMatrix);
+		
+		Matrix4f.rotate(angleY, new Vector3f(0,1f,0), modelMatrix, modelMatrix);
+		Matrix4f.rotate(angleX, new Vector3f(1f,0,0), modelMatrix, modelMatrix);
 	}
 }

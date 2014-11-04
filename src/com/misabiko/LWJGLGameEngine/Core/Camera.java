@@ -3,6 +3,8 @@ package com.misabiko.LWJGLGameEngine.Core;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
+
 public class Camera {
 	public Matrix4f viewMatrix = new Matrix4f();
 	public Vector3f pos;
@@ -18,7 +20,7 @@ public class Camera {
 //		Matrix4f.translate(pos, viewMatrix, viewMatrix);
 	}
 	
-	public void update() {
+	public void update(Mesh m) {
 		Matrix4f.setIdentity(viewMatrix);
 		
 		Matrix4f.translate(new Vector3f(0,0,-zoom), viewMatrix, viewMatrix);
@@ -26,7 +28,6 @@ public class Camera {
 		Matrix4f.rotate(-angleX, new Vector3f(1f,0,0), viewMatrix, viewMatrix);
 		Matrix4f.rotate(-angleY, new Vector3f(0,1f,0), viewMatrix, viewMatrix);
 		
-		Matrix4f.translate(pos.negate(new Vector3f()), viewMatrix, viewMatrix);
-		
+		Matrix4f.translate(m.pos.negate(new Vector3f()), viewMatrix, viewMatrix);
 	}
 }

@@ -15,11 +15,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Meshes.Cuby;
-import com.misabiko.LWJGLGameEngine.Meshes.Line;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Meshes.TexturedVertex;
 import com.misabiko.LWJGLGameEngine.Meshes.Vertex;
@@ -37,13 +37,12 @@ public class Core {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "LWJGL Game Engine";
-	public static Program colProgram, texProgram;
-	public static Matrix4f projectionMatrix;
-	public static FloatBuffer matrixBuffer;
+	private Program colProgram, texProgram;
+	private Matrix4f projectionMatrix;
+	private FloatBuffer matrixBuffer;
 	private int vaoId = 0;
 	private ArrayList<Mesh> Meshes = new ArrayList<Mesh>();
-	private ArrayList<Line> Lines = new ArrayList<Line>();
-	public static Camera camera;
+	private Camera camera;
 	private Cuby cuby;
 	
 	private boolean F5isHeld, EscIsHeld = false;
@@ -74,11 +73,6 @@ public class Core {
 			for (Mesh mesh : Meshes) {
 				update(mesh);
 				render(mesh);
-			}
-			
-			for (Line line : Lines) {
-				update(line);
-				render(line);
 			}
 			
 			Display.sync(60);
@@ -149,8 +143,6 @@ public class Core {
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
-		Lines.add(new Line(-0.5f,0,-1f,0.5f,0,-1f));
-		
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
@@ -171,15 +163,6 @@ public class Core {
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 			}
 			
-			for (Line line : Lines) {
-				line.vboId = glGenBuffers();
-				
-				glBindBuffer(GL_ARRAY_BUFFER,line.vboId);
-				
-					glBufferData(GL_ARRAY_BUFFER,line.verticesBuffer,GL_STATIC_DRAW);
-					
-				glBindBuffer(GL_ARRAY_BUFFER,0);
-			}
 		glBindVertexArray(0);
 		
 	}
@@ -223,8 +206,8 @@ public class Core {
 		}
 		
 		if (Mouse.isGrabbed()) {
-			camera.angleX += ((float) Mouse.getDY()/100);
-			camera.angleY -= ((float) Mouse.getDX()/100);
+			camera.angleX += ((float) Mouse.getDY()/500);
+			camera.angleY -= ((float) Mouse.getDX()/500);
 			
 			if (camera.angleX > Math.PI*2) {
 				camera.angleX = camera.angleX - (float) (Math.PI*2);
@@ -237,9 +220,6 @@ public class Core {
 				camera.angleY = camera.angleY + (float) (Math.PI*2);
 			}
 		
-//			if (!camera.freeMovement) {
-//				cuby.angleY = camera.angleY;
-//			}
 		}else {
 			Mouse.getDX();
 			Mouse.getDY();
@@ -264,21 +244,15 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			cuby.angleY = camera.angleY + ((float) (Math.PI/2));
 			
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
-			vel.scale(camera.speed);
-			
-			Vector3f.add(cuby.pos, vel, cuby.pos);
+			cuby.xVel += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
 			cuby.angleY = camera.angleY - ((float) (Math.PI/2));
 			
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
-			vel.scale(camera.speed);
-			
-			Vector3f.add(cuby.pos, vel, cuby.pos);
+			cuby.xVel -= cuby.speed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			Vector3f.add(cuby.pos, new Vector3f(0,camera.speed,0), cuby.pos);
+			cuby.jump();
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
 			Vector3f.sub(cuby.pos, new Vector3f(0,camera.speed,0), cuby.pos);
 		}
@@ -286,30 +260,40 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			cuby.angleY = camera.angleY;
 			
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
-			vel.scale(camera.speed);
-			
-			Vector3f.sub(cuby.pos, vel, cuby.pos);
+			cuby.zVel += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			cuby.angleY = camera.angleY + (float) Math.PI;
+			cuby.angleY = camera.angleY+(float)Math.PI;
 			
-			Vector3f vel = Util.angleToVector3f(cuby.angleX, cuby.angleY);
-			vel.scale(camera.speed);
-			
-			Vector3f.sub(cuby.pos, vel, cuby.pos);
+			cuby.zVel -= cuby.speed;
 		}
 		
 	}
 	
 	private void update(Mesh mesh) {
 		
+		mesh.update();
+		camera.update(cuby);
 		
-		
-	}
-	
-	private void update(Line line) {
-		glUseProgram(colProgram.id);
-		
+		if (mesh.isTextured) {
+			glUseProgram(texProgram.id);
+			
+				projectionMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(texProgram.projectionMatrixLocation, false, matrixBuffer);
+				
+				camera.viewMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
+				
+				mesh.modelMatrix.store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
+				
+			
+			glUseProgram(0);
+		} else {
+			glUseProgram(colProgram.id);
+			
 			projectionMatrix.store(matrixBuffer);
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.projectionMatrixLocation, false, matrixBuffer);
@@ -318,12 +302,14 @@ public class Core {
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
 			
-			line.modelMatrix.store(matrixBuffer);
+			mesh.modelMatrix.store(matrixBuffer);
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
 			
 		
 		glUseProgram(0);
+		}
+		
 	}
 	
 	private void render(Mesh mesh) {
@@ -387,29 +373,6 @@ public class Core {
 		}
 	}
 	
-	private void render(Line line) {
-		glUseProgram(colProgram.id);
-			
-			glBindVertexArray(vaoId);
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-			
-				glBindBuffer(GL_ARRAY_BUFFER, line.vboId);
-				
-					glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
-					glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.colorOffset);
-					
-					glDrawArrays(GL_LINE, 0, 2);
-					
-				glBindBuffer(GL_ARRAY_BUFFER,0);
-			
-			glDisableVertexAttribArray(0);
-			glDisableVertexAttribArray(1);
-			glBindVertexArray(0);
-		
-		glUseProgram(0);
-	}
-	
 	private void cleanUp() {
 		glUseProgram(0);
 		
@@ -428,9 +391,6 @@ public class Core {
 		}
 		
 		glDeleteTextures(Mesh.defaultTexture.texId);
-		
-		for (Line line : Lines)
-			glDeleteBuffers(line.vboId);
 		
 		colProgram.cleanUp();
 		texProgram.cleanUp();
