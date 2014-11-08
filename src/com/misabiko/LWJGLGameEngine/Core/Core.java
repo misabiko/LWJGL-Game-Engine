@@ -242,11 +242,11 @@ public class Core {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			cuby.angleY = camera.angleY + ((float) (Math.PI/2));
+			cuby.angleY = camera.angleY;
 			
 			cuby.xVel += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-			cuby.angleY = camera.angleY - ((float) (Math.PI/2));
+			cuby.angleY = camera.angleY;
 			
 			cuby.xVel -= cuby.speed;
 		}
@@ -262,7 +262,7 @@ public class Core {
 			
 			cuby.zVel += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			cuby.angleY = camera.angleY+(float)Math.PI;
+			cuby.angleY = camera.angleY;
 			
 			cuby.zVel -= cuby.speed;
 		}

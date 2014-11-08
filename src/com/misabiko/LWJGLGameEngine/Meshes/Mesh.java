@@ -55,7 +55,7 @@ public abstract class Mesh {
 	}
 	
 	public void update() {
-		Vector3f vel = new Vector3f(xVel, yVel, zVel);
+		Vector3f vel = new Vector3f(xVel, yVel, -zVel);
 //		System.out.println("Before: "+vel.toString());
 		
 		System.out.println("angleX: "+Math.toDegrees(angleX));
