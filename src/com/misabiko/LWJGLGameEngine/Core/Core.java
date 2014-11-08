@@ -45,10 +45,10 @@ public class Core {
 	private boolean F5isHeld, EscIsHeld = false;
 	
 //	Current task
-//	TODO Maybe move the stuff messing with opengl into another class (crowded core class is crowded)
+//	TODO make a line class
 	
 //	Short term todos
-//	TODO make a line class
+//	TODO in mesh class, join xVel and zVel into a vector and manipulate length instead
 //	TODO Collision System
 	
 //	Long term todos
