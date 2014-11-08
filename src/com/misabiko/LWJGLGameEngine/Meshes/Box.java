@@ -5,7 +5,7 @@ import java.awt.Color;
 public class Box extends Mesh{
 	
 	public Box(float x, float y, float z, float w, float h, float d, Color[] colors) {
-		super(x,y,z,w,h,d, new TexturedVertex[] {
+		super(x,y,z, new TexturedVertex[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
 				new TexturedVertex(x-(w/2),	y-(h/2),	z+(d/2),	colors[0], 	0f, 1f),	//0

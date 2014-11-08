@@ -237,30 +237,30 @@ public abstract class OpenGLHandler {
 		}else {
 			glUseProgram(colProgram.id);
 			
-			glBindVertexArray(vaoId);
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-			glEnableVertexAttribArray(2);
-			
-				glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
+				glBindVertexArray(vaoId);
+				glEnableVertexAttribArray(0);
+				glEnableVertexAttribArray(1);
+				glEnableVertexAttribArray(2);
 				
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
+					glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
+					
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
+					
+						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
+						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
+						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+						
+						glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
+						
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+					glBindBuffer(GL_ARRAY_BUFFER,0);
 				
-					glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
-					glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
-					glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
-					
-					glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
-					
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-				glBindBuffer(GL_ARRAY_BUFFER,0);
-			
-			glDisableVertexAttribArray(0);
-			glDisableVertexAttribArray(1);
-			glDisableVertexAttribArray(2);
-			glBindVertexArray(0);
+				glDisableVertexAttribArray(0);
+				glDisableVertexAttribArray(1);
+				glDisableVertexAttribArray(2);
+				glBindVertexArray(0);
 		
-		glUseProgram(0);
+			glUseProgram(0);
 		}
 	}
 	

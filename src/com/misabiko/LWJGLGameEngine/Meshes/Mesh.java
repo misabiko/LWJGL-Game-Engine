@@ -1,6 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Meshes;
 
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
 import java.awt.Color;
 import java.nio.ByteBuffer;
@@ -30,12 +31,14 @@ public abstract class Mesh {
 	
 	public int indicesCount, vboId, vboiId = 0;
 	
+	public int primitiveType = GL_TRIANGLES;
+	
 	public Texture texture = defaultTexture;
 
 	public static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
 	protected static Color defaultColor = Color.WHITE;
 	
-	public Mesh	(float x, float y, float z, float w, float h, float d, Vertex[] vertices, byte[] indices) {
+	public Mesh	(float x, float y, float z, Vertex[] vertices, int primType) {
 		modelMatrix = new Matrix4f();
 		
 		pos = new Vector3f(x,y,z);
@@ -47,6 +50,11 @@ public abstract class Mesh {
 		}
 		verticesBuffer.flip();
 		
+		primitiveType = primType;
+	}
+	
+	public Mesh	(float x, float y, float z, Vertex[] vertices, byte[] indices) {
+		this(x,y,z,vertices, GL_TRIANGLES);
 		
 		indicesCount = indices.length;
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
