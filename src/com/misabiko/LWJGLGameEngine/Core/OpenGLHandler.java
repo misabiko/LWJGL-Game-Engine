@@ -74,7 +74,7 @@ public abstract class OpenGLHandler {
 			System.exit(-1);
 		}
 		
-		glClearColor(0.0f,0.5f,1f,1f);
+		glClearColor(0.0f,0f,0f,1f);
 		
 		glViewport(0, 0, width, height);
 		
