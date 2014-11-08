@@ -1,7 +1,6 @@
 package com.misabiko.LWJGLGameEngine.Meshes;
 
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
-import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 public class Cuby extends Box{
 	

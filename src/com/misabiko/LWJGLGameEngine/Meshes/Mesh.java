@@ -56,20 +56,12 @@ public abstract class Mesh {
 	
 	public void update() {
 		Vector3f vel = new Vector3f(xVel, yVel, -zVel);
-//		System.out.println("Before: "+vel.toString());
-		
-		System.out.println("angleX: "+Math.toDegrees(angleX));
-		System.out.println("angleY: "+Math.toDegrees(angleY));
-		System.out.println("angleZ: "+Math.toDegrees(angleZ));
 		
 		Matrix4f rot = new Matrix4f();
 		Matrix4f.rotate(angleX, new Vector3f(1,0,0), rot, rot);
 		Matrix4f.rotate(angleY, new Vector3f(0,1,0), rot, rot);
 		Matrix4f.rotate(angleZ, new Vector3f(0,0,1), rot, rot);
-		
 		vel = Util.mulMatrix4fVector3f(rot, vel);
-//		System.out.println(rot.toString());
-//		System.out.println("After: "+vel.toString());
 		
 		Vector3f.add(pos, vel, pos);
 		

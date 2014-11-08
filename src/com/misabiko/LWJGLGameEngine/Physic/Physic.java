@@ -6,7 +6,7 @@ public class Physic {
 	private static float ySpeedCap = -1f;
 	private static float speedCap = 0.1f;
 	private static float gravity = 0.05f;
-	private static float friction = 0.0005f;
+	private static float friction = 0.004f;
 	
 	private static void friction(Mesh m) {
 		if (m.xVel >= friction) {

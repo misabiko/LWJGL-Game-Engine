@@ -37,11 +37,10 @@ public abstract class Util {
 	}
 	
 	public static Vector3f mulMatrix4fVector3f(Matrix4f mat, Vector3f vec) {
-		
-		vec.setX((vec.x*mat.m00)+(vec.y*mat.m10)+(vec.z*mat.m20));
-		vec.setY((vec.x*mat.m01)+(vec.y*mat.m11)+(vec.z*mat.m21));
-		vec.setZ((vec.x*mat.m02)+(vec.y*mat.m12)+(vec.z*mat.m22));
+		vec.set((vec.x*mat.m00)+(vec.y*mat.m10)+(vec.z*mat.m20),
+				(vec.x*mat.m01)+(vec.y*mat.m11)+(vec.z*mat.m21),
+				(vec.x*mat.m02)+(vec.y*mat.m12)+(vec.z*mat.m22));
 		
 		return vec;
-	}
+	}	
 }
