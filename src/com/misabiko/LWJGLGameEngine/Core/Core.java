@@ -47,17 +47,17 @@ public class Core {
 	
 	private boolean F5isHeld, EscIsHeld = false;
 	
-//	Short term todos
+//	Current task
 //	TODO make a line class
+	
+//	Short term todos
 //	TODO Maybe move the stuff messing with opengl into another class (crowded core class is crowded)
+//	TODO Collision System
 	
 //	Long term todos
-//	TODO what is the x angle for the vector (1,0,0)
 //	TODO make a light shader/engine ( or at least something to see the meshes' borders )
-//	TODO learn to manage the projection matrix because that shizza is but' ugly
-//	TODO Physic Engine (Collision, gravity, etc)
-//	TODO Custom (Blender) models?
-//	TODO sound manager
+//	TODO learn to manage the projection matrix
+//	TODO Custom (Blender or MagicaVoxel) models?
 //	TODO well, you know, game stuff
 	
 	public Core() {
