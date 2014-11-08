@@ -1,14 +1,12 @@
 package com.misabiko.LWJGLGameEngine.Physic;
 
-import org.lwjgl.util.vector.Vector2f;
-
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
-import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 public class Physic {
-	private static float ySpeedCap = -0.005f;
+	private static float ySpeedCap = -1f;
+	private static float speedCap = 0.1f;
 	private static float gravity = 0.05f;
-	private static float friction = 0.001f;
+	private static float friction = 0.0005f;
 	
 	private static void friction(Mesh m) {
 		if (m.xVel >= friction) {
@@ -25,6 +23,18 @@ public class Physic {
 			m.zVel += friction;
 		}else {
 			m.zVel = 0;
+		}
+		
+		if (m.xVel > speedCap) {
+			m.xVel = speedCap;
+		}else if (m.xVel < -speedCap) {
+			m.xVel = -speedCap;
+		}
+		
+		if (m.zVel > speedCap) {
+			m.zVel = speedCap;
+		}else if (m.zVel < -speedCap) {
+			m.zVel = -speedCap;
 		}
 	}
 	

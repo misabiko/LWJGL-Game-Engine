@@ -7,17 +7,18 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
+import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 public abstract class Mesh {
 	public Matrix4f modelMatrix;
 	
 	public Vector3f pos;
-	public Vector3f vel = new Vector3f(0,0,0);
 	
 	public float angleX, angleY, angleZ, xVel, yVel, zVel = 0;
 	
@@ -54,8 +55,22 @@ public abstract class Mesh {
 	}
 	
 	public void update() {
-		vel.set(xVel, yVel, -zVel);
-		System.out.println(vel.toString());
+		Vector3f vel = new Vector3f(xVel, yVel, zVel);
+//		System.out.println("Before: "+vel.toString());
+		
+		System.out.println("angleX: "+Math.toDegrees(angleX));
+		System.out.println("angleY: "+Math.toDegrees(angleY));
+		System.out.println("angleZ: "+Math.toDegrees(angleZ));
+		
+		Matrix4f rot = new Matrix4f();
+		Matrix4f.rotate(angleX, new Vector3f(1,0,0), rot, rot);
+		Matrix4f.rotate(angleY, new Vector3f(0,1,0), rot, rot);
+		Matrix4f.rotate(angleZ, new Vector3f(0,0,1), rot, rot);
+		
+		vel = Util.mulMatrix4fVector3f(rot, vel);
+//		System.out.println(rot.toString());
+//		System.out.println("After: "+vel.toString());
+		
 		Vector3f.add(pos, vel, pos);
 		
 		Matrix4f.setIdentity(modelMatrix);

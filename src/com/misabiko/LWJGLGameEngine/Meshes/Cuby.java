@@ -18,7 +18,6 @@ public class Cuby extends Box{
 	
 	public void update() {
 		Physic.update(this);
-//		System.out.println(xzVel);
 		super.update();
 	}
 }
