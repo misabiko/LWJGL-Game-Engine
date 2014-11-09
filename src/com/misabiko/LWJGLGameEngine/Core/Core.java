@@ -47,10 +47,9 @@ public class Core {
 	private boolean F5isHeld, EscIsHeld = false;
 	
 //	Current task
-//	TODO in mesh class, join xVel and zVel into a vector and manipulate length instead
+//	TODO Collision System
 	
 //	Short term todos
-//	TODO Collision System
 	
 //	Long term todos
 //	TODO make a light shader/engine ( or at least something to see the meshes' borders )
