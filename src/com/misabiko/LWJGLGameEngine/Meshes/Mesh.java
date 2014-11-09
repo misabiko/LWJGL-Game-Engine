@@ -23,7 +23,7 @@ public abstract class Mesh {
 	
 	public float angleX, angleY, angleZ, xVel, yVel, zVel = 0;
 	
-	public boolean isTextured = true;
+	public boolean isTextured;
 	public boolean isOnGround = false;
 	
 	public FloatBuffer verticesBuffer;
@@ -49,8 +49,9 @@ public abstract class Mesh {
 			verticesBuffer.put(v.getElements());
 		}
 		verticesBuffer.flip();
-		
+		indicesCount = vertices.length;
 		primitiveType = primType;
+		isTextured = false;
 	}
 	
 	public Mesh	(float x, float y, float z, Vertex[] vertices, byte[] indices) {
@@ -60,6 +61,7 @@ public abstract class Mesh {
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
+		isTextured = true;
 	}
 	
 	public void update() {

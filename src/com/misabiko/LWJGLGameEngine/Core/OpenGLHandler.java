@@ -1,37 +1,10 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
-import static org.lwjgl.opengl.GL11.glDrawElements;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
-import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
-import static org.lwjgl.opengl.GL20.glCompileShader;
-import static org.lwjgl.opengl.GL20.glCreateShader;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glShaderSource;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -154,12 +127,14 @@ public abstract class OpenGLHandler {
 					
 				glBindBuffer(GL_ARRAY_BUFFER,0);
 				
-				mesh.vboiId = glGenBuffers();
+				if (mesh.primitiveType == GL_TRIANGLES) {
+					mesh.vboiId = glGenBuffers();
+						
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
+						glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indicesBuffer, GL_STATIC_DRAW);
 					
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indicesBuffer, GL_STATIC_DRAW);
-				
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+				}
 			}
 			
 		glBindVertexArray(0);
@@ -204,60 +179,58 @@ public abstract class OpenGLHandler {
 		glUseProgram(0);
 		}
 		
-		if (mesh.isTextured) {
-			glUseProgram(texProgram.id);
-			
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, mesh.texture.texId);
+		if (mesh.primitiveType == GL_TRIANGLES) {
+			if (mesh.isTextured) {
 				
-				glBindVertexArray(vaoId);
-				glEnableVertexAttribArray(0);
-				glEnableVertexAttribArray(1);
-				glEnableVertexAttribArray(2);
+				glUseProgram(texProgram.id);
 				
-					glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
+					glActiveTexture(GL_TEXTURE0);
+					glBindTexture(GL_TEXTURE_2D, mesh.texture.texId);
+			}else {
+				glUseProgram(colProgram.id);
+			}
+					glBindVertexArray(vaoId);
+					glEnableVertexAttribArray(0);
+					glEnableVertexAttribArray(1);
+					glEnableVertexAttribArray(2);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
-					
-						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
-						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
-						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+						glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
 						
-						glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
+						
+							glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
+							glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
+							glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+							
+							glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
+							
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+						glBindBuffer(GL_ARRAY_BUFFER,0);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-					glBindBuffer(GL_ARRAY_BUFFER,0);
-				
-				glDisableVertexAttribArray(0);
-				glDisableVertexAttribArray(1);
-				glDisableVertexAttribArray(2);
-				glBindVertexArray(0);
+					glDisableVertexAttribArray(0);
+					glDisableVertexAttribArray(1);
+					glDisableVertexAttribArray(2);
+					glBindVertexArray(0);
 			
-			glUseProgram(0);
+				glUseProgram(0);
 		}else {
 			glUseProgram(colProgram.id);
 			
 				glBindVertexArray(vaoId);
 				glEnableVertexAttribArray(0);
 				glEnableVertexAttribArray(1);
-				glEnableVertexAttribArray(2);
 				
 					glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
-					
-						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
-						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
-						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
+						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.colorOffset);
 						
-						glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
+						glDrawArrays(mesh.primitiveType, 0, mesh.indicesCount);
 						
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 					glBindBuffer(GL_ARRAY_BUFFER,0);
 				
 				glDisableVertexAttribArray(0);
 				glDisableVertexAttribArray(1);
-				glDisableVertexAttribArray(2);
 				glBindVertexArray(0);
 		
 			glUseProgram(0);

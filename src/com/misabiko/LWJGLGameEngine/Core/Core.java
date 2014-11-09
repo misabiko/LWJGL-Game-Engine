@@ -1,5 +1,6 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Meshes.Cuby;
+import com.misabiko.LWJGLGameEngine.Meshes.Line;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Meshes.TexturedVertex;
 import com.misabiko.LWJGLGameEngine.Meshes.Vertex;
@@ -83,6 +85,7 @@ public class Core {
 		Meshes.add(cuby);
 		
 		Meshes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
+		Meshes.add(new Line(-1.5f, -1f, -3f, 0f, -3f, -3f, new Color[] {Color.RED,Color.BLUE}));
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
@@ -167,9 +170,7 @@ public class Core {
 	}
 	
 	private void update(Mesh mesh) {
-		
 		mesh.update();
 		camera.update(cuby);
-		
 	}
 }
