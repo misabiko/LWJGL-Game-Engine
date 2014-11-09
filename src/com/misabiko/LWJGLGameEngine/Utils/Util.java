@@ -43,4 +43,8 @@ public abstract class Util {
 		
 		return vec;
 	}	
+	
+	public static float lengthBetween2Points(float x, float y, float x2, float y2) {	//Basically a simple pythagorium
+		return (float) Math.sqrt(((y2-y)*(y2-y))+((x2-x)*(x2-x)));
+	}
 }
