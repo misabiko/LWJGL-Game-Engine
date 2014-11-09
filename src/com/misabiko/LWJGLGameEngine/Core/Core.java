@@ -47,10 +47,9 @@ public class Core {
 	private boolean F5isHeld, EscIsHeld = false;
 	
 //	Current task
-//	TODO make a line class
+//	TODO in mesh class, join xVel and zVel into a vector and manipulate length instead
 	
 //	Short term todos
-//	TODO in mesh class, join xVel and zVel into a vector and manipulate length instead
 //	TODO Collision System
 	
 //	Long term todos
@@ -85,7 +84,10 @@ public class Core {
 		Meshes.add(cuby);
 		
 		Meshes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
-		Meshes.add(new Line(-1.5f, -1f, -3f, 0f, -3f, -3f, new Color[] {Color.RED,Color.BLUE}));
+		
+		Meshes.add(new Line(0, 0, 0, 10f, 0, 0, Color.RED));
+		Meshes.add(new Line(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
+		Meshes.add(new Line(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
