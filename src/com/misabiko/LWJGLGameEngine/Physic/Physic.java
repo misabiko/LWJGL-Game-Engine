@@ -6,35 +6,21 @@ public class Physic {
 	private static float ySpeedCap = -1f;
 	private static float speedCap = 0.1f;
 	private static float gravity = 0.05f;
-	private static float friction = 0.004f;
+	private static float friction = 0.08f;
 	
 	private static void friction(Mesh m) {
-		if (m.xVel >= friction) {
-			m.xVel -= friction;
-		}else if (m.xVel <= -friction) {
-			m.xVel += friction;
+		if (m.xzVel.length() >= (friction/20)) {
+			m.xzVel.scale(1f-friction);
+		}else if (m.xzVel.length() <= (-friction/20)) {
+			m.xzVel.scale(1f-friction);
 		}else {
-			m.xVel = 0;
+			m.xzVel.scale(0);
 		}
 		
-		if (m.zVel >= friction) {
-			m.zVel -= friction;
-		}else if (m.zVel <= -friction) {
-			m.zVel += friction;
-		}else {
-			m.zVel = 0;
-		}
-		
-		if (m.xVel > speedCap) {
-			m.xVel = speedCap;
-		}else if (m.xVel < -speedCap) {
-			m.xVel = -speedCap;
-		}
-		
-		if (m.zVel > speedCap) {
-			m.zVel = speedCap;
-		}else if (m.zVel < -speedCap) {
-			m.zVel = -speedCap;
+		if (m.xzVel.length() > speedCap) {
+			m.xzVel.scale(speedCap/m.xzVel.length());
+		}else if (m.xzVel.length() < -speedCap) {
+			m.xzVel.scale(-speedCap/m.xzVel.length());
 		}
 	}
 	

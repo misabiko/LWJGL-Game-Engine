@@ -20,8 +20,8 @@ public abstract class Mesh {
 	public Matrix4f modelMatrix;
 	
 	public Vector3f pos;
-	
-	public float angleX, angleY, angleZ, xVel, yVel, zVel = 0;
+	public Vector2f xzVel = new Vector2f(0,0);
+	public float angleX, angleY, angleZ, yVel = 0;
 	
 	public boolean isTextured;
 	public boolean isOnGround = false;
@@ -65,7 +65,7 @@ public abstract class Mesh {
 	}
 	
 	public void update() {
-		Vector3f vel = new Vector3f(xVel, yVel, -zVel);
+		Vector3f vel = new Vector3f(xzVel.x, yVel, -xzVel.y);
 		
 		Matrix4f rot = new Matrix4f();
 		Matrix4f.rotate(angleX, new Vector3f(1,0,0), rot, rot);
