@@ -43,7 +43,7 @@ public class Physic {
 		}
 		
 		friction(m);
-		if (!m.isOnGround)
-			gravity(m);
+//		if (!m.isOnGround)
+//			gravity(m);
 	}
 }
