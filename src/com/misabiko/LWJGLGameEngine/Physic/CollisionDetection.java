@@ -5,9 +5,6 @@ import org.lwjgl.util.vector.Vector3f;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 
 public abstract class CollisionDetection {
-	public static enum HitboxType {
-		CYLINDER,BOX
-	}
 	
 	public static boolean collisionCheck(Mesh m1, Mesh m2) {
 		
