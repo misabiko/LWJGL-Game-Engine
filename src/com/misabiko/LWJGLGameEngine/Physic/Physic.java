@@ -26,10 +26,6 @@ public class Physic {
 		}
 	}
 	
-	private static void collisionCheck(Mesh m, Mesh m2) {
-//		if (m.xzVel.x)
-	}
-	
 	private static void gravity(Mesh m) {
 		if (m.yVel > ySpeedCap)
 			m.yVel -= gravity;
@@ -38,9 +34,6 @@ public class Physic {
 	}
 	
 	public static void update(Mesh m, ArrayList<Mesh> meshes) {
-		for (Mesh mesh : meshes) {
-			collisionCheck(m,mesh);
-		}
 		
 		friction(m);
 //		if (!m.isOnGround)
