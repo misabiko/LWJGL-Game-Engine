@@ -2,6 +2,7 @@ package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.util.ArrayList;
 
+import com.misabiko.LWJGLGameEngine.Physic.Hitbox;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
 public class Cuby extends Box{
@@ -11,6 +12,8 @@ public class Cuby extends Box{
 	
 	public Cuby() {
 		super(0, 0, 0, 0.5f,0.5f,0.5f);
+		
+		hitbox = Hitbox.CYLINDER;
 	}
 	
 	public void jump() {

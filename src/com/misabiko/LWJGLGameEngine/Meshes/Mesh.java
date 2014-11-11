@@ -6,14 +6,13 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Physic.Hitbox;
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 
@@ -23,6 +22,8 @@ public abstract class Mesh {
 	public Vector3f pos;
 	public Vector2f xzVel = new Vector2f(0,0);
 	public float angleX, angleY, angleZ, yVel = 0;
+	
+	public Hitbox hitbox;
 	
 	public boolean isTextured;
 	public boolean isOnGround = false;
@@ -39,7 +40,7 @@ public abstract class Mesh {
 	public static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
 	protected static Color defaultColor = Color.WHITE;
 	
-	public Mesh	(float x, float y, float z, Vertex[] vertices, int primType) {
+	public Mesh	(float x, float y, float z, Vertex[] vertices, int primType, Hitbox hb) {
 		modelMatrix = new Matrix4f();
 		
 		pos = new Vector3f(x,y,z);
@@ -53,10 +54,12 @@ public abstract class Mesh {
 		indicesCount = vertices.length;
 		primitiveType = primType;
 		isTextured = false;
+		
+		hitbox = hb;
 	}
 	
-	public Mesh	(float x, float y, float z, Vertex[] vertices, byte[] indices) {
-		this(x,y,z,vertices, GL_TRIANGLES);
+	public Mesh	(float x, float y, float z, Vertex[] vertices, byte[] indices, Hitbox hb) {
+		this(x,y,z,vertices, GL_TRIANGLES, hb);
 		
 		indicesCount = indices.length;
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);

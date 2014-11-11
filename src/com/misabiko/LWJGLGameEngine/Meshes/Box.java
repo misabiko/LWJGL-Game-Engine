@@ -2,6 +2,8 @@ package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.awt.Color;
 
+import com.misabiko.LWJGLGameEngine.Physic.Hitbox;
+
 public class Box extends Mesh{
 	
 	public Box(float x, float y, float z, float w, float h, float d, Color[] colors) {
@@ -57,7 +59,7 @@ public class Box extends Mesh{
 //					Bottom Face
 					20,21,23,
 					21,22,23
-				});
+				}, Hitbox.BOX);
 	}
 	
 	public Box(float x, float y, float z, float w, float h, float d, float r, float g, float b, float a) {
