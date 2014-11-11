@@ -22,6 +22,7 @@ public abstract class Mesh {
 	public Vector3f pos;
 	public Vector2f xzVel = new Vector2f(0,0);
 	public float angleX, angleY, angleZ, yVel = 0;
+	public float width, height, depth;
 	
 	public Hitbox hitbox;
 	

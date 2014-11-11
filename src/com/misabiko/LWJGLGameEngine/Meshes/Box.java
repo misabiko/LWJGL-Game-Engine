@@ -60,6 +60,9 @@ public class Box extends Mesh{
 					20,21,23,
 					21,22,23
 				}, Hitbox.BOX);
+		width = w;
+		height = h;
+		depth = d;
 	}
 	
 	public Box(float x, float y, float z, float w, float h, float d, float r, float g, float b, float a) {
