@@ -69,8 +69,9 @@ public abstract class Mesh {
 		isTextured = true;
 	}
 	
-	public void update() {
+	public Vector3f findNewPos() {
 		Vector3f vel = new Vector3f(xzVel.x, yVel, -xzVel.y);
+		Vector3f newPos = new Vector3f();
 		
 		Matrix4f rot = new Matrix4f();
 		Matrix4f.rotate(angleX, new Vector3f(1,0,0), rot, rot);
@@ -78,7 +79,13 @@ public abstract class Mesh {
 		Matrix4f.rotate(angleZ, new Vector3f(0,0,1), rot, rot);
 		vel = Util.mulMatrix4fVector3f(rot, vel);
 		
-		Vector3f.add(pos, vel, pos);
+		Vector3f.add(pos, vel, newPos);
+		
+		return newPos;
+	}
+	
+	public void update() {
+		pos = findNewPos();
 		
 		Matrix4f.setIdentity(modelMatrix);
 		
