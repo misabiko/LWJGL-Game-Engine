@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Meshes;
 
+import java.util.ArrayList;
+
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
 public class Cuby extends Box{
@@ -15,8 +17,8 @@ public class Cuby extends Box{
 		yVel = jumpStrength;
 	}
 	
-	public void update() {
-		Physic.update(this);
+	public void update(ArrayList<Mesh> meshes) {
+		Physic.update(this, meshes);
 		super.update();
 	}
 }

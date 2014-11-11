@@ -47,15 +47,18 @@ public class Core {
 	private boolean F5isHeld, EscIsHeld = false;
 	
 //	Current task
-//	TODO Collision System
+//		TODO Collision System
+//			Making a cylinder shaped detection space
+//			if 2 points are closer than r1+r2, then there is collision
 	
 //	Short term todos
+//		
 	
 //	Long term todos
-//	TODO make a light shader/engine ( or at least something to see the meshes' borders )
-//	TODO learn to manage the projection matrix
-//	TODO Custom (Blender or MagicaVoxel) models?
-//	TODO well, you know, game stuff
+//		TODO make a light shader/engine ( or at least something to see the meshes' borders )
+//		TODO learn to manage the projection matrix
+//		TODO Custom (Blender or MagicaVoxel) models?
+//		TODO well, you know, game stuff
 	
 	public Core() {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
@@ -171,7 +174,11 @@ public class Core {
 	}
 	
 	private void update(Mesh mesh) {
-		mesh.update();
+		if (mesh instanceof Cuby)	//Will change cuby for "movables"
+			((Cuby) mesh).update(Meshes);
+		else
+			mesh.update();
+		
 		camera.update(cuby);
 	}
 }
