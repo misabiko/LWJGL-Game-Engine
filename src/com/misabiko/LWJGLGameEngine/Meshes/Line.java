@@ -9,10 +9,10 @@ import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 public class Line extends Mesh{
 
 	public Line(float x, float y, float z, float x2, float y2, float z2, Color[] colors) {
-		super(x,y,z, new Vertex[] {
+		super(new Vertex[] {
 				new Vertex(x,	y,	z,	colors[0]),
 				new Vertex(x2,	y2,	z2,	colors[1])
-			}, GL11.GL_LINES, null);
+			}, GL11.GL_LINES);
 	}
 	
 	public Line(float x, float y, float z, float x2, float y2, float z2, float r, float g, float b, float a) {
