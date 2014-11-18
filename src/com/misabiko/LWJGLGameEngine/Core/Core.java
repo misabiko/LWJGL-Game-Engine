@@ -33,7 +33,7 @@ public class Core {
 //			if 2 points are closer than r1+r2, then there is collision
 	
 //	Short term todos
-//		
+//		Prevent 360 cam spins
 	
 //	Long term todos
 //		TODO make a light shader/engine ( or at least something to see the objes' borders )

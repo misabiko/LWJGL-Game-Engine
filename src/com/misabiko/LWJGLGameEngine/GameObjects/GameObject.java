@@ -38,6 +38,7 @@ public abstract class GameObject {
 	}
 	
 	public void update() {
+		pos = findNewPos();
 		mesh.update(pos,angleX,angleY);
 	}
 }
