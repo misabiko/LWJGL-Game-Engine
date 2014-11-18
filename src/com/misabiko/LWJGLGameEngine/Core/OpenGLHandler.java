@@ -21,6 +21,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 
+import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Meshes.TexturedVertex;
 import com.misabiko.LWJGLGameEngine.Meshes.Vertex;
@@ -114,24 +115,24 @@ public abstract class OpenGLHandler {
 		matrixBuffer = BufferUtils.createFloatBuffer(16);
 	}
 	
-	public static void initVBOs(ArrayList<Mesh> Meshes) {
+	public static void initVBOs(ArrayList<GameObject> objs) {
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
-			for (Mesh mesh : Meshes) {
-				mesh.vboId = glGenBuffers();
+			for (GameObject obj : objs) {
+				obj.mesh.vboId = glGenBuffers();
 				
-				glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
+				glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 				
-					glBufferData(GL_ARRAY_BUFFER,mesh.verticesBuffer,GL_STATIC_DRAW);
+					glBufferData(GL_ARRAY_BUFFER,obj.mesh.verticesBuffer,GL_STATIC_DRAW);
 					
 				glBindBuffer(GL_ARRAY_BUFFER,0);
 				
-				if (mesh.primitiveType == GL_TRIANGLES) {
-					mesh.vboiId = glGenBuffers();
+				if (obj.mesh.primitiveType == GL_TRIANGLES) {
+					obj.mesh.vboiId = glGenBuffers();
 						
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
-						glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indicesBuffer, GL_STATIC_DRAW);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj.mesh.vboiId);
+						glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.mesh.indicesBuffer, GL_STATIC_DRAW);
 					
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 				}
@@ -141,9 +142,9 @@ public abstract class OpenGLHandler {
 		
 	}
 	
-	public static void render(Mesh mesh, Camera camera) {
+	public static void render(GameObject obj, Camera camera) {
 		
-		if (mesh.isTextured) {
+		if (obj.mesh.isTextured) {
 			glUseProgram(texProgram.id);
 			
 				projectionMatrix.store(matrixBuffer);
@@ -154,7 +155,7 @@ public abstract class OpenGLHandler {
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
 				
-				mesh.modelMatrix.store(matrixBuffer);
+				obj.mesh.modelMatrix.store(matrixBuffer);
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
 				
@@ -171,7 +172,7 @@ public abstract class OpenGLHandler {
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
 			
-			mesh.modelMatrix.store(matrixBuffer);
+			obj.mesh.modelMatrix.store(matrixBuffer);
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
 			
@@ -179,13 +180,13 @@ public abstract class OpenGLHandler {
 		glUseProgram(0);
 		}
 		
-		if (mesh.primitiveType == GL_TRIANGLES) {
-			if (mesh.isTextured) {
+		if (obj.mesh.primitiveType == GL_TRIANGLES) {
+			if (obj.mesh.isTextured) {
 				
 				glUseProgram(texProgram.id);
 				
 					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, mesh.texture.texId);
+					glBindTexture(GL_TEXTURE_2D, obj.mesh.texture.texId);
 			}else {
 				glUseProgram(colProgram.id);
 			}
@@ -194,15 +195,15 @@ public abstract class OpenGLHandler {
 					glEnableVertexAttribArray(1);
 					glEnableVertexAttribArray(2);
 					
-						glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
+						glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 						
-						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.vboiId);
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj.mesh.vboiId);
 						
 							glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 							glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 							glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
 							
-							glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
+							glDrawElements(GL_TRIANGLES, obj.mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
 							
 						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 						glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -220,12 +221,12 @@ public abstract class OpenGLHandler {
 				glEnableVertexAttribArray(0);
 				glEnableVertexAttribArray(1);
 				
-					glBindBuffer(GL_ARRAY_BUFFER,mesh.vboId);
+					glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 					
 						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
 						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.colorOffset);
 						
-						glDrawArrays(mesh.primitiveType, 0, mesh.indicesCount);
+						glDrawArrays(obj.mesh.primitiveType, 0, obj.mesh.indicesCount);
 						
 					glBindBuffer(GL_ARRAY_BUFFER,0);
 				
@@ -237,7 +238,7 @@ public abstract class OpenGLHandler {
 		}
 	}
 	
-	public static void cleanUp(ArrayList<Mesh> Meshes) {
+	public static void cleanUp(ArrayList<GameObject> objs) {
 		glUseProgram(0);
 		
 		glDisableVertexAttribArray(0);
@@ -246,12 +247,12 @@ public abstract class OpenGLHandler {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
-		for (Mesh mesh : Meshes) {
-			glDeleteBuffers(mesh.vboId);
-			glDeleteBuffers(mesh.vboiId);
+		for (GameObject obj : objs) {
+			glDeleteBuffers(obj.mesh.vboId);
+			glDeleteBuffers(obj.mesh.vboiId);
 			
-			if (mesh.texture.texId != Mesh.defaultTexture.texId)
-				glDeleteTextures(mesh.texture.texId);
+			if (obj.mesh.texture.texId != Mesh.defaultTexture.texId)
+				glDeleteTextures(obj.mesh.texture.texId);
 		}
 		
 		glDeleteTextures(Mesh.defaultTexture.texId);

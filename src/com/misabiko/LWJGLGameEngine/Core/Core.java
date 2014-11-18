@@ -8,10 +8,10 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.misabiko.LWJGLGameEngine.Meshes.Box;
+import com.misabiko.LWJGLGameEngine.GameObjects.Axis;
+import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
+import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
 import com.misabiko.LWJGLGameEngine.Meshes.Cuby;
-import com.misabiko.LWJGLGameEngine.Meshes.Line;
-import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -21,7 +21,7 @@ public class Core {
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "LWJGL Game Engine";
 	
-	private ArrayList<Mesh> Meshes = new ArrayList<Mesh>();
+	private ArrayList<GameObject> objs = new ArrayList<GameObject>();
 	private Camera camera;
 	private Cuby cuby;
 	
@@ -36,7 +36,7 @@ public class Core {
 //		
 	
 //	Long term todos
-//		TODO make a light shader/engine ( or at least something to see the meshes' borders )
+//		TODO make a light shader/engine ( or at least something to see the objes' borders )
 //		TODO learn to manage the projection matrix
 //		TODO Custom (Blender or MagicaVoxel) models?
 //		TODO well, you know, game stuff
@@ -50,31 +50,31 @@ public class Core {
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			input();
 			
-			for (Mesh mesh : Meshes) {
-				update(mesh);
-				OpenGLHandler.render(mesh, camera);
+			for (GameObject obj : objs) {
+				update(obj);
+				OpenGLHandler.render(obj, camera);
 			}
 			
 			Display.sync(60);
 			Display.update();
 		}
 		
-		OpenGLHandler.cleanUp(Meshes);
+		OpenGLHandler.cleanUp(objs);
 	}
 	
 	private void init() {
 		cuby = new Cuby();
-		Meshes.add(cuby);
+		objs.add(cuby);
 		
-		Meshes.add(new Box(-3f, -2f, -2f, 8f,0.5f,4f));
+		objs.add(new Platform(-3f, -2f, -2f, 8f,0.5f,4f));
 		
-		Meshes.add(new Line(0, 0, 0, 10f, 0, 0, Color.RED));
-		Meshes.add(new Line(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
-		Meshes.add(new Line(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
+		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
+		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
+		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
 		camera = new Camera(-1f, -1.5f, -1f);
 		
-		OpenGLHandler.initVBOs(Meshes);
+		OpenGLHandler.initVBOs(objs);
 	}
 	
 	private void input() {
@@ -117,7 +117,6 @@ public class Core {
 				if (camera.freeMovement) {
 					camera.angleX = cuby.angleX;
 					camera.angleY = cuby.angleY;
-					camera.angleZ = cuby.angleZ;
 				}
 				camera.freeMovement = !camera.freeMovement;
 			}
@@ -154,11 +153,11 @@ public class Core {
 		
 	}
 	
-	private void update(Mesh mesh) {
-		if (mesh instanceof Cuby)	//Will change cuby for "movables"
-			((Cuby) mesh).update(Meshes);
+	private void update(GameObject obj) {
+		if (obj instanceof Cuby)	//Will change cuby for "movables"
+			((Cuby) obj).update(objs);
 		else
-			mesh.update();
+			obj.update();
 		
 		camera.update(cuby);
 	}
