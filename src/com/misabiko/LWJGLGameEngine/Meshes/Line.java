@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
-import com.misabiko.LWJGLGameEngine.Physic.Hitbox;
+import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 
 public class Line extends Mesh{
 
@@ -12,7 +12,7 @@ public class Line extends Mesh{
 		super(x,y,z, new Vertex[] {
 				new Vertex(x,	y,	z,	colors[0]),
 				new Vertex(x2,	y2,	z2,	colors[1])
-			}, GL11.GL_LINES, Hitbox.LINE);
+			}, GL11.GL_LINES, null);
 	}
 	
 	public Line(float x, float y, float z, float x2, float y2, float z2, float r, float g, float b, float a) {

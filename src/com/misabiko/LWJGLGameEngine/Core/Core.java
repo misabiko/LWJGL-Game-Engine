@@ -1,38 +1,19 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
 import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.PixelFormat;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Meshes.Cuby;
 import com.misabiko.LWJGLGameEngine.Meshes.Line;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
-import com.misabiko.LWJGLGameEngine.Meshes.TexturedVertex;
-import com.misabiko.LWJGLGameEngine.Meshes.Vertex;
-import com.misabiko.LWJGLGameEngine.Shaders.Program;
-import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 public class Core {
 	

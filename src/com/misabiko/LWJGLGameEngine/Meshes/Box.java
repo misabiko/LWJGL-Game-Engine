@@ -2,7 +2,10 @@ package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.awt.Color;
 
-import com.misabiko.LWJGLGameEngine.Physic.Hitbox;
+import org.lwjgl.util.vector.Vector3f;
+
+import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.BoxTypeHitbox;
+import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 
 public class Box extends Mesh{
 	
@@ -59,7 +62,7 @@ public class Box extends Mesh{
 //					Bottom Face
 					20,21,23,
 					21,22,23
-				}, Hitbox.BOX);
+				}, new BoxTypeHitbox(w,h,d));
 		width = w;
 		height = h;
 		depth = d;

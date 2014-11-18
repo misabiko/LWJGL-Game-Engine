@@ -2,8 +2,6 @@ package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.util.ArrayList;
 
-import com.misabiko.LWJGLGameEngine.Physic.CollisionDetection;
-import com.misabiko.LWJGLGameEngine.Physic.Hitbox;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
 public class Cuby extends Box{
@@ -15,7 +13,7 @@ public class Cuby extends Box{
 	public Cuby() {
 		super(0, 0, 0, 0.5f,0.5f,0.5f);
 		
-		hitbox = Hitbox.CYLINDER;
+//		hitbox = Hitbox.CYLINDER;
 	}
 	
 	public void jump() {
@@ -23,13 +21,7 @@ public class Cuby extends Box{
 	}
 	
 	public void update(ArrayList<Mesh> meshes) {
-		for (Mesh mesh : meshes) {
-			if (CollisionDetection.collisionCheck(this, mesh))
-				return;
-			else {
-				Physic.update(this, meshes);
-				super.update();
-			}
-		}
+		Physic.update(this, meshes);
+		super.update();
 	}
 }

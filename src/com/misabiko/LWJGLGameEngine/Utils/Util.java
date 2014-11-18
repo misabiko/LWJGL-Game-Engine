@@ -47,4 +47,18 @@ public abstract class Util {
 	public static float lengthBetween2Points(float x, float y, float x2, float y2) {	//Basically a simple pythagorium
 		return (float) Math.sqrt(((y2-y)*(y2-y))+((x2-x)*(x2-x)));
 	}
+	
+	public static float getYForAnXOnALine(float x, float x1, float y1, float x2, float y2) {
+		float a = (y2-y1)/(x2-x1);
+		float b = y1-(a*x1);
+		
+		return (a*x)+b;
+	}
+	
+	public static float getXForAnYOnALine(float y, float x1, float y1, float x2, float y2) {
+		float a = (y2-y1)/(x2-x1);
+		float b = y1-(a*x1);
+		
+		return (y-b)/a;
+	}
 }
