@@ -4,6 +4,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 
@@ -13,11 +14,13 @@ public abstract class GameObject {
 	public Vector2f xzVel = new Vector2f(0,0);
 	
 	public float angleX, angleY, angleZ, yVel = 0;
-	public float width, height, depth;
 	
-	public boolean isOnGround = false;
-	
+	public Mesh mesh;
 	public Hitbox hitbox;
+	
+	public GameObject(float x, float y, float z) {
+		pos = new Vector3f(x,y,z);
+	}
 	
 	public Vector3f findNewPos() {
 		Vector3f vel = new Vector3f(xzVel.x, yVel, -xzVel.y);
