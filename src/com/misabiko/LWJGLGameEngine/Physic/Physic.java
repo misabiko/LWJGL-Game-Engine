@@ -36,13 +36,13 @@ public class Physic {
 	}
 	
 	public static boolean isColliding(GameObject obj1, GameObject obj2) {
-		for (Vector3f sp : obj1.hitbox.getSP()) {
-			if (obj1.hitbox.isPointInside(sp))
+		for (Vector3f sp : obj1.hitbox.getSP(obj1)) {
+			if (obj1.hitbox.isPointInside(sp,obj1))
 				return true;
 		}
 		
-		for (Vector3f sp : obj1.hitbox.getSP()) {
-			if (obj1.hitbox.isPointInside(sp))
+		for (Vector3f sp : obj1.hitbox.getSP(obj1)) {
+			if (obj1.hitbox.isPointInside(sp,obj1))
 				return true;
 		}
 		
