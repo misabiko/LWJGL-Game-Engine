@@ -8,40 +8,41 @@ import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.BoxTypeHitbox;
 import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 
 public class Box extends Mesh{
+	float width, height, depth;
 	
-	public Box(float x, float y, float z, float w, float h, float d, Color[] colors) {
-		super(x,y,z, new TexturedVertex[] {
+	public Box(float w, float h, float d, Color[] colors) {
+		super(new TexturedVertex[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
-				new TexturedVertex(x-(w/2),	y-(h/2),	z+(d/2),	colors[0], 	0f, 1f),	//0
-				new TexturedVertex(x+(w/2),	y-(h/2),	z+(d/2),	colors[0], 	1f, 1f),	//1
-				new TexturedVertex(x+(w/2),	y+(h/2),	z+(d/2),	colors[0], 	1f, 0f),	//2
-				new TexturedVertex(x-(w/2),	y+(h/2),	z+(d/2),	colors[0], 	0f, 0f),	//3
+				new TexturedVertex(-w/2,	-h/2,	d/2,	colors[0], 	0f, 1f),	//0
+				new TexturedVertex(w/2,		-h/2,	d/2,	colors[0], 	1f, 1f),	//1
+				new TexturedVertex(w/2,		h/2,	d/2,	colors[0], 	1f, 0f),	//2
+				new TexturedVertex(-w/2,	h/2,	d/2,	colors[0], 	0f, 0f),	//3
 //				Back Face
-				new TexturedVertex(x-(w/2),	y-(h/2),	z-(d/2),	colors[1], 	1f, 1f),	//4
-				new TexturedVertex(x+(w/2),	y-(h/2),	z-(d/2),	colors[1], 	0f, 1f),	//5
-				new TexturedVertex(x+(w/2),	y+(h/2),	z-(d/2),	colors[1], 	0f, 0f),	//6
-				new TexturedVertex(x-(w/2),	y+(h/2),	z-(d/2),	colors[1], 	1f, 0f),	//7
+				new TexturedVertex(-w/2,	-h/2,	-d/2,	colors[1], 	1f, 1f),	//4
+				new TexturedVertex(w/2,		-h/2,	-d/2,	colors[1], 	0f, 1f),	//5
+				new TexturedVertex(w/2,		h/2,	-d/2,	colors[1], 	0f, 0f),	//6
+				new TexturedVertex(-w/2,	h/2,	-d/2,	colors[1], 	1f, 0f),	//7
 //				Left Face
-				new TexturedVertex(x-(w/2),	y-(h/2),	z-(d/2),	colors[2], 	0f, 1f),	//8
-				new TexturedVertex(x-(w/2),	y-(h/2),	z+(d/2),	colors[2], 	1f, 1f),	//9
-				new TexturedVertex(x-(w/2),	y+(h/2),	z+(d/2),	colors[2], 	1f, 0f),	//10
-				new TexturedVertex(x-(w/2),	y+(h/2),	z-(d/2),	colors[2], 	0f, 0f),	//11
+				new TexturedVertex(-w/2,	-h/2,	-d/2,	colors[2], 	0f, 1f),	//8
+				new TexturedVertex(-w/2,	-h/2,	d/2,	colors[2], 	1f, 1f),	//9
+				new TexturedVertex(-w/2,	h/2,	d/2,	colors[2], 	1f, 0f),	//10
+				new TexturedVertex(-w/2,	h/2,	-d/2,	colors[2], 	0f, 0f),	//11
 //				Right Face
-				new TexturedVertex(x+(w/2),	y-(h/2),	z+(d/2),	colors[3], 	0f, 1f),	//12
-				new TexturedVertex(x+(w/2),	y-(h/2),	z-(d/2),	colors[3], 	1f, 1f),	//13
-				new TexturedVertex(x+(w/2),	y+(h/2),	z-(d/2),	colors[3], 	1f, 0f),	//14
-				new TexturedVertex(x+(w/2),	y+(h/2),	z+(d/2),	colors[3], 	0f, 0f),	//15
+				new TexturedVertex(w/2,		-h/2,	d/2,	colors[3], 	0f, 1f),	//12
+				new TexturedVertex(w/2,		-h/2,	-d/2,	colors[3], 	1f, 1f),	//13
+				new TexturedVertex(w/2,		h/2,	-d/2,	colors[3], 	1f, 0f),	//14
+				new TexturedVertex(w/2,		h/2,	d/2,	colors[3], 	0f, 0f),	//15
 //				Top Face
-				new TexturedVertex(x-(w/2),	y+(h/2),	z-(d/2),	colors[4], 	0f, 0f),	//16
-				new TexturedVertex(x+(w/2),	y+(h/2),	z-(d/2),	colors[4], 	1f, 0f),	//17
-				new TexturedVertex(x+(w/2),	y+(h/2),	z+(d/2),	colors[4], 	1f, 1f),	//18
-				new TexturedVertex(x-(w/2),	y+(h/2),	z+(d/2),	colors[4], 	0f, 1f),	//19
+				new TexturedVertex(-w/2,	h/2,	-d/2,	colors[4], 	0f, 0f),	//16
+				new TexturedVertex(w/2,		h/2,	-d/2,	colors[4], 	1f, 0f),	//17
+				new TexturedVertex(w/2,		h/2,	d/2,	colors[4], 	1f, 1f),	//18
+				new TexturedVertex(-w/2,	h/2,	d/2,	colors[4], 	0f, 1f),	//19
 //				Bottom Face
-				new TexturedVertex(x-(w/2),	y-(h/2),	z-(d/2),	colors[5], 	0f, 1f),	//20
-				new TexturedVertex(x+(w/2),	y-(h/2),	z-(d/2),	colors[5], 	1f, 1f),	//21
-				new TexturedVertex(x+(w/2),	y-(h/2),	z+(d/2),	colors[5], 	1f, 0f),	//22
-				new TexturedVertex(x-(w/2),	y-(h/2),	z+(d/2),	colors[5], 	0f, 0f)		//23
+				new TexturedVertex(-w/2,	-h/2,	-d/2,	colors[5], 	0f, 1f),	//20
+				new TexturedVertex(w/2,		-h/2,	-d/2,	colors[5], 	1f, 1f),	//21
+				new TexturedVertex(w/2,		-h/2,	d/2,	colors[5], 	1f, 0f),	//22
+				new TexturedVertex(-w/2,	-h/2,	d/2,	colors[5], 	0f, 0f)		//23
 			}, new byte[] {
 //					Sets the order in which the vertices should be used to produce triangles
 //					Front Face
@@ -62,14 +63,14 @@ public class Box extends Mesh{
 //					Bottom Face
 					20,21,23,
 					21,22,23
-				}, new BoxTypeHitbox(w,h,d));
+				});
 		width = w;
 		height = h;
 		depth = d;
 	}
 	
-	public Box(float x, float y, float z, float w, float h, float d, float r, float g, float b, float a) {
-		this(x,y,z,w,h,d, new Color[] {
+	public Box(float w, float h, float d, float r, float g, float b, float a) {
+		this(w,h,d, new Color[] {
 				new Color(r,g,b,a),
 				new Color(r,g,b,a),
 				new Color(r,g,b,a),
@@ -80,8 +81,8 @@ public class Box extends Mesh{
 		);
 	}
 	
-	public Box(float x, float y, float z, float w, float h, float d, Color color) {
-		this(x,y,z,w,h,d, new Color[] {
+	public Box(float w, float h, float d, Color color) {
+		this(w,h,d, new Color[] {
 				color,
 				color,
 				color,
@@ -92,8 +93,8 @@ public class Box extends Mesh{
 		);
 	}
 	
-	public Box(float x, float y, float z, float w, float h, float d) {
-		this(x,y,z,w,h,d, new Color[] {
+	public Box(float w, float h, float d) {
+		this(w,h,d, new Color[] {
 				defaultColor,
 				defaultColor,
 				defaultColor,
