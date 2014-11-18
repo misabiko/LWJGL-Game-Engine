@@ -9,9 +9,9 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.Axis;
+import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
-import com.misabiko.LWJGLGameEngine.Meshes.Cuby;
 
 import static org.lwjgl.opengl.GL11.*;
 

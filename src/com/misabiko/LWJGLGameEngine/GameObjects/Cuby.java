@@ -1,9 +1,7 @@
-package com.misabiko.LWJGLGameEngine.Meshes;
+package com.misabiko.LWJGLGameEngine.GameObjects;
 
 import java.util.ArrayList;
 
-import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
 public class Cuby extends Platform {
