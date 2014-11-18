@@ -19,15 +19,7 @@ import com.misabiko.LWJGLGameEngine.Utils.Util;
 public abstract class Mesh {
 	public Matrix4f modelMatrix;
 	
-	public Vector3f pos;
-	public Vector2f xzVel = new Vector2f(0,0);
-	public float angleX, angleY, angleZ, yVel = 0;
-	public float width, height, depth;
-	
-	public Hitbox hitbox;
-	
 	public boolean isTextured;
-	public boolean isOnGround = false;
 	
 	public FloatBuffer verticesBuffer;
 	public ByteBuffer indicesBuffer;
@@ -41,10 +33,8 @@ public abstract class Mesh {
 	public static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
 	protected static Color defaultColor = Color.WHITE;
 	
-	public Mesh	(float x, float y, float z, Vertex[] vertices, int primType, Hitbox hb) {
+	public Mesh	(Vertex[] vertices, int primType) {
 		modelMatrix = new Matrix4f();
-		
-		pos = new Vector3f(x,y,z);
 		
 //		TODO Look further into Byte Buffers
 		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*TexturedVertex.elementCount);
@@ -55,12 +45,10 @@ public abstract class Mesh {
 		indicesCount = vertices.length;
 		primitiveType = primType;
 		isTextured = false;
-		
-		hitbox = hb;
 	}
 	
-	public Mesh	(float x, float y, float z, Vertex[] vertices, byte[] indices, Hitbox hb) {
-		this(x,y,z,vertices, GL_TRIANGLES, hb);
+	public Mesh	(Vertex[] vertices, byte[] indices) {
+		this(vertices, GL_TRIANGLES);
 		
 		indicesCount = indices.length;
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
@@ -69,24 +57,7 @@ public abstract class Mesh {
 		isTextured = true;
 	}
 	
-	public Vector3f findNewPos() {
-		Vector3f vel = new Vector3f(xzVel.x, yVel, -xzVel.y);
-		Vector3f newPos = new Vector3f();
-		
-		Matrix4f rot = new Matrix4f();
-		Matrix4f.rotate(angleX, new Vector3f(1,0,0), rot, rot);
-		Matrix4f.rotate(angleY, new Vector3f(0,1,0), rot, rot);
-		Matrix4f.rotate(angleZ, new Vector3f(0,0,1), rot, rot);
-		vel = Util.mulMatrix4fVector3f(rot, vel);
-		
-		Vector3f.add(pos, vel, newPos);
-		
-		return newPos;
-	}
-	
-	public void update() {
-		pos = findNewPos();
-		
+	public void update(Vector3f pos, float angleX, float angleY) {
 		Matrix4f.setIdentity(modelMatrix);
 		
 		Matrix4f.translate(pos, modelMatrix, modelMatrix);
