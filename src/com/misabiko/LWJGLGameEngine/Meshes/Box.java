@@ -2,11 +2,6 @@ package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.awt.Color;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.BoxTypeHitbox;
-import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
-
 public class Box extends Mesh{
 	float width, height, depth;
 	

@@ -4,8 +4,6 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
-import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
-
 public class Line extends Mesh{
 
 	public Line(float x, float y, float z, float x2, float y2, float z2, Color[] colors) {

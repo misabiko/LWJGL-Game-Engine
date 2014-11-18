@@ -3,7 +3,6 @@ package com.misabiko.LWJGLGameEngine.Physic.Hitboxes;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 public class BoxTypeHitbox extends Hitbox{

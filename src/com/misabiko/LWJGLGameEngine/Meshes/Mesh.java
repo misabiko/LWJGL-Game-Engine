@@ -9,12 +9,9 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
-import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 public abstract class Mesh {
 	public Matrix4f modelMatrix;
