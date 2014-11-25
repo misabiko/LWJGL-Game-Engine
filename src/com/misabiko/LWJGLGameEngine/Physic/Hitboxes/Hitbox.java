@@ -18,6 +18,41 @@ public abstract class Hitbox {
 	
 	protected abstract void initSignificantPoints();
 	
+	public boolean isPointInsidePolygon(Vector3f p, Vector3f[][] edges) {
+		for (Vector3f[] edge : edges) {
+			if (!(
+					  ((((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x)+(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x) >= p.y
+					&& (((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x)+(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x) <= p.y)
+					
+					||
+					
+					  ((((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x)+(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x) <= p.y
+					&& (((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x)+(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x) >= p.y)
+					
+					)) {
+				return false;
+			}
+		}
+		
+
+		for (Vector3f[] edge : edges) {
+			if (!(
+					  (((p.y-(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x))/((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))) >= p.x
+					&& ((p.y-(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x))/((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))) <= p.x)
+					
+					||
+					
+					  (((p.y-(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x))/((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))) <= p.x
+					&& ((p.y-(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x))/((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))) >= p.x)
+					
+					)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public abstract boolean isPointInside(Vector3f p, GameObject obj);
 	
 	public ArrayList<Vector3f> getSP(GameObject obj) {
