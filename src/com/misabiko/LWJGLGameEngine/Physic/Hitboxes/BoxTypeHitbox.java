@@ -33,59 +33,21 @@ public class BoxTypeHitbox extends Hitbox{
 
 	@Override
 	public boolean isPointInside(Vector3f p, GameObject obj) {
-		if (p.z < Util.getYForAnXOnALine(p.x, getSP(obj).get(1).x, getSP(obj).get(1).z, getSP(obj).get(2).x, getSP(obj).get(2).z) && 
-			p.z > Util.getYForAnXOnALine(p.x, getSP(obj).get(3).x, getSP(obj).get(3).z, getSP(obj).get(4).x, getSP(obj).get(4).z)) {
-			
-			if (p.x < Util.getXForAnYOnALine(p.z, getSP(obj).get(1).x, getSP(obj).get(1).z, getSP(obj).get(3).x, getSP(obj).get(3).z) && 
-				p.x > Util.getXForAnYOnALine(p.z, getSP(obj).get(2).x, getSP(obj).get(2).z, getSP(obj).get(4).x, getSP(obj).get(4).z)) {
+		if (isPointInsidePolygon(p, new Vector3f[][] {
 				
-				if (p.y < getSP(obj).get(1).y && p.y > getSP(obj).get(5).y)
-					return true;
-				else if (p.y > getSP(obj).get(1).y && p.y < getSP(obj).get(5).y)
-					return true;
-				else
-					return false;
+					new Vector3f[] {
+					getSP(obj).get(1),getSP(obj).get(2)
+					,getSP(obj).get(3),getSP(obj).get(4)
+					},
+					
+					new Vector3f[] {
+					getSP(obj).get(1),getSP(obj).get(3)
+					,getSP(obj).get(2),getSP(obj).get(4)
+					}
 				
-			}else if (p.x > Util.getXForAnYOnALine(p.z, getSP(obj).get(1).x, getSP(obj).get(1).z, getSP(obj).get(3).x, getSP(obj).get(3).z) && 
-					p.x < Util.getXForAnYOnALine(p.z, getSP(obj).get(2).x, getSP(obj).get(2).z, getSP(obj).get(4).x, getSP(obj).get(4).z)) {
-
-				if (p.y < getSP(obj).get(1).y && p.y > getSP(obj).get(5).y)
-					return true;
-				else if (p.y > getSP(obj).get(1).y && p.y < getSP(obj).get(5).y)
-					return true;
-				else
-					return false;
-				
-			}else
-				return false;
-			
-		}else if (p.z > Util.getYForAnXOnALine(p.x, getSP(obj).get(1).x, getSP(obj).get(1).z, getSP(obj).get(2).x, getSP(obj).get(2).z) && 
-				p.z < Util.getYForAnXOnALine(p.x, getSP(obj).get(3).x, getSP(obj).get(3).z, getSP(obj).get(4).x, getSP(obj).get(4).z)) {
-			
-			if (p.x < Util.getXForAnYOnALine(p.z, getSP(obj).get(1).x, getSP(obj).get(1).z, getSP(obj).get(3).x, getSP(obj).get(3).z) && 
-					p.x > Util.getXForAnYOnALine(p.z, getSP(obj).get(2).x, getSP(obj).get(2).z, getSP(obj).get(4).x, getSP(obj).get(4).z)) {
-				
-				if (p.y < getSP(obj).get(1).y && p.y > getSP(obj).get(5).y)
-					return true;
-				else if (p.y > getSP(obj).get(1).y && p.y < getSP(obj).get(5).y)
-					return true;
-				else
-					return false;
-				
-			}else if (p.x > Util.getXForAnYOnALine(p.z, getSP(obj).get(1).x, getSP(obj).get(1).z, getSP(obj).get(3).x, getSP(obj).get(3).z) && 
-						p.x < Util.getXForAnYOnALine(p.z, getSP(obj).get(2).x, getSP(obj).get(2).z, getSP(obj).get(4).x, getSP(obj).get(4).z)) {
-				
-				if (p.y < getSP(obj).get(1).y && p.y > getSP(obj).get(5).y)
-					return true;
-				else if (p.y > getSP(obj).get(1).y && p.y < getSP(obj).get(5).y)
-					return true;
-				else
-					return false;
-				
-			}else
-				return false;
-			
-		}else
+				}) && (((p.y >= getSP(obj).get(1).y) && (p.y <= getSP(obj).get(5).y)) || ((p.y <= getSP(obj).get(1).y) && (p.y >= getSP(obj).get(5).y))))
+			return true;
+		else
 			return false;
 	}
 
