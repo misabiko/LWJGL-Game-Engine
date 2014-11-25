@@ -29,6 +29,7 @@ public abstract class Hitbox {
 					&& (((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x)+(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x) >= p.z)
 					
 					)) {
+				System.out.println(p.toString()+" is not inside "+edge[0].toString()+" "+edge[1].toString()+" "+edge[2].toString()+" "+edge[3].toString());
 				return false;
 			}
 		}
