@@ -11,12 +11,11 @@ import com.misabiko.LWJGLGameEngine.Utils.Util;
 public abstract class Hitbox {
 	
 	protected ArrayList<Vector3f> significantPoints = new ArrayList<Vector3f>();
+	protected GameObject obj;
 	
-	public Hitbox() {
-		initSignificantPoints();
+	public Hitbox(GameObject obj) {
+		this.obj = obj;
 	}
-	
-	protected abstract void initSignificantPoints();
 	
 	public boolean isPointInsidePolygon(Vector3f p, Vector3f[][] edges) {
 		for (Vector3f[] edge : edges) {
@@ -53,9 +52,9 @@ public abstract class Hitbox {
 		return true;
 	}
 	
-	public abstract boolean isPointInside(Vector3f p, GameObject obj);
+	public abstract boolean isPointInside(Vector3f p);
 	
-	public ArrayList<Vector3f> getSP(GameObject obj) {
+	public ArrayList<Vector3f> getSP() {
 		ArrayList<Vector3f> sp = new ArrayList<Vector3f>(significantPoints);
 		Matrix4f rot = new Matrix4f();
 		
