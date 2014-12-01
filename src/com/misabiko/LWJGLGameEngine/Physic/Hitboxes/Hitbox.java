@@ -17,37 +17,16 @@ public abstract class Hitbox {
 		this.obj = obj;
 	}
 	
-	public boolean isPointInsidePolygon(Vector3f p, Vector3f[][] edges) {
-		for (Vector3f[] edge : edges) {
-			if (!(
-					  ((((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x)+(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x) >= p.z
-					&& (((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x)+(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x) <= p.z)
-					
-					||
-					
-					  ((((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x)+(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x) <= p.z
-					&& (((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x)+(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x) >= p.z)
-					
-					)) {
-				System.out.println(p.toString()+" is not inside "+edge[0].toString()+" "+edge[1].toString()+" "+edge[2].toString()+" "+edge[3].toString());
+	public boolean isPointInsidePolygon(Vector3f p, Vector3f[] vertices) {
+		for (int i = 0;i < vertices.length;i++) {
+			float a = -( vertices[i+1].y - vertices[i].y);		//A = -(y2-y1)
+			float b = (vertices[i+1].x - vertices[i].x);		//B = x2-x1
+			float c = -((a*vertices[i].x) + (b*vertices[i].y));	//C = -(A*x1 + B*y1)
+			
+			float d = (a*p.x) + (b*p.y) + c;					//D = A*xp + B*yp + C
+			
+			if (d<0)
 				return false;
-			}
-		}
-		
-
-		for (Vector3f[] edge : edges) {
-			if (!(
-					  (((p.z-(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x))/((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))) >= p.x
-					&& ((p.z-(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x))/((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))) <= p.x)
-					
-					||
-					
-					  (((p.z-(-((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))*p.x))/((edge[1].z-edge[0].z)/(edge[1].x-edge[0].x))) <= p.x
-					&& ((p.z-(-((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))*p.x))/((edge[3].z-edge[2].z)/(edge[3].x-edge[2].x))) >= p.x)
-					
-					)) {
-				return false;
-			}
 		}
 		
 		return true;
