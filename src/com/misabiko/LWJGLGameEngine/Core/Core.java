@@ -155,7 +155,7 @@ public class Core {
 	
 	private void update(GameObject obj) {
 		if (obj instanceof Cuby)	//Will change cuby for "movables"
-			((Cuby) obj).update(objs);
+			((Cuby) obj).update();
 		else
 			obj.update();
 		

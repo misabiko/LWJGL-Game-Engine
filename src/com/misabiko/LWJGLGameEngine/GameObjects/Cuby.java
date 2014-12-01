@@ -17,8 +17,8 @@ public class Cuby extends Platform {
 		yVel = jumpStrength;
 	}
 
-	public void update(ArrayList<GameObject> objs) {
-		Physic.update(this, objs);
+	public void update() {
+		Physic.update(this);
 		super.update();
 	}
 }

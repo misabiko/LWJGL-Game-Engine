@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
+import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 
 public class Physic {
 	private static float ySpeedCap = -0.2f;
@@ -35,15 +36,28 @@ public class Physic {
 			obj.yVel = ySpeedCap;
 	}
 	
-	public static boolean isColliding(GameObject obj1, GameObject obj2) {
-		for (Vector3f sp : obj1.hitbox.getSP()) {
-			if (obj1.hitbox.isPointInside(sp)) {
+	public static boolean isColliding(Hitbox hb1, Hitbox hb2) {
+
+		for (Vector3f vec : hb1.getSP()) {
+			System.out.println(vec.toString());
+		}
+
+		System.out.println();
+		
+		for (Vector3f vec : hb2.getSP()) {
+			System.out.println(vec.toString());
+		}
+		
+		for (Vector3f sp : hb1.getSP()) {
+			if (hb2.isPointInside(sp)) {
+				System.out.println("boop1");
 				return true;
 			}
 		}
 		
-		for (Vector3f sp : obj1.hitbox.getSP()) {
-			if (obj1.hitbox.isPointInside(sp)) {
+		for (Vector3f sp : hb2.getSP()) {
+			if (hb1.isPointInside(sp)) {
+				System.out.println("foo");
 				return true;
 			}
 		}
@@ -51,11 +65,11 @@ public class Physic {
 		return false;
 	}
 	
-	public static void update(GameObject obj, ArrayList<GameObject> objs) {
+	public static void update(GameObject obj) {
 		friction(obj);
-		if (obj.hitbox != null) {
-			for (GameObject object : objs) {
-				if (isColliding(obj, object) && object.hitbox != null) {
+		for (Hitbox hb : Hitbox.Hitboxes) {
+			if (hb != obj.hitbox) {
+				if (isColliding(obj.hitbox, hb)) {
 					System.out.println("Collision");
 				}
 			}
