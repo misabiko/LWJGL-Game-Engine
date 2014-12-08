@@ -51,7 +51,7 @@ public class Core {
 			input();
 			
 			for (GameObject obj : objs) {
-				update(obj);
+				obj.update();
 				OpenGLHandler.render(obj, camera);
 			}
 			
@@ -151,14 +151,5 @@ public class Core {
 			cuby.xzVel.y -= cuby.speed;
 		}
 		
-	}
-	
-	private void update(GameObject obj) {
-		if (obj instanceof Cuby)	//Will change cuby for "movables"
-			((Cuby) obj).update();
-		else
-			obj.update();
-		
-		camera.update(cuby);
 	}
 }
