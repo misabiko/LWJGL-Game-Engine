@@ -47,7 +47,7 @@ public class Physic {
 		for (Vector3f vec : hb2.getSP()) {
 			System.out.println(vec.toString());
 		}
-		
+//		
 		for (Vector3f sp : hb1.getSP()) {
 			if (hb2.isPointInside(sp)) {
 				System.out.println("boop1");

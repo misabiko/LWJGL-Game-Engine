@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 
@@ -39,20 +40,16 @@ public abstract class Hitbox {
 	
 	public abstract boolean isPointInside(Vector3f p);
 	
+	public abstract ArrayList<Vector3f> getNonRotatedSP(Vector3f pos);
+	
 	public ArrayList<Vector3f> getSP() {
-		ArrayList<Vector3f> sp = new ArrayList<Vector3f>(significantPoints);
 		ArrayList<Vector3f> newSp = new ArrayList<Vector3f>();
 		Matrix4f rot = new Matrix4f();
 		
 		rot.rotate(obj.angleX, new Vector3f(1f,0,0));
 		rot.rotate(obj.angleY, new Vector3f(0,1f,0));
 		
-		rot.translate(obj.pos);
-		
-//		System.out.println(obj.pos);
-//		System.out.println();
-		
-		for (Vector3f p : sp) {
+		for (Vector3f p : getNonRotatedSP(obj.pos)) {
 			newSp.add(Util.mulMatrix4fVector3f(rot, p));
 		}
 		

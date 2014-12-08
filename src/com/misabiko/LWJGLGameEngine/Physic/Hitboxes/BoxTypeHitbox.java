@@ -1,31 +1,40 @@
 package com.misabiko.LWJGLGameEngine.Physic.Hitboxes;
 
+import java.util.ArrayList;
+
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 
 public class BoxTypeHitbox extends Hitbox{
+	
 	private float width,height,depth;
 
 	public BoxTypeHitbox(GameObject obj, float w, float h, float d) {
 		super(obj);
-
-		significantPoints.add(new Vector3f(0,0,0));
-		
-		significantPoints.add(new Vector3f(	-w/2,	h/2,	d/2));
-		significantPoints.add(new Vector3f(	w/2,	h/2,	d/2));
-		significantPoints.add(new Vector3f(	-w/2,	h/2,	-d/2));
-		significantPoints.add(new Vector3f(	w/2,	h/2,	-d/2));
-		
-		significantPoints.add(new Vector3f(	-w/2,	-h/2,	d/2));
-		significantPoints.add(new Vector3f(	w/2,	-h/2,	d/2));
-		significantPoints.add(new Vector3f(	-w/2,	-h/2,	-d/2));
-		significantPoints.add(new Vector3f(	w/2,	-h/2,	-d/2));
 		
 		width = w;
 		height = h;
 		depth = d;
+	}
+	
+	public ArrayList<Vector3f> getNonRotatedSP(Vector3f pos) {
+		ArrayList<Vector3f> vecs = new ArrayList<Vector3f>();
+
+		vecs.add(new Vector3f(obj.pos.x,			obj.pos.y,				obj.pos.z));
+		
+		vecs.add(new Vector3f(obj.pos.x-(width/2),	obj.pos.y+(height/2),	obj.pos.z+(depth/2)	));
+		vecs.add(new Vector3f(obj.pos.x+(width/2),	obj.pos.y+(height/2),	obj.pos.z+(depth/2)	));
+		vecs.add(new Vector3f(obj.pos.x-(width/2),	obj.pos.y+(height/2),	obj.pos.z-(depth/2)	));
+		vecs.add(new Vector3f(obj.pos.x+(width/2),	obj.pos.y+(height/2),	obj.pos.z-(depth/2)	));
+		
+		vecs.add(new Vector3f(obj.pos.x-(width/2),	obj.pos.y-(height/2),	obj.pos.z+(depth/2)	));
+		vecs.add(new Vector3f(obj.pos.x+(width/2),	obj.pos.y-(height/2),	obj.pos.z+(depth/2)	));
+		vecs.add(new Vector3f(obj.pos.x-(width/2),	obj.pos.y-(height/2),	obj.pos.z-(depth/2)	));
+		vecs.add(new Vector3f(obj.pos.x+(width/2),	obj.pos.y-(height/2),	obj.pos.z-(depth/2)	));
+		
+		return vecs;
 	}
 
 	@Override
@@ -40,6 +49,12 @@ public class BoxTypeHitbox extends Hitbox{
 //			System.out.println(p.y+" is between "+getSP().get(1).y+" and "+getSP().get(5).y);
 			return true;
 		} else {
+			System.out.println(p.toString()+" is not inside:");
+			System.out.println();
+			for (Vector3f vec : getSP()) {
+				System.out.println(vec.toString());
+			}
+			System.out.println();
 			return false;
 		}
 	}
