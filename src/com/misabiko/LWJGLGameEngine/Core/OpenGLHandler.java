@@ -142,7 +142,7 @@ public abstract class OpenGLHandler {
 		
 	}
 	
-	public static void render(GameObject obj, Camera camera) {
+	public static void render(GameObject obj) {
 		
 		if (obj.mesh.isTextured) {
 			glUseProgram(texProgram.id);
@@ -151,7 +151,7 @@ public abstract class OpenGLHandler {
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.projectionMatrixLocation, false, matrixBuffer);
 				
-				camera.viewMatrix.store(matrixBuffer);
+				Camera.viewMatrix.store(matrixBuffer);
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
 				
@@ -168,7 +168,7 @@ public abstract class OpenGLHandler {
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.projectionMatrixLocation, false, matrixBuffer);
 			
-			camera.viewMatrix.store(matrixBuffer);
+			Camera.viewMatrix.store(matrixBuffer);
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
 			

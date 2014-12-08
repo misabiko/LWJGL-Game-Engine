@@ -6,21 +6,21 @@ import org.lwjgl.util.vector.Vector3f;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 
 public class Camera {
-	public Matrix4f viewMatrix = new Matrix4f();
-	public Vector3f pos;
-	public float angleY, angleX, angleZ = 0;
-	public float rotateSpeed = 0.01f;
-	public float zoom = 1f;
-	public float speed = 0.05f;
-	public boolean freeMovement = false;
+	public static Matrix4f viewMatrix = new Matrix4f();
+	public static Vector3f pos;
+	public static float angleY, angleX, angleZ = 0;
+	public static float rotateSpeed = 0.01f;
+	public static float zoom = 1f;
+	public static float speed = 0.05f;
+	public static boolean freeMovement = false;
 	
-	public Camera(float x, float y, float z) {
-		pos = new Vector3f(x,y,z);
-		
-//		Matrix4f.translate(pos, viewMatrix, viewMatrix);
-	}
+//	public Camera(float x, float y, float z) {
+//		pos = new Vector3f(x,y,z);
+//		
+////		Matrix4f.translate(pos, viewMatrix, viewMatrix);
+//	}
 	
-	public void update(GameObject obj) {
+	public static void update(GameObject obj) {
 		Matrix4f.setIdentity(viewMatrix);
 		
 		Matrix4f.translate(new Vector3f(0,0,-zoom), viewMatrix, viewMatrix);

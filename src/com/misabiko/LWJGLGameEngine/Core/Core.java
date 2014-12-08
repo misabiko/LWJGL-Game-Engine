@@ -22,7 +22,7 @@ public class Core {
 	private static final String TITLE = "LWJGL Game Engine";
 	
 	private ArrayList<GameObject> objs = new ArrayList<GameObject>();
-	private Camera camera;
+//	private Camera camera;
 	private Cuby cuby;
 	
 	private boolean F5isHeld, EscIsHeld = false;
@@ -52,7 +52,7 @@ public class Core {
 			
 			for (GameObject obj : objs) {
 				obj.update();
-				OpenGLHandler.render(obj, camera);
+				OpenGLHandler.render(obj);
 			}
 			
 			Display.sync(60);
@@ -72,8 +72,6 @@ public class Core {
 		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
 		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
-		camera = new Camera(-1f, -1.5f, -1f);
-		
 		OpenGLHandler.initVBOs(objs);
 	}
 	
@@ -91,18 +89,18 @@ public class Core {
 		}
 		
 		if (Mouse.isGrabbed()) {
-			camera.angleX += ((float) Mouse.getDY()/500);
-			camera.angleY -= ((float) Mouse.getDX()/500);
+			Camera.angleX += ((float) Mouse.getDY()/500);
+			Camera.angleY -= ((float) Mouse.getDX()/500);
 			
-			if (camera.angleX > Math.PI*2) {
-				camera.angleX = camera.angleX - (float) (Math.PI*2);
-			}else if (camera.angleX < -(Math.PI*2)) {
-				camera.angleX = camera.angleX + (float) (Math.PI*2);
+			if (Camera.angleX > Math.PI*2) {
+				Camera.angleX = Camera.angleX - (float) (Math.PI*2);
+			}else if (Camera.angleX < -(Math.PI*2)) {
+				Camera.angleX = Camera.angleX + (float) (Math.PI*2);
 			}
-			if (camera.angleY > Math.PI*2) {
-				camera.angleY = camera.angleY - (float) (Math.PI*2);
-			}else if (camera.angleY < -(Math.PI*2)) {
-				camera.angleY = camera.angleY + (float) (Math.PI*2);
+			if (Camera.angleY > Math.PI*2) {
+				Camera.angleY = Camera.angleY - (float) (Math.PI*2);
+			}else if (Camera.angleY < -(Math.PI*2)) {
+				Camera.angleY = Camera.angleY + (float) (Math.PI*2);
 			}
 		
 		}else {
@@ -110,15 +108,15 @@ public class Core {
 			Mouse.getDY();
 		}
 		
-		camera.zoom -= ((float) Mouse.getDWheel()/1000);
+		Camera.zoom -= ((float) Mouse.getDWheel()/1000);
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_F5)) {
 			if (!F5isHeld) {
-				if (camera.freeMovement) {
-					camera.angleX = cuby.angleX;
-					camera.angleY = cuby.angleY;
+				if (Camera.freeMovement) {
+					Camera.angleX = cuby.angleX;
+					Camera.angleY = cuby.angleY;
 				}
-				camera.freeMovement = !camera.freeMovement;
+				Camera.freeMovement = !Camera.freeMovement;
 			}
 			F5isHeld = true;
 		}else {
@@ -126,11 +124,11 @@ public class Core {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			cuby.angleY = camera.angleY;
+			cuby.angleY = Camera.angleY;
 			
 			cuby.xzVel.x += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-			cuby.angleY = camera.angleY;
+			cuby.angleY = Camera.angleY;
 			
 			cuby.xzVel.x -= cuby.speed;
 		}
@@ -138,15 +136,15 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			cuby.jump();
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			Vector3f.sub(cuby.pos, new Vector3f(0,camera.speed,0), cuby.pos);
+			Vector3f.sub(cuby.pos, new Vector3f(0,Camera.speed,0), cuby.pos);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			cuby.angleY = camera.angleY;
+			cuby.angleY = Camera.angleY;
 			
 			cuby.xzVel.y += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			cuby.angleY = camera.angleY;
+			cuby.angleY = Camera.angleY;
 			
 			cuby.xzVel.y -= cuby.speed;
 		}

@@ -1,7 +1,6 @@
 package com.misabiko.LWJGLGameEngine.GameObjects;
 
-import java.util.ArrayList;
-
+import com.misabiko.LWJGLGameEngine.Core.Camera;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
 public class Cuby extends Platform {
@@ -20,5 +19,7 @@ public class Cuby extends Platform {
 	public void update() {
 		Physic.update(this);
 		super.update();
+		
+		Camera.update(this);
 	}
 }
