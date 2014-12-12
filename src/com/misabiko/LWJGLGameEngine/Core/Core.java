@@ -12,6 +12,7 @@ import com.misabiko.LWJGLGameEngine.GameObjects.Axis;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
+import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -43,6 +44,7 @@ public class Core {
 	
 	public Core() {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
+		JBulletHandler.init();
 		
 		init();
 		
@@ -60,6 +62,7 @@ public class Core {
 		}
 		
 		OpenGLHandler.cleanUp(objs);
+		JBulletHandler.cleanUp();
 	}
 	
 	private void init() {
