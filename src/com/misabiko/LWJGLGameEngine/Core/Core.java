@@ -49,22 +49,57 @@ public class Core {
 	public Core() {
 		init();
 		
-		while (!Display.isCloseRequested()) {
-			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-			input();
-			
-			dynamicsWorld.stepSimulation(1/60f, 10);
-			
-			for (GameObject obj : objs) {
-				obj.update();
-				OpenGLHandler.render(obj);
-			}
-			
-			Display.update();
-			Display.sync(60);
-		}
+		run();
 		
 		cleanUp();
+	}
+	
+	private void run() {
+		long lastTime = System.nanoTime();
+		double nsPerTick = 1000000000D / 60D;
+
+		int renders = 0;
+		int updates = 0;
+
+		long lastTimer = System.currentTimeMillis();
+		double delta = 0;
+
+		while (!Display.isCloseRequested()) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / nsPerTick;
+			lastTime = now;
+			boolean shouldRender = false;
+
+			while (delta >= 1) {
+				updates++;
+				
+				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+				input();
+				
+				dynamicsWorld.stepSimulation(1/60f, 1);
+				
+				for (GameObject obj : objs) {
+					obj.update();
+					OpenGLHandler.render(obj);
+				}
+
+				delta -= 1;
+				shouldRender = true;
+			}
+
+			if (shouldRender) {
+				renders++;
+				Display.update();
+			}
+
+			if (System.currentTimeMillis() - lastTimer >= 1000) {
+				lastTimer += 1000;
+				System.out.println(renders + ", " + updates);
+				renders = 0;
+				updates = 0;
+			}
+
+		}
 	}
 	
 	private void init() {
