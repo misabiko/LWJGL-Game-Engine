@@ -13,28 +13,28 @@ public class Physic {
 	private static float gravity = 0.05f;
 	private static float friction = 0.08f;
 	
-	private static void friction(GameObject obj) {
-		if (obj.xzVel.length() >= (friction/20)) {
-			obj.xzVel.scale(1f-friction);
-		}else if (obj.xzVel.length() <= (-friction/20)) {
-			obj.xzVel.scale(1f-friction);
-		}else {
-			obj.xzVel.scale(0);
-		}
-		
-		if (obj.xzVel.length() > speedCap) {
-			obj.xzVel.scale(speedCap/obj.xzVel.length());
-		}else if (obj.xzVel.length() < -speedCap) {
-			obj.xzVel.scale(-speedCap/obj.xzVel.length());
-		}
-	}
-	
-	private static void gravity(GameObject obj) {
-		if (obj.yVel > ySpeedCap)
-			obj.yVel -= gravity;
-		else
-			obj.yVel = ySpeedCap;
-	}
+//	private static void friction(GameObject obj) {
+//		if (obj.xzVel.length() >= (friction/20)) {
+//			obj.xzVel.scale(1f-friction);
+//		}else if (obj.xzVel.length() <= (-friction/20)) {
+//			obj.xzVel.scale(1f-friction);
+//		}else {
+//			obj.xzVel.scale(0);
+//		}
+//		
+//		if (obj.xzVel.length() > speedCap) {
+//			obj.xzVel.scale(speedCap/obj.xzVel.length());
+//		}else if (obj.xzVel.length() < -speedCap) {
+//			obj.xzVel.scale(-speedCap/obj.xzVel.length());
+//		}
+//	}
+//	
+//	private static void gravity(GameObject obj) {
+//		if (obj.yVel > ySpeedCap)
+//			obj.yVel -= gravity;
+//		else
+//			obj.yVel = ySpeedCap;
+//	}
 	
 	public static boolean isColliding(Hitbox hb1, Hitbox hb2) {
 
@@ -66,13 +66,13 @@ public class Physic {
 	}
 	
 	public static void update(GameObject obj) {
-		friction(obj);
-		for (Hitbox hb : Hitbox.Hitboxes) {
-			if (hb != obj.hitbox) {
-				if (isColliding(obj.hitbox, hb)) {
-					System.out.println("Collision");
-				}
-			}
-		}
+//		friction(obj);
+//		for (Hitbox hb : Hitbox.Hitboxes) {
+//			if (hb != obj.hitbox) {
+//				if (isColliding(obj.hitbox, hb)) {
+//					System.out.println("Collision");
+//				}
+//			}
+//		}
 	}
 }

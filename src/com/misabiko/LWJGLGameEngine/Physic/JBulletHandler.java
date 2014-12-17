@@ -1,7 +1,5 @@
 package com.misabiko.LWJGLGameEngine.Physic;
 
-
-
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
@@ -13,24 +11,32 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 
 public class JBulletHandler {
-	private static DiscreteDynamicsWorld dynamicsWorld;
+	private static BroadphaseInterface broadphase;
+	private static DefaultCollisionConfiguration collisionConfig;
+	private static CollisionDispatcher dispatcher;
+	private static SequentialImpulseConstraintSolver solver;
 	
-	public static void init() {
-		BroadphaseInterface broadphase = new DbvtBroadphase();
+	public static DiscreteDynamicsWorld init(DiscreteDynamicsWorld dw) {
+		broadphase = new DbvtBroadphase();
 		
-		DefaultCollisionConfiguration collisionConfig = new DefaultCollisionConfiguration();
-		CollisionDispatcher dispatcher = new CollisionDispatcher(collisionConfig);
+		collisionConfig = new DefaultCollisionConfiguration();
+		dispatcher = new CollisionDispatcher(collisionConfig);
 		
 		GImpactCollisionAlgorithm.registerAlgorithm(dispatcher);
 		
-		SequentialImpulseConstraintSolver solver = new SequentialImpulseConstraintSolver();
+		solver = new SequentialImpulseConstraintSolver();
 		
-		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
+		dw = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
 		
-		dynamicsWorld.setGravity(new Vector3f(0,-10f,0));
+		dw.setGravity(new Vector3f(0,-5f,0));
+		
+		return dw;
 	}
 	
 	public static void cleanUp() {
-		dynamicsWorld.destroy();
+		broadphase = null;
+		collisionConfig = null;
+		dispatcher = null;
+		solver = null;
 	}
 }

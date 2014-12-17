@@ -8,6 +8,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.GameObjects.Axis;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
@@ -21,6 +23,8 @@ public class Core {
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "LWJGL Game Engine";
+
+	private static DiscreteDynamicsWorld dynamicsWorld;
 	
 	private ArrayList<GameObject> objs = new ArrayList<GameObject>();
 //	private Camera camera;
@@ -44,13 +48,15 @@ public class Core {
 	
 	public Core() {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
-		JBulletHandler.init();
+		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
 		
 		init();
 		
 		while (!Display.isCloseRequested()) {
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			input();
+			
+			dynamicsWorld.stepSimulation(1/60f, 10);
 			
 			for (GameObject obj : objs) {
 				obj.update();
@@ -63,13 +69,17 @@ public class Core {
 		
 		OpenGLHandler.cleanUp(objs);
 		JBulletHandler.cleanUp();
+		cleanUp();
 	}
 	
 	private void init() {
+		Platform ground = new Platform(-3f, -2f, -2f, 8f,0.5f,4f);
+		objs.add(ground);
+		dynamicsWorld.addRigidBody(ground.rb);
+		
 		cuby = new Cuby();
 		objs.add(cuby);
-		
-		objs.add(new Platform(-3f, -2f, -2f, 8f,0.5f,4f));
+		dynamicsWorld.addRigidBody(cuby.rb);
 		
 		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
 		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
@@ -129,11 +139,11 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			cuby.angleY = Camera.angleY;
 			
-			cuby.xzVel.x += cuby.speed;
+			cuby.vel.x += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
 			cuby.angleY = Camera.angleY;
 			
-			cuby.xzVel.x -= cuby.speed;
+			cuby.vel.x -= cuby.speed;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
@@ -145,12 +155,16 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			cuby.angleY = Camera.angleY;
 			
-			cuby.xzVel.y += cuby.speed;
+			cuby.vel.z += cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
 			cuby.angleY = Camera.angleY;
 			
-			cuby.xzVel.y -= cuby.speed;
+			cuby.vel.z -= cuby.speed;
 		}
 		
+	}
+	
+	public void cleanUp() {
+		dynamicsWorld.destroy();
 	}
 }
