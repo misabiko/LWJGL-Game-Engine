@@ -47,9 +47,6 @@ public class Core {
 //		TODO well, you know, game stuff
 	
 	public Core() {
-		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
-		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
-		
 		init();
 		
 		while (!Display.isCloseRequested()) {
@@ -63,16 +60,17 @@ public class Core {
 				OpenGLHandler.render(obj);
 			}
 			
-			Display.sync(60);
 			Display.update();
+			Display.sync(60);
 		}
 		
-		OpenGLHandler.cleanUp(objs);
-		JBulletHandler.cleanUp();
 		cleanUp();
 	}
 	
 	private void init() {
+		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
+		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
+		
 		Platform ground = new Platform(-3f, -2f, -2f, 8f,0.5f,4f);
 		objs.add(ground);
 		dynamicsWorld.addRigidBody(ground.rb);
@@ -165,6 +163,9 @@ public class Core {
 	}
 	
 	public void cleanUp() {
+		OpenGLHandler.cleanUp(objs);
+		JBulletHandler.cleanUp();
+	
 		dynamicsWorld.destroy();
 	}
 }
