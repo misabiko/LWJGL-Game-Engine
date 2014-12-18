@@ -76,13 +76,13 @@ public class Core {
 				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 				input();
 				
-				dynamicsWorld.stepSimulation(1/60f, 1);
+				dynamicsWorld.stepSimulation(1/60f, 3);
 				
 				for (GameObject obj : objs) {
 					obj.update();
 					OpenGLHandler.render(obj);
 				}
-
+				
 				delta -= 1;
 				shouldRender = true;
 			}
@@ -94,7 +94,7 @@ public class Core {
 
 			if (System.currentTimeMillis() - lastTimer >= 1000) {
 				lastTimer += 1000;
-				System.out.println(renders + ", " + updates);
+//				System.out.println(renders + ", " + updates);
 				renders = 0;
 				updates = 0;
 			}

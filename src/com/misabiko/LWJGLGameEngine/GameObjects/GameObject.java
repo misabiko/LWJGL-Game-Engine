@@ -2,9 +2,12 @@ package com.misabiko.LWJGLGameEngine.GameObjects;
 
 import javax.vecmath.Vector3f;
 
+import org.lwjgl.util.vector.Matrix4f;
+
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.DefaultMotionState;
+import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 
 public abstract class GameObject {
@@ -40,6 +43,7 @@ public abstract class GameObject {
 	
 	public void update() {
 //		pos = findNewPos();
+		
 		mesh.update(new org.lwjgl.util.vector.Vector3f(pos.x,pos.y,pos.z),angleX,angleY);
 	}
 }

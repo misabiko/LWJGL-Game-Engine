@@ -62,4 +62,8 @@ public abstract class Mesh {
 		Matrix4f.rotate(angleY, new Vector3f(0,1f,0), modelMatrix, modelMatrix);
 		Matrix4f.rotate(angleX, new Vector3f(1f,0,0), modelMatrix, modelMatrix);
 	}
+	
+	public void update(Matrix4f mat) {
+		modelMatrix = mat;
+	}
 }
