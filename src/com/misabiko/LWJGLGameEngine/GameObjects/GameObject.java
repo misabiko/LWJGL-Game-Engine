@@ -2,12 +2,7 @@ package com.misabiko.LWJGLGameEngine.GameObjects;
 
 import javax.vecmath.Vector3f;
 
-import org.lwjgl.util.vector.Matrix4f;
-
-import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.linearmath.DefaultMotionState;
-import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
 
 public abstract class GameObject {
@@ -18,8 +13,6 @@ public abstract class GameObject {
 	public float angleX, angleY;
 	
 	public Mesh mesh;
-	protected CollisionShape cs;
-	protected DefaultMotionState ms;
 	public RigidBody rb;
 	
 	public GameObject(float x, float y, float z, Mesh m) {

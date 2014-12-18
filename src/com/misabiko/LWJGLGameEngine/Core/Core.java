@@ -9,7 +9,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
-import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.GameObjects.Axis;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
@@ -58,8 +57,8 @@ public class Core {
 		long lastTime = System.nanoTime();
 		double nsPerTick = 1000000000D / 60D;
 
-		int renders = 0;
-		int updates = 0;
+//		int renders = 0;
+//		int updates = 0;
 
 		long lastTimer = System.currentTimeMillis();
 		double delta = 0;
@@ -71,7 +70,7 @@ public class Core {
 			boolean shouldRender = false;
 
 			while (delta >= 1) {
-				updates++;
+//				updates++;
 				
 				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 				input();
@@ -88,15 +87,15 @@ public class Core {
 			}
 
 			if (shouldRender) {
-				renders++;
+//				renders++;
 				Display.update();
 			}
 
 			if (System.currentTimeMillis() - lastTimer >= 1000) {
 				lastTimer += 1000;
 //				System.out.println(renders + ", " + updates);
-				renders = 0;
-				updates = 0;
+//				renders = 0;
+//				updates = 0;
 			}
 
 		}
@@ -112,7 +111,9 @@ public class Core {
 		
 		cuby = new Cuby();
 		objs.add(cuby);
-		dynamicsWorld.addRigidBody(cuby.rb);
+		dynamicsWorld.addCollisionObject(cuby.go);
+		dynamicsWorld.addAction(cuby.controller);
+		
 		
 		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
 		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
@@ -122,9 +123,6 @@ public class Core {
 	}
 	
 	private void input() {
-		
-//		Dat clean input method :O
-		
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			if (!EscIsHeld) {
 				Mouse.setGrabbed(!Mouse.isGrabbed());

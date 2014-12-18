@@ -6,6 +6,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.collision.dispatch.GhostPairCallback;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
@@ -18,6 +19,7 @@ public class JBulletHandler {
 	
 	public static DiscreteDynamicsWorld init(DiscreteDynamicsWorld dw) {
 		broadphase = new DbvtBroadphase();
+		broadphase.getOverlappingPairCache().setInternalGhostPairCallback(new GhostPairCallback());
 		
 		collisionConfig = new DefaultCollisionConfiguration();
 		dispatcher = new CollisionDispatcher(collisionConfig);

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Utils.Util;
 

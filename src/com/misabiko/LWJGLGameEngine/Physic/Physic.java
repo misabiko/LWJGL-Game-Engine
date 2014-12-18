@@ -1,17 +1,11 @@
 package com.misabiko.LWJGLGameEngine.Physic;
 
-import java.util.ArrayList;
-
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Physic.Hitboxes.Hitbox;
 
 public class Physic {
-	private static float ySpeedCap = -0.2f;
-	private static float speedCap = 0.1f;
-	private static float gravity = 0.05f;
-	private static float friction = 0.08f;
 	
 //	private static void friction(GameObject obj) {
 //		if (obj.xzVel.length() >= (friction/20)) {

@@ -4,48 +4,73 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
+import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.CylinderShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
+import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.DefaultMotionState;
+import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Core.Camera;
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
 
 public class Cuby extends GameObject {
-
-	private float jumpStrength = 0.05f;
+	
+	private static CollisionShape cs = new CylinderShape(new Vector3f(0.25f,0.25f,0.25f));
+	public KinematicCharacterController controller;
+	public PairCachingGhostObject go;
+	
+	private float jumpStrength = 3f;
 	public float speed = 0.00005f;
+	private float speedCap = 0.05f;
 	
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
 	public Cuby() {
-		super(-5f, 10f, -3f, new Box(0.5f,0.5f,0.5f));
+		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f));
 		
-		cs = new CylinderShape(new Vector3f(0.25f,0.25f,0.25f));
-		ms = new DefaultMotionState(new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 10f, -3f), 1f)));
+		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 5f, -3f), 1f));
+		MotionState ms = new DefaultMotionState(initTrans);
 		
 		cs.calculateLocalInertia(mass, fallInertia);
 		
 		RigidBodyConstructionInfo rbConstructInfo = new RigidBodyConstructionInfo(mass, ms, cs, fallInertia);
 		rb = new RigidBody(rbConstructInfo);
 		
-//		rb.setAngularFactor(0);
+		rb.setAngularFactor(0);
+		
+		go = new PairCachingGhostObject();
+		go.setCollisionShape(cs);
+		go.setWorldTransform(initTrans);
+		
+		
+		controller = new KinematicCharacterController(go, (ConvexShape) cs, 0.125f);
+		controller.setJumpSpeed(jumpStrength);
 	}
 
 	public void jump() {
-		vel.y = jumpStrength;
+		controller.jump();
 	}
 
 	public void update() {
 //		Physic.update(this);
-		rb.applyCentralForce(vel);
+		if (vel.x > speedCap)
+			vel.x = speedCap;
+		if (vel.z > speedCap)
+			vel.z = speedCap;
+		controller.setWalkDirection(vel);
 		
 		Transform trans = new Transform();
-		rb.getMotionState().getWorldTransform(trans);
+//		rb.getMotionState().getWorldTransform(trans);
+		go.getWorldTransform(trans);
 		
 		pos.set(trans.origin.x, trans.origin.y, trans.origin.z);
+		
+		
 
 		org.lwjgl.util.vector.Matrix4f mat = new org.lwjgl.util.vector.Matrix4f();
 		float[] matArray = new float[16];
