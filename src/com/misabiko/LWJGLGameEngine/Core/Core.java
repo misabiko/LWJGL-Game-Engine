@@ -111,8 +111,9 @@ public class Core {
 		
 		cuby = new Cuby();
 		objs.add(cuby);
-		dynamicsWorld.addCollisionObject(cuby.go);
-		dynamicsWorld.addAction(cuby.controller);
+		dynamicsWorld.addRigidBody(cuby.rb);
+//		dynamicsWorld.addCollisionObject(cuby.go);
+//		dynamicsWorld.addAction(cuby.controller);
 		
 		
 		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
@@ -178,9 +179,9 @@ public class Core {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			cuby.jump();
+			cuby.vel.y += cuby.jumpStrength;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			Vector3f.sub(cuby.pos, new Vector3f(0,Camera.speed,0), cuby.pos);
+			cuby.vel.y -= cuby.jumpStrength;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {

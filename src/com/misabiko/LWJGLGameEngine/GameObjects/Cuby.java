@@ -5,6 +5,8 @@ import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
+import com.bulletphysics.collision.shapes.BoxShape;
+import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.CylinderShape;
@@ -16,16 +18,17 @@ import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Core.Camera;
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
+import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
 public class Cuby extends GameObject {
 	
-	private static CollisionShape cs = new CylinderShape(new Vector3f(0.25f,0.25f,0.25f));
-	public KinematicCharacterController controller;
-	public PairCachingGhostObject go;
+//	private static CollisionShape cs = new CapsuleShape(0.25f,0f);
+	private static CollisionShape cs = new BoxShape(new Vector3f(0.25f,0.25f,0.25f));
+//	public KinematicCharacterController controller;
+//	public PairCachingGhostObject go;
 	
-	private float jumpStrength = 3f;
-	public float speed = 0.00005f;
-	private float speedCap = 0.05f;
+	public float jumpStrength = 1f;
+	public float speed = 0.05f;
 	
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
@@ -41,32 +44,30 @@ public class Cuby extends GameObject {
 		RigidBodyConstructionInfo rbConstructInfo = new RigidBodyConstructionInfo(mass, ms, cs, fallInertia);
 		rb = new RigidBody(rbConstructInfo);
 		
-		rb.setAngularFactor(0);
+//		rb.setAngularFactor(0);
+		rb.setFriction(0f);
 		
-		go = new PairCachingGhostObject();
-		go.setCollisionShape(cs);
-		go.setWorldTransform(initTrans);
+//		go = new PairCachingGhostObject();
+//		go.setCollisionShape(cs);
+//		go.setWorldTransform(initTrans);
+//		
+//		
+//		controller = new KinematicCharacterController(go, (ConvexShape) cs, 0.125f);
+//		controller.setJumpSpeed(jumpStrength);
 		
-		
-		controller = new KinematicCharacterController(go, (ConvexShape) cs, 0.125f);
-		controller.setJumpSpeed(jumpStrength);
 	}
 
 	public void jump() {
-		controller.jump();
+		vel.y += jumpStrength;
 	}
 
 	public void update() {
 //		Physic.update(this);
-		if (vel.x > speedCap)
-			vel.x = speedCap;
-		if (vel.z > speedCap)
-			vel.z = speedCap;
-		controller.setWalkDirection(vel);
+		System.out.println(vel.toString());
+		rb.applyCentralForce(vel);
 		
 		Transform trans = new Transform();
-//		rb.getMotionState().getWorldTransform(trans);
-		go.getWorldTransform(trans);
+		rb.getMotionState().getWorldTransform(trans);
 		
 		pos.set(trans.origin.x, trans.origin.y, trans.origin.z);
 		
