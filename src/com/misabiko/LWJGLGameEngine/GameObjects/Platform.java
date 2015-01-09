@@ -23,5 +23,7 @@ public class Platform extends GameObject {;
 		
 		RigidBodyConstructionInfo rbConstructInfo = new RigidBodyConstructionInfo(0, ms, cs, new Vector3f(0f,0f,0f));
 		rb = new RigidBody(rbConstructInfo);
+		
+		rb.setFriction(0f);
 	}
 }

@@ -3,13 +3,14 @@ package com.misabiko.LWJGLGameEngine.Physic;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 
 public class Physic {
-	private static float speedCap = 1f;
-	private static float friction = 0.005f;
+	private static float speedCap = 0.1f;
+	private static float friction = 0.25f;
+	public static float gravity = -0.1f;
 	
 	private static void friction(GameObject obj) {
-		if (obj.vel.length() >= (friction/20)) {
+		if (obj.vel.length() >= (friction/200)) {
 			obj.vel.scale(1f-friction);
-		}else if (obj.vel.length() <= (-friction/20)) {
+		}else if (obj.vel.length() <= (-friction/200)) {
 			obj.vel.scale(1f-friction);
 		}else {
 			obj.vel.scale(0);

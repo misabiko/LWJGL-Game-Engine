@@ -4,17 +4,14 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.ConvexShape;
-import com.bulletphysics.collision.shapes.CylinderShape;
-import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.dynamics.character.KinematicCharacterController;
-import com.bulletphysics.linearmath.DefaultMotionState;
-import com.bulletphysics.linearmath.MotionState;
+import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Core.Camera;
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
@@ -24,11 +21,11 @@ public class Cuby extends GameObject {
 	
 //	private static CollisionShape cs = new CapsuleShape(0.25f,0f);
 	private static CollisionShape cs = new BoxShape(new Vector3f(0.25f,0.25f,0.25f));
-//	public KinematicCharacterController controller;
-//	public PairCachingGhostObject go;
+	public PairCachingGhostObject go;
+	public KinematicCharacterController controller;
 	
 	public float jumpStrength = 1f;
-	public float speed = 0.05f;
+	public float speed = 1f;
 	
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
@@ -37,42 +34,37 @@ public class Cuby extends GameObject {
 		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 5f, -3f), 1f));
-		MotionState ms = new DefaultMotionState(initTrans);
 		
 		cs.calculateLocalInertia(mass, fallInertia);
 		
-		RigidBodyConstructionInfo rbConstructInfo = new RigidBodyConstructionInfo(mass, ms, cs, fallInertia);
-		rb = new RigidBody(rbConstructInfo);
+		go = new PairCachingGhostObject();
+		go.setWorldTransform(initTrans);
+		go.setCollisionShape(cs);
+		go.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
-//		rb.setAngularFactor(0);
-		rb.setFriction(0f);
-		
-//		go = new PairCachingGhostObject();
-//		go.setCollisionShape(cs);
-//		go.setWorldTransform(initTrans);
-//		
-//		
-//		controller = new KinematicCharacterController(go, (ConvexShape) cs, 0.125f);
-//		controller.setJumpSpeed(jumpStrength);
-		
-	}
-
-	public void jump() {
-		vel.y += jumpStrength;
+		controller = new KinematicCharacterController(go, (ConvexShape) cs, 0.1f);
+		controller.setJumpSpeed(5f);
 	}
 
 	public void update() {
-//		Physic.update(this);
-		System.out.println(vel.toString());
-		rb.applyCentralForce(vel);
+		Physic.update(this);
 		
 		Transform trans = new Transform();
-		rb.getMotionState().getWorldTransform(trans);
+		go.getWorldTransform(trans);
 		
-		pos.set(trans.origin.x, trans.origin.y, trans.origin.z);
+		Quat4f rot = new Quat4f();
+		QuaternionUtil.setRotation(rot, new Vector3f(0,1f,0), angleY);
+		trans.setRotation(rot);
 		
+		Vector3f finalVel = new Vector3f();
+		QuaternionUtil.quatRotate(rot, vel, finalVel);
 		
-
+		if (!controller.canJump()) {
+			finalVel.scale(0.5f);
+		}
+		
+		controller.setWalkDirection(finalVel);
+		
 		org.lwjgl.util.vector.Matrix4f mat = new org.lwjgl.util.vector.Matrix4f();
 		float[] matArray = new float[16];
 		trans.getOpenGLMatrix(matArray);
@@ -96,6 +88,6 @@ public class Cuby extends GameObject {
 		
 		mesh.update(mat);
 		
-		Camera.update(this);
+		Camera.update(new org.lwjgl.util.vector.Vector3f(trans.origin.x,trans.origin.y,trans.origin.z));
 	}
 }

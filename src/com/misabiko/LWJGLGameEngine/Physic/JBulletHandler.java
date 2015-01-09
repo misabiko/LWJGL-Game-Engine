@@ -1,7 +1,5 @@
 package com.misabiko.LWJGLGameEngine.Physic;
 
-import javax.vecmath.Vector3f;
-
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -29,8 +27,6 @@ public class JBulletHandler {
 		solver = new SequentialImpulseConstraintSolver();
 		
 		dw = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig);
-		
-		dw.setGravity(new Vector3f(0,-5f,0));
 		
 		return dw;
 	}

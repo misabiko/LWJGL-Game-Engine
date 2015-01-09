@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector3f;
 
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.misabiko.LWJGLGameEngine.GameObjects.Axis;
@@ -105,20 +104,26 @@ public class Core {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
 		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
 		
-		Platform ground = new Platform(-3f, -2f, -2f, 8f,0.5f,4f);
+		Platform ground = new Platform(-3f, -2f, -2f, 16f,0.5f,16f);
 		objs.add(ground);
 		dynamicsWorld.addRigidBody(ground.rb);
 		
+		Platform block = new Platform(-3f, -1.5f, -2f, 10f, 0.5f, 1f);
+		objs.add(block);
+		dynamicsWorld.addRigidBody(block.rb);
+		
+		Platform block2 = new Platform(-3f, -1.725f, -1f, 10f, 0.05f, 1f);
+		objs.add(block2);
+		dynamicsWorld.addRigidBody(block2.rb);
+		
 		cuby = new Cuby();
 		objs.add(cuby);
-		dynamicsWorld.addRigidBody(cuby.rb);
-//		dynamicsWorld.addCollisionObject(cuby.go);
-//		dynamicsWorld.addAction(cuby.controller);
+		dynamicsWorld.addCollisionObject(cuby.go);
+		dynamicsWorld.addAction(cuby.controller);
 		
-		
-		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
-		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
-		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
+//		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
+//		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
+//		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
 		OpenGLHandler.initVBOs(objs);
 	}
@@ -155,18 +160,6 @@ public class Core {
 		
 		Camera.zoom -= ((float) Mouse.getDWheel()/1000);
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_F5)) {
-			if (!F5isHeld) {
-				if (Camera.freeMovement) {
-					Camera.angleX = cuby.angleX;
-					Camera.angleY = cuby.angleY;
-				}
-				Camera.freeMovement = !Camera.freeMovement;
-			}
-			F5isHeld = true;
-		}else {
-			F5isHeld = false;
-		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			cuby.angleY = Camera.angleY;
@@ -179,7 +172,7 @@ public class Core {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			cuby.vel.y += cuby.jumpStrength;
+			cuby.controller.jump();
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
 			cuby.vel.y -= cuby.jumpStrength;
 		}
@@ -187,11 +180,11 @@ public class Core {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			cuby.angleY = Camera.angleY;
 			
-			cuby.vel.z += cuby.speed;
+			cuby.vel.z -= cuby.speed;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
 			cuby.angleY = Camera.angleY;
 			
-			cuby.vel.z -= cuby.speed;
+			cuby.vel.z += cuby.speed;
 		}
 		
 	}
