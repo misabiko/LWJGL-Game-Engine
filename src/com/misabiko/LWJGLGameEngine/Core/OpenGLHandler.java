@@ -194,6 +194,7 @@ public abstract class OpenGLHandler {
 					glEnableVertexAttribArray(0);
 					glEnableVertexAttribArray(1);
 					glEnableVertexAttribArray(2);
+					glEnableVertexAttribArray(3);
 					
 						glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 						
@@ -202,6 +203,7 @@ public abstract class OpenGLHandler {
 							glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
 							glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
 							glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
+							glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.normOffset);
 							
 							glDrawElements(GL_TRIANGLES, obj.mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
 							
@@ -211,6 +213,7 @@ public abstract class OpenGLHandler {
 					glDisableVertexAttribArray(0);
 					glDisableVertexAttribArray(1);
 					glDisableVertexAttribArray(2);
+					glDisableVertexAttribArray(3);
 					glBindVertexArray(0);
 			
 				glUseProgram(0);
