@@ -2,6 +2,8 @@ package com.misabiko.LWJGLGameEngine.Meshes;
 
 import java.awt.Color;
 
+import org.lwjgl.util.vector.Vector3f;
+
 public class Box extends Mesh{
 	float width, height, depth;
 	
@@ -9,35 +11,35 @@ public class Box extends Mesh{
 		super(new TexturedVertex[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
-				new TexturedVertex(-w/2,	-h/2,	d/2,	colors[0], 	0f, 1f),	//0
-				new TexturedVertex(w/2,		-h/2,	d/2,	colors[0], 	1f, 1f),	//1
-				new TexturedVertex(w/2,		h/2,	d/2,	colors[0], 	1f, 0f),	//2
-				new TexturedVertex(-w/2,	h/2,	d/2,	colors[0], 	0f, 0f),	//3
+				new TexturedVertex(-w/2,	-h/2,	d/2,	new Vector3f(0f, 0f, 1f),	colors[0], 	0f, 1f),	//0
+				new TexturedVertex(w/2,		-h/2,	d/2,	new Vector3f(0f, 0f, 1f),	colors[0], 	1f, 1f),	//1
+				new TexturedVertex(w/2,		h/2,	d/2,	new Vector3f(0f, 0f, 1f),	colors[0], 	1f, 0f),	//2
+				new TexturedVertex(-w/2,	h/2,	d/2,	new Vector3f(0f, 0f, 1f),	colors[0], 	0f, 0f),	//3
 //				Back Face
-				new TexturedVertex(-w/2,	-h/2,	-d/2,	colors[1], 	1f, 1f),	//4
-				new TexturedVertex(w/2,		-h/2,	-d/2,	colors[1], 	0f, 1f),	//5
-				new TexturedVertex(w/2,		h/2,	-d/2,	colors[1], 	0f, 0f),	//6
-				new TexturedVertex(-w/2,	h/2,	-d/2,	colors[1], 	1f, 0f),	//7
+				new TexturedVertex(-w/2,	-h/2,	-d/2,	new Vector3f(0f, 0f, -1f),	colors[1], 	1f, 1f),	//4
+				new TexturedVertex(w/2,		-h/2,	-d/2,	new Vector3f(0f, 0f, -1f),	colors[1], 	0f, 1f),	//5
+				new TexturedVertex(w/2,		h/2,	-d/2,	new Vector3f(0f, 0f, -1f),	colors[1], 	0f, 0f),	//6
+				new TexturedVertex(-w/2,	h/2,	-d/2,	new Vector3f(0f, 0f, -1f),	colors[1], 	1f, 0f),	//7
 //				Left Face
-				new TexturedVertex(-w/2,	-h/2,	-d/2,	colors[2], 	0f, 1f),	//8
-				new TexturedVertex(-w/2,	-h/2,	d/2,	colors[2], 	1f, 1f),	//9
-				new TexturedVertex(-w/2,	h/2,	d/2,	colors[2], 	1f, 0f),	//10
-				new TexturedVertex(-w/2,	h/2,	-d/2,	colors[2], 	0f, 0f),	//11
+				new TexturedVertex(-w/2,	-h/2,	-d/2,	new Vector3f(-1f, 0f, 0f),	colors[2], 	0f, 1f),	//8
+				new TexturedVertex(-w/2,	-h/2,	d/2,	new Vector3f(-1f, 0f, 0f),	colors[2], 	1f, 1f),	//9
+				new TexturedVertex(-w/2,	h/2,	d/2,	new Vector3f(-1f, 0f, 0f),	colors[2], 	1f, 0f),	//10
+				new TexturedVertex(-w/2,	h/2,	-d/2,	new Vector3f(-1f, 0f, 0f),	colors[2], 	0f, 0f),	//11
 //				Right Face
-				new TexturedVertex(w/2,		-h/2,	d/2,	colors[3], 	0f, 1f),	//12
-				new TexturedVertex(w/2,		-h/2,	-d/2,	colors[3], 	1f, 1f),	//13
-				new TexturedVertex(w/2,		h/2,	-d/2,	colors[3], 	1f, 0f),	//14
-				new TexturedVertex(w/2,		h/2,	d/2,	colors[3], 	0f, 0f),	//15
+				new TexturedVertex(w/2,		-h/2,	d/2,	new Vector3f(1f, 0f, 0f),	colors[3], 	0f, 1f),	//12
+				new TexturedVertex(w/2,		-h/2,	-d/2,	new Vector3f(1f, 0f, 0f),	colors[3], 	1f, 1f),	//13
+				new TexturedVertex(w/2,		h/2,	-d/2,	new Vector3f(1f, 0f, 0f),	colors[3], 	1f, 0f),	//14
+				new TexturedVertex(w/2,		h/2,	d/2,	new Vector3f(1f, 0f, 0f),	colors[3], 	0f, 0f),	//15
 //				Top Face
-				new TexturedVertex(-w/2,	h/2,	-d/2,	colors[4], 	0f, 0f),	//16
-				new TexturedVertex(w/2,		h/2,	-d/2,	colors[4], 	1f, 0f),	//17
-				new TexturedVertex(w/2,		h/2,	d/2,	colors[4], 	1f, 1f),	//18
-				new TexturedVertex(-w/2,	h/2,	d/2,	colors[4], 	0f, 1f),	//19
+				new TexturedVertex(-w/2,	h/2,	-d/2,	new Vector3f(0f, 1f, 0f),	colors[4], 	0f, 0f),	//16
+				new TexturedVertex(w/2,		h/2,	-d/2,	new Vector3f(0f, 1f, 0f),	colors[4], 	1f, 0f),	//17
+				new TexturedVertex(w/2,		h/2,	d/2,	new Vector3f(0f, 1f, 0f),	colors[4], 	1f, 1f),	//18
+				new TexturedVertex(-w/2,	h/2,	d/2,	new Vector3f(0f, 1f, 0f),	colors[4], 	0f, 1f),	//19
 //				Bottom Face
-				new TexturedVertex(-w/2,	-h/2,	-d/2,	colors[5], 	0f, 1f),	//20
-				new TexturedVertex(w/2,		-h/2,	-d/2,	colors[5], 	1f, 1f),	//21
-				new TexturedVertex(w/2,		-h/2,	d/2,	colors[5], 	1f, 0f),	//22
-				new TexturedVertex(-w/2,	-h/2,	d/2,	colors[5], 	0f, 0f)		//23
+				new TexturedVertex(-w/2,	-h/2,	-d/2,	new Vector3f(0f, -1f, 0f),	colors[5], 	0f, 1f),	//20
+				new TexturedVertex(w/2,		-h/2,	-d/2,	new Vector3f(0f, -1f, 0f),	colors[5], 	1f, 1f),	//21
+				new TexturedVertex(w/2,		-h/2,	d/2,	new Vector3f(0f, -1f, 0f),	colors[5], 	1f, 0f),	//22
+				new TexturedVertex(-w/2,	-h/2,	d/2,	new Vector3f(0f, -1f, 0f),	colors[5], 	0f, 0f)		//23
 			}, new byte[] {
 //					Sets the order in which the vertices should be used to produce triangles
 //					Front Face
