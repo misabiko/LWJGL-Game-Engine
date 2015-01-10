@@ -223,11 +223,13 @@ public abstract class OpenGLHandler {
 				glBindVertexArray(vaoId);
 				glEnableVertexAttribArray(0);
 				glEnableVertexAttribArray(1);
+				glEnableVertexAttribArray(3);
 				
 					glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 					
 						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
 						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.colorOffset);
+						glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.normOffset);
 						
 						glDrawArrays(obj.mesh.primitiveType, 0, obj.mesh.indicesCount);
 						
@@ -235,6 +237,7 @@ public abstract class OpenGLHandler {
 				
 				glDisableVertexAttribArray(0);
 				glDisableVertexAttribArray(1);
+				glDisableVertexAttribArray(3);
 				glBindVertexArray(0);
 		
 			glUseProgram(0);
@@ -246,6 +249,7 @@ public abstract class OpenGLHandler {
 		
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(3);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
