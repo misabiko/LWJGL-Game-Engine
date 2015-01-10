@@ -33,6 +33,7 @@ public class Core {
 	
 //	Short term todos
 //		Prevent 360 cam spins
+//		Make "Rendering" package and add OpenGLHandler and Meshes in it
 	
 //	Long term todos
 //		TODO make a control class

@@ -18,6 +18,7 @@ public class Program {
 		glBindAttribLocation(id, 0, "in_Position");
 		glBindAttribLocation(id, 1, "in_Color");
 		glBindAttribLocation(id, 2, "in_TextureCoord");
+		glBindAttribLocation(id, 3, "in_Normal");
 		
 		glLinkProgram(id);
 		glValidateProgram(id);
