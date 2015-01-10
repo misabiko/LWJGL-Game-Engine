@@ -1,5 +1,6 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -42,7 +43,26 @@ public abstract class Util {
 				(vec.x*mat.m02)+(vec.y*mat.m12)+(vec.z*mat.m22));
 		
 		return vec;
-	}	
+	}
+	
+	public static Matrix3f mat4ToMat3(Matrix4f mat4) {
+		Matrix3f mat3 = new Matrix3f();
+		
+		mat3.m00 = mat4.m00;
+		mat3.m10 = mat4.m10;
+		mat3.m20 = mat4.m20;
+		
+		mat3.m01 = mat4.m01;
+		mat3.m11 = mat4.m11;
+		mat3.m21 = mat4.m21;
+		
+		mat3.m02 = mat4.m02;
+		mat3.m12 = mat4.m12;
+		mat3.m22 = mat4.m22;
+
+		
+		return mat3;
+	}
 	
 	public static float lengthBetween2Points(float x, float y, float x2, float y2) {	//Basically a simple pythagorium
 		return (float) Math.sqrt(((y2-y)*(y2-y))+((x2-x)*(x2-x)));
