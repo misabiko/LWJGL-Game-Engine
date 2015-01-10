@@ -19,6 +19,7 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
@@ -159,6 +160,10 @@ public abstract class OpenGLHandler {
 				matrixBuffer.flip();
 				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
 				
+				Util.mat4ToMat3(obj.mesh.modelMatrix).invert().transpose().store(matrixBuffer);
+				matrixBuffer.flip();
+				glUniformMatrix4(texProgram.normalMatrixLocation, false, matrixBuffer);
+				
 			
 			glUseProgram(0);
 		} else {
@@ -175,6 +180,10 @@ public abstract class OpenGLHandler {
 			obj.mesh.modelMatrix.store(matrixBuffer);
 			matrixBuffer.flip();
 			glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
+			
+			Util.mat4ToMat3(obj.mesh.modelMatrix).invert().transpose().store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4(colProgram.normalMatrixLocation, false, matrixBuffer);
 			
 		
 		glUseProgram(0);
