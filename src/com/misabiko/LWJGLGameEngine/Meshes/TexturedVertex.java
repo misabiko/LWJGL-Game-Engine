@@ -10,8 +10,8 @@ public class TexturedVertex extends Vertex{
 	public static final int stElementCount = 2;
 	public static final int elementCount = posElementCount+colorElementCount+normElementCount+stElementCount;
 	
-	public static final int stOffset = (bytesPerFloat*posElementCount)+(bytesPerFloat*colorElementCount);
-	public static final int normOffset = (bytesPerFloat*posElementCount)+(bytesPerFloat*colorElementCount)+(bytesPerFloat*normElementCount);
+	public static final int stOffset = colorOffset+(bytesPerFloat*colorElementCount);
+	public static final int normOffset = stOffset+(bytesPerFloat*normElementCount);
 	
 	public TexturedVertex(float x, float y, float z, Vector3f n, float r, float g, float b, float a, float s, float t) {
 		super(x, y, z, n, r, g, b, a);
