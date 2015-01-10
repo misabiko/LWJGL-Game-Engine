@@ -14,6 +14,7 @@ public class Vertex {
 	public static final int bytesPerFloat = 4;
 	
 	public static final int colorOffset = bytesPerFloat*posElementCount;
+	public static final int normOffset = colorOffset+(bytesPerFloat*normElementCount);
 	
 	public Vertex(float x, float y, float z, Vector3f n, float r, float g, float b, float a) {
 		xyzw = new float[] {x,y,z,1f};
