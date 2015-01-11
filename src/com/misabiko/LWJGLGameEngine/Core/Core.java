@@ -30,7 +30,6 @@ public class Core {
 	private boolean EscIsHeld = false;
 	
 //	Current task
-//		TODO make a light shader/engine ( or at least something to see the objes' borders )
 	
 //	Short term todos
 //		Prevent 360 cam spins
