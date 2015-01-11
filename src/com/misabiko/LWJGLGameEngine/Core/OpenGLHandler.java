@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL31.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,25 +20,23 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
-import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
-import com.misabiko.LWJGLGameEngine.Meshes.TexturedVertex;
 import com.misabiko.LWJGLGameEngine.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Shaders.Program;
 
 public abstract class OpenGLHandler {
 	
-	private static Program colProgram, texProgram;
+	private static Program program;
 	private static Matrix4f projectionMatrix;
-	private static FloatBuffer matrixBuffer;
+	private static FloatBuffer matrix4fBuffer, matrix3fBuffer;
 	private static int vaoId = 0;
 	
 	public static void init(String title, int width, int height) {
 		PixelFormat pixelFormat = new PixelFormat();
-		ContextAttribs contextAttribs = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
+		ContextAttribs contextAttribs = new ContextAttribs(3,3).withForwardCompatible(true).withProfileCore(true);
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(width,height));
@@ -49,7 +48,7 @@ public abstract class OpenGLHandler {
 			System.exit(-1);
 		}
 		
-		glClearColor(0.0f,0f,0f,1f);
+		glClearColor(1f,1f,1f,1f);
 		
 		glViewport(0, 0, width, height);
 		
@@ -64,10 +63,8 @@ public abstract class OpenGLHandler {
 	private static void initShaders() {
 		int vertShaderId = loadShader("vertex.glsl", GL_VERTEX_SHADER);
 		int fragShaderId = loadShader("fragment.glsl", GL_FRAGMENT_SHADER);
-		int texFragShaderId = loadShader("texfragment.glsl", GL_FRAGMENT_SHADER);
 		
-		colProgram = new Program(new int[] {vertShaderId, fragShaderId});
-		texProgram = new Program(new int[] {vertShaderId, texFragShaderId});
+		program = new Program(new int[] {vertShaderId, fragShaderId});
 	}
 	
 	private static int loadShader(String filename, int type) {
@@ -113,7 +110,8 @@ public abstract class OpenGLHandler {
 		projectionMatrix.m32 = -((2 * nearPlane * farPlane) / frustumLength);
 		projectionMatrix.m33 = 0;
 		
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
+		matrix4fBuffer = BufferUtils.createFloatBuffer(16);
+		matrix3fBuffer = BufferUtils.createFloatBuffer(9);
 	}
 	
 	public static void initVBOs(ArrayList<GameObject> objs) {
@@ -144,113 +142,50 @@ public abstract class OpenGLHandler {
 	}
 	
 	public static void render(GameObject obj) {
-		
-		if (obj.mesh.isTextured) {
-			glUseProgram(texProgram.id);
+		glUseProgram(program.id);
 			
-				projectionMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(texProgram.projectionMatrixLocation, false, matrixBuffer);
-				
-				Camera.viewMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(texProgram.viewMatrixLocation, false, matrixBuffer);
-				
-				obj.mesh.modelMatrix.store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(texProgram.modelMatrixLocation, false, matrixBuffer);
-				
-				Util.mat4ToMat3(obj.mesh.modelMatrix).invert().transpose().store(matrixBuffer);
-				matrixBuffer.flip();
-				glUniformMatrix4(texProgram.normalMatrixLocation, false, matrixBuffer);
-				
+			projectionMatrix.store(matrix4fBuffer);
+			matrix4fBuffer.flip();
+			glUniformMatrix4(glGetUniformLocation(program.id, "projectionMatrix"), false, matrix4fBuffer);
 			
-			glUseProgram(0);
-		} else {
-			glUseProgram(colProgram.id);
+			Camera.viewMatrix.store(matrix4fBuffer);
+			matrix4fBuffer.flip();
+			glUniformMatrix4(glGetUniformLocation(program.id, "viewMatrix"), false, matrix4fBuffer);
 			
-			projectionMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(colProgram.projectionMatrixLocation, false, matrixBuffer);
+			obj.mesh.modelMatrix.store(matrix4fBuffer);
+			matrix4fBuffer.flip();
+			glUniformMatrix4(glGetUniformLocation(program.id, "modelMatrix"), false, matrix4fBuffer);
 			
-			Camera.viewMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(colProgram.viewMatrixLocation, false, matrixBuffer);
+			Util.mat4ToMat3(obj.mesh.modelMatrix).invert().transpose().store(matrix3fBuffer);
+			matrix3fBuffer.flip();
+			glUniformMatrix3(glGetUniformLocation(program.id, "normalMatrix"), false, matrix3fBuffer);
 			
-			obj.mesh.modelMatrix.store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(colProgram.modelMatrixLocation, false, matrixBuffer);
+			glUniform3f(glGetUniformLocation(program.id, "lightPosition"), Core.light.position.x, Core.light.position.y, Core.light.position.z);
+			glUniform3f(glGetUniformLocation(program.id, "lightIntensities"), Core.light.intensities.x, Core.light.intensities.y, Core.light.intensities.z);
 			
-			Util.mat4ToMat3(obj.mesh.modelMatrix).invert().transpose().store(matrixBuffer);
-			matrixBuffer.flip();
-			glUniformMatrix4(colProgram.normalMatrixLocation, false, matrixBuffer);
-			
-		
-		glUseProgram(0);
-		}
-		
-		if (obj.mesh.primitiveType == GL_TRIANGLES) {
-			if (obj.mesh.isTextured) {
-				
-				glUseProgram(texProgram.id);
-				
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, obj.mesh.texture.texId);
-			}else {
-				glUseProgram(colProgram.id);
-			}
-					glBindVertexArray(vaoId);
-					glEnableVertexAttribArray(0);
-					glEnableVertexAttribArray(1);
-					glEnableVertexAttribArray(2);
-					glEnableVertexAttribArray(3);
-					
-						glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
-						
-						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj.mesh.vboiId);
-						
-							glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
-							glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
-							glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
-							glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.normOffset);
-							
-							glDrawElements(GL_TRIANGLES, obj.mesh.indicesCount, GL_UNSIGNED_BYTE, 0);
-							
-						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-						glBindBuffer(GL_ARRAY_BUFFER,0);
-					
-					glDisableVertexAttribArray(0);
-					glDisableVertexAttribArray(1);
-					glDisableVertexAttribArray(2);
-					glDisableVertexAttribArray(3);
-					glBindVertexArray(0);
-			
-				glUseProgram(0);
-		}else {
-			glUseProgram(colProgram.id);
-			
-				glBindVertexArray(vaoId);
+			glBindVertexArray(vaoId);
 				glEnableVertexAttribArray(0);
 				glEnableVertexAttribArray(1);
-				glEnableVertexAttribArray(3);
+				glEnableVertexAttribArray(2);
 				
 					glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 					
 						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
 						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.colorOffset);
-						glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.normOffset);
+						glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.normOffset);
 						
-						glDrawArrays(obj.mesh.primitiveType, 0, obj.mesh.indicesCount);
+//						glDrawArrays(GL_TRIANGLES, 0, obj.mesh.indicesCount);
+						glDrawElements(GL_TRIANGLES, obj.mesh.indicesBuffer);
 						
 					glBindBuffer(GL_ARRAY_BUFFER,0);
 				
 				glDisableVertexAttribArray(0);
 				glDisableVertexAttribArray(1);
-				glDisableVertexAttribArray(3);
-				glBindVertexArray(0);
-		
-			glUseProgram(0);
-		}
+				glDisableVertexAttribArray(2);
+			glBindVertexArray(0);
+	
+		glUseProgram(0);
+//		}
 	}
 	
 	public static void cleanUp(ArrayList<GameObject> objs) {
@@ -273,8 +208,7 @@ public abstract class OpenGLHandler {
 		
 		glDeleteTextures(Mesh.defaultTexture.texId);
 		
-		colProgram.cleanUp();
-		texProgram.cleanUp();
+		program.cleanUp();
 		
 		Display.destroy();
 	}

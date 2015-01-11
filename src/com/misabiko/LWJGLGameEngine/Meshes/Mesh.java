@@ -16,8 +16,6 @@ import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 public abstract class Mesh {
 	public Matrix4f modelMatrix;
 	
-	public boolean isTextured;
-	
 	public FloatBuffer verticesBuffer;
 	public ByteBuffer indicesBuffer;
 	
@@ -28,20 +26,19 @@ public abstract class Mesh {
 	public Texture texture = defaultTexture;
 
 	public static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
-	protected static Color defaultColor = Color.WHITE;
+	protected static Color defaultColor = Color.ORANGE;
 	
 	public Mesh	(Vertex[] vertices, int primType) {
 		modelMatrix = new Matrix4f();
 		
 //		TODO Look further into Byte Buffers
-		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*TexturedVertex.elementCount);
+		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*Vertex.elementCount);
 		for (Vertex v : vertices) {
 			verticesBuffer.put(v.getElements());
 		}
 		verticesBuffer.flip();
 		indicesCount = vertices.length;
 		primitiveType = primType;
-		isTextured = false;
 	}
 	
 	public Mesh	(Vertex[] vertices, byte[] indices) {
@@ -51,7 +48,6 @@ public abstract class Mesh {
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
-		isTextured = true;
 	}
 	
 	public void update(Vector3f pos, float angleX, float angleY) {

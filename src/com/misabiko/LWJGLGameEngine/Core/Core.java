@@ -25,8 +25,9 @@ public class Core {
 	private ArrayList<GameObject> objs = new ArrayList<GameObject>();
 //	private Camera camera;
 	private Cuby cuby;
+	public static Light light;	//You'll find a proper way to get it to the shader in later time
 	
-	private boolean F5isHeld, EscIsHeld = false;
+	private boolean EscIsHeld = false;
 	
 //	Current task
 //		TODO make a light shader/engine ( or at least something to see the objes' borders )
@@ -34,12 +35,16 @@ public class Core {
 //	Short term todos
 //		Prevent 360 cam spins
 //		Make "Rendering" package and add OpenGLHandler and Meshes in it
+//		TODO make a control class
 	
 //	Long term todos
-//		TODO make a control class
+//		TODO Implement separate textures per-face on mesh
+//		TODO Remove those .* imports, I don't like those
+//		TODO Reimplement lines and axis (axii? axises? axi?)
 //		TODO learn to manage the projection matrix
 //		TODO Custom (Blender or MagicaVoxel) models?
 //		TODO well, you know, game stuff
+//		TODO Transition LWJGL 2 to 3
 	
 	public Core() {
 		init();
@@ -77,6 +82,9 @@ public class Core {
 					obj.update();
 					OpenGLHandler.render(obj);
 				}
+				
+//				cuby.update();
+//				OpenGLHandler.render(cuby);
 				
 				delta -= 1;
 				shouldRender = true;
@@ -117,6 +125,8 @@ public class Core {
 		objs.add(cuby);
 		dynamicsWorld.addCollisionObject(cuby.go);
 		dynamicsWorld.addAction(cuby.controller);
+		
+		light = new Light(0f, -3f, 0f);
 		
 //		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
 //		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));

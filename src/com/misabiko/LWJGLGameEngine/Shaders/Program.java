@@ -1,10 +1,11 @@
 package com.misabiko.LWJGLGameEngine.Shaders;
 
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 
 public class Program {
 	
-	public int id, projectionMatrixLocation, viewMatrixLocation, modelMatrixLocation = 0;
+	public int id;
 	public int[] shaderIds;
 	
 	public Program(int[] shaderIds) {
@@ -15,17 +16,20 @@ public class Program {
 			glAttachShader(id, i);
 		}
 		
-		glBindAttribLocation(id, 0, "in_Position");
-		glBindAttribLocation(id, 1, "in_Color");
-		glBindAttribLocation(id, 2, "in_TextureCoord");
-		glBindAttribLocation(id, 3, "in_Normal");
+//		glBindAttribLocation(id, 0, "in_Position");
+//		glBindAttribLocation(id, 1, "in_Color");
+//		glBindAttribLocation(id, 2, "in_TextureCoord");
+//		glBindAttribLocation(id, 3, "in_Normal");
+		
+		glBindFragDataLocation(id, 0, "out_Color");
+		
+		System.out.println(glGetProgramInfoLog(id, 10000));
+		for (int i : shaderIds) {
+			System.out.println(glGetShaderInfoLog(i, 10000));
+		}
 		
 		glLinkProgram(id);
 		glValidateProgram(id);
-		
-		projectionMatrixLocation = glGetUniformLocation(id, "projectionMatrix");
-		viewMatrixLocation = glGetUniformLocation(id, "viewMatrix");
-		modelMatrixLocation = glGetUniformLocation(id, "modelMatrix");
 	}
 	
 	public void cleanUp() {

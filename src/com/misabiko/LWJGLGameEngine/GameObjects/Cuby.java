@@ -1,8 +1,13 @@
 package com.misabiko.LWJGLGameEngine.GameObjects;
 
+import java.awt.Color;
+
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+
+
+
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
@@ -31,7 +36,14 @@ public class Cuby extends GameObject {
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
 	public Cuby() {
-		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f));
+		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f, new Color[] {
+				Color.RED,
+				Color.YELLOW,
+				Color.MAGENTA,
+				Color.GREEN,
+				Color.BLUE,
+				Color.RED
+		}));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 5f, -3f), 1f));
 		

@@ -1,34 +1,36 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
-import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Vector3f;
 
+//import java.nio.FloatBuffer;
+
+//import org.lwjgl.BufferUtils;
+//import static org.lwjgl.opengl.GL15.glGenBuffers;
+//import static org.lwjgl.opengl.GL15.glBindBuffer;
+//import static org.lwjgl.opengl.GL15.glBufferData;
+//import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+//import static org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER;;
+
 public class Light {
-	private Vector3f position;
-	private Vector3f intensities;
+//	private FloatBuffer buffer;
+//	public int bufferId = 0;
+	public Vector3f position, intensities;
 	
 	public Light(float x, float y, float z, float r, float g, float b) {
-		position = new Vector3f(x, y, z);
-		intensities = new Vector3f(r, g, b);
+		position = new Vector3f(x,y,z);
+		intensities = new Vector3f(r,g,b);
+//		buffer = BufferUtils.createFloatBuffer(6);
+//		buffer.put(new float[] {x,y,z,r,g,b});
+//		buffer.flip();
+//		
+//		bufferId = glGenBuffers();
+//		
+//		glBindBuffer(GL_UNIFORM_BUFFER, bufferId);
+//			glBufferData(bufferId, buffer, GL_STATIC_DRAW);
+//		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 	
 	public Light(float x, float y, float z) {
-		position = new Vector3f(x, y, z);
-		intensities = new Vector3f(1f, 1f, 1f);
-	}
-	
-	public Matrix3f getMatrix() {
-		Matrix3f mat = new Matrix3f();
-		mat.setZero();
-		
-		mat.m00 = position.x;
-		mat.m01 = position.y;
-		mat.m02 = position.z;
-
-		mat.m10 = intensities.x;
-		mat.m11 = intensities.y;
-		mat.m12 = intensities.z;
-		
-		return mat;
+		this(x, y, z, 1f, 1f, 1f);
 	}
 }
