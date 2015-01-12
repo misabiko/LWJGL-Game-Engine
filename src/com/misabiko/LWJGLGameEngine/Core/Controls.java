@@ -7,16 +7,16 @@ import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 
 public class Controls {
-	private static boolean EscIsHeld = false;
+	private static boolean Esc = false;
 	
 	public static void update() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-			if (!EscIsHeld) {
+			if (!Esc) {
 				Mouse.setGrabbed(!Mouse.isGrabbed());
 			}
-			EscIsHeld = true;
+			Esc = true;
 		}else {
-			EscIsHeld = false;
+			Esc = false;
 		}
 		
 		if (Mouse.isGrabbed()) {

@@ -30,9 +30,9 @@ public class Core {
 	public static Cuby cuby;
 	
 //	Current task
+//	Prevent 360 cam spins
 	
 //	Short term todos
-//		Prevent 360 cam spins
 	
 //	Long term todos
 //		TODO Implement separate textures per-face on mesh
