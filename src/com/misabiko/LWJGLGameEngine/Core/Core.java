@@ -27,15 +27,12 @@ public class Core {
 	private static DiscreteDynamicsWorld dynamicsWorld;
 	
 //	private Camera camera;
-	private Cuby cuby;
-	private boolean EscIsHeld = false;
+	public static Cuby cuby;
 	
 //	Current task
-//		Make "Rendering" package and add OpenGLHandler and Meshes in it
 	
 //	Short term todos
 //		Prevent 360 cam spins
-//		TODO make a control class
 	
 //	Long term todos
 //		TODO Implement separate textures per-face on mesh
@@ -48,9 +45,7 @@ public class Core {
 	
 	public Core() {
 		init();
-		
 		run();
-		
 		cleanUp();
 	}
 	
@@ -74,7 +69,7 @@ public class Core {
 //				updates++;
 				
 				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-				input();
+				Controls.update();
 				
 				dynamicsWorld.stepSimulation(1/60f, 3);
 				
@@ -131,73 +126,6 @@ public class Core {
 //		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
 		OpenGLHandler.initBuffers();
-	}
-	
-	private void input() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-			if (!EscIsHeld) {
-				Mouse.setGrabbed(!Mouse.isGrabbed());
-			}
-			EscIsHeld = true;
-		}else {
-			EscIsHeld = false;
-		}
-		
-		if (Mouse.isGrabbed()) {
-			Camera.angleX += ((float) Mouse.getDY()/500);
-			Camera.angleY -= ((float) Mouse.getDX()/500);
-			
-			if (Camera.angleX > Math.PI*2) {
-				Camera.angleX = Camera.angleX - (float) (Math.PI*2);
-			}else if (Camera.angleX < -(Math.PI*2)) {
-				Camera.angleX = Camera.angleX + (float) (Math.PI*2);
-			}
-			if (Camera.angleY > Math.PI*2) {
-				Camera.angleY = Camera.angleY - (float) (Math.PI*2);
-			}else if (Camera.angleY < -(Math.PI*2)) {
-				Camera.angleY = Camera.angleY + (float) (Math.PI*2);
-			}
-		
-		}else {
-			Mouse.getDX();
-			Mouse.getDY();
-		}
-		
-		Camera.zoom -= ((float) Mouse.getDWheel()/1000);
-		
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			cuby.angleY = Camera.angleY;
-			
-			cuby.vel.x += cuby.speed;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-			cuby.angleY = Camera.angleY;
-			
-			cuby.vel.x -= cuby.speed;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			cuby.controller.jump();
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			Physic.speedCap = 0.04f;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-			Physic.speedCap = 0.2f;
-		}else {
-			Physic.speedCap = 0.1f;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			cuby.angleY = Camera.angleY;
-			
-			cuby.vel.z -= cuby.speed;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			cuby.angleY = Camera.angleY;
-			
-			cuby.vel.z += cuby.speed;
-		}
-		
 	}
 	
 	public void cleanUp() {
