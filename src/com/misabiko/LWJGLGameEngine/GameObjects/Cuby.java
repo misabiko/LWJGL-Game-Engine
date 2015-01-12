@@ -41,14 +41,7 @@ public class Cuby extends GameObject {
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
 	public Cuby() {
-		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f, new Color[] {
-				Color.BLUE,
-				Color.BLUE,
-				Color.BLUE,
-				Color.BLUE,
-				Color.BLUE,
-				Color.BLUE
-		}));
+		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f, Color.BLUE));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 5f, -3f), 1f));
 		
