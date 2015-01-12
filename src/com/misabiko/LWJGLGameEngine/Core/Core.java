@@ -33,6 +33,7 @@ public class Core {
 	
 //	Short term todos
 //		TODO Remove those .* imports, I don't like those
+//		TODO Smooth rotating for Cuby
 	
 //	Long term todos
 //		TODO Implement separate textures per-face on mesh
@@ -118,10 +119,6 @@ public class Core {
 		
 		Light.lights.add(new Light(-6f,-1.5f,-1f, 1f));
 		Light.lights.add(new Light(10f,100f,10f, 0f));
-		
-//		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
-//		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
-//		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
 		OpenGLHandler.initBuffers();
 	}

@@ -6,23 +6,14 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
-
-
-
-
-
-
-
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
-import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.ConvexShape;
-import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.misabiko.LWJGLGameEngine.Core.Core;
+import com.misabiko.LWJGLGameEngine.Physic.CustomCharacterController;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 import com.misabiko.LWJGLGameEngine.Rendering.Light;
@@ -32,7 +23,7 @@ public class Cuby extends GameObject {
 	
 	private static CollisionShape cs = new BoxShape(new Vector3f(0.25f,0.25f,0.25f));
 	public PairCachingGhostObject go;
-	public KinematicCharacterController controller;
+	public CustomCharacterController controller;
 	
 	public float jumpStrength = 1f;
 	public float speed = 1f;
@@ -52,7 +43,7 @@ public class Cuby extends GameObject {
 		go.setCollisionShape(cs);
 		go.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
-		controller = new KinematicCharacterController(go, (ConvexShape) cs, 0.1f);
+		controller = new CustomCharacterController(go, (ConvexShape) cs, 0.1f);
 		controller.setJumpSpeed(5f);
 	}
 	
