@@ -7,6 +7,8 @@ public class Camera {
 	public static Matrix4f viewMatrix = new Matrix4f();
 	public static float angleY, angleX, zoomVel = 0;
 	
+	private static float angleXCap = 1.5f;
+	
 	private static float zoom = 1f;
 	private static float zoomCap = 0.55f;
 	private static float zoomVelCap = 0.1f;
@@ -30,6 +32,11 @@ public class Camera {
 		
 		if (zoom < zoomCap)
 			zoom = zoomCap;
+		
+		if (angleX > angleXCap)
+			angleX = angleXCap;
+		else if (angleX < -angleXCap)
+			angleX = -angleXCap;
 		
 		Matrix4f.setIdentity(viewMatrix);
 		

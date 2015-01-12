@@ -26,21 +26,19 @@ public class Core {
 
 	private static DiscreteDynamicsWorld dynamicsWorld;
 	
-//	private Camera camera;
 	public static Cuby cuby;
 	
 //	Current task
-//	Prevent 360 cam spins
+//		TODO Prevent that weird step when jumping against surfaces
 	
 //	Short term todos
+//		TODO Remove those .* imports, I don't like those
 	
 //	Long term todos
 //		TODO Implement separate textures per-face on mesh
-//		TODO Remove those .* imports, I don't like those
-//		TODO Reimplement lines and axis (axii? axises? axi?)
+//		TODO Reimplement lines and axis (axii? axises? axi? axes?)
 //		TODO learn to manage the projection matrix
 //		TODO Custom (Blender or MagicaVoxel) models?
-//		TODO well, you know, game stuff
 //		TODO Transition LWJGL 2 to 3
 	
 	public Core() {
