@@ -30,7 +30,6 @@ import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 
 public class Cuby extends GameObject {
 	
-//	private static CollisionShape cs = new CapsuleShape(0.25f,0f);
 	private static CollisionShape cs = new BoxShape(new Vector3f(0.25f,0.25f,0.25f));
 	public PairCachingGhostObject go;
 	public KinematicCharacterController controller;
