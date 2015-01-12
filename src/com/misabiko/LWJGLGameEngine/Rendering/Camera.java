@@ -5,8 +5,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
 	public static Matrix4f viewMatrix = new Matrix4f();
-	public static float angleY, angleX = 0;
-	public static float zoomSpeed = 1f;
+	public static float angleY, angleX, zoomVel = 0;
+	public static float zoom = 1f;
 	
 	public static void update(Vector3f pos) {
 		Matrix4f.setIdentity(viewMatrix);
