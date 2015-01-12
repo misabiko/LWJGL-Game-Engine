@@ -26,10 +26,8 @@ public class Core {
 
 	private static DiscreteDynamicsWorld dynamicsWorld;
 	
-	private ArrayList<GameObject> objs = new ArrayList<GameObject>();
 //	private Camera camera;
 	private Cuby cuby;
-	public static ArrayList<Light> lights = new ArrayList<Light>();
 	private boolean EscIsHeld = false;
 	
 //	Current task
@@ -80,13 +78,10 @@ public class Core {
 				
 				dynamicsWorld.stepSimulation(1/60f, 3);
 				
-				for (GameObject obj : objs) {
+				for (GameObject obj : GameObject.objs) {
 					obj.update();
 					OpenGLHandler.render(obj);
 				}
-				
-//				cuby.update();
-//				OpenGLHandler.render(cuby);
 				
 				delta -= 1;
 				shouldRender = true;
@@ -112,7 +107,6 @@ public class Core {
 		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
 		
 		Platform ground = new Platform(-3f, -2f, -2f, 16f,0.5f,16f);
-		objs.add(ground);
 		dynamicsWorld.addRigidBody(ground.rb);
 		
 //		Platform lightBlock = new Platform(0f, 3f, 0f, 1f,1f,1f);
@@ -120,26 +114,23 @@ public class Core {
 //		dynamicsWorld.addRigidBody(lightBlock.rb);
 		
 		Platform block = new Platform(-3f, -1.5f, -2f, 1f, 1.5f, 3f);
-		objs.add(block);
 		dynamicsWorld.addRigidBody(block.rb);
 		
 		Platform block2 = new Platform(0f, -1.5f, -2f, 1f, 1.5f, 3f);
-		objs.add(block2);
 		dynamicsWorld.addRigidBody(block2.rb);
 		
 		cuby = new Cuby();
-		objs.add(cuby);
 		dynamicsWorld.addCollisionObject(cuby.go);
 		dynamicsWorld.addAction(cuby.controller);
 		
-		lights.add(new Light(-6f,-1.5f,-1f, 1f));
-		lights.add(new Light(10f,100f,10f, 0f));
+		Light.lights.add(new Light(-6f,-1.5f,-1f, 1f));
+		Light.lights.add(new Light(10f,100f,10f, 0f));
 		
 //		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
 //		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
 //		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
-		OpenGLHandler.initBuffers(objs);
+		OpenGLHandler.initBuffers();
 	}
 	
 	private void input() {
@@ -210,7 +201,7 @@ public class Core {
 	}
 	
 	public void cleanUp() {
-		OpenGLHandler.cleanUp(objs);
+		OpenGLHandler.cleanUp();
 		JBulletHandler.cleanUp();
 	
 		dynamicsWorld.destroy();

@@ -76,7 +76,7 @@ public abstract class OpenGLHandler {
 		
 //		TODO Look further into BufferedReader and such
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("src/com/misabiko/LWJGLGameEngine/Shaders/"+filename));
+			BufferedReader reader = new BufferedReader(new FileReader("src/com/misabiko/LWJGLGameEngine/Rendering/Shaders/"+filename));
 			String line;
 			while ((line = reader.readLine()) != null) {
 				shaderSource.append(line).append("\n");
@@ -117,11 +117,11 @@ public abstract class OpenGLHandler {
 		matrix3fBuffer = BufferUtils.createFloatBuffer(9);
 	}
 	
-	public static void initBuffers(ArrayList<GameObject> objs) {
+	public static void initBuffers() {
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			
-			for (GameObject obj : objs) {
+			for (GameObject obj : GameObject.objs) {
 				obj.mesh.vboId = glGenBuffers();
 				
 				glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
@@ -163,14 +163,15 @@ public abstract class OpenGLHandler {
 			matrix3fBuffer.flip();
 			glUniformMatrix3(glGetUniformLocation(program.id, "normalMatrix"), false, matrix3fBuffer);
 			
-			glUniform1f(glGetUniformLocation(program.id, "numLights"),	Core.lights.size());
-			for (int i = 0; i < Core.lights.size(); ++i) {
-				glUniform4f(glGetUniformLocation(program.id, "lights["+i+"].position"),				Core.lights.get(i).position.x,			Core.lights.get(i).position.y,		Core.lights.get(i).position.z,		Core.lights.get(i).position.w);
-				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].intensities"),			Core.lights.get(i).intensities.x,		Core.lights.get(i).intensities.y,	Core.lights.get(i).intensities.z);
-				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].coneDirection"),		Core.lights.get(i).coneDirection.x,		Core.lights.get(i).coneDirection.y,	Core.lights.get(i).coneDirection.z);
-				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].ambientCoefficient"),	Core.lights.get(i).ambientCoefficient);
-				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].attenuation"),			Core.lights.get(i).attenuation);
-				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].coneAngle"),			Core.lights.get(i).coneAngle);
+			glUniform1f(glGetUniformLocation(program.id, "numLights"),	Light.lights.size());
+			for (Light light : Light.lights) {
+				int i = Light.lights.indexOf(light);
+				glUniform4f(glGetUniformLocation(program.id, "lights["+i+"].position"),				light.position.x,			light.position.y,		light.position.z,		light.position.w);
+				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].intensities"),			light.intensities.x,		light.intensities.y,	light.intensities.z);
+				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].coneDirection"),		light.coneDirection.x,		light.coneDirection.y,	light.coneDirection.z);
+				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].ambientCoefficient"),	light.ambientCoefficient);
+				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].attenuation"),			light.attenuation);
+				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].coneAngle"),			light.coneAngle);
 			}
 			
 
@@ -201,7 +202,7 @@ public abstract class OpenGLHandler {
 //		}
 	}
 	
-	public static void cleanUp(ArrayList<GameObject> objs) {
+	public static void cleanUp() {
 		glUseProgram(0);
 		
 		glDisableVertexAttribArray(0);
@@ -211,7 +212,7 @@ public abstract class OpenGLHandler {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
-		for (GameObject obj : objs) {
+		for (GameObject obj : GameObject.objs) {
 			glDeleteBuffers(obj.mesh.vboId);
 			glDeleteBuffers(obj.mesh.vboiId);
 			

@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.GameObjects;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.dynamics.RigidBody;
@@ -7,8 +9,8 @@ import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 
 public abstract class GameObject {
+	public static ArrayList<GameObject> objs = new ArrayList<GameObject>();
 	
-//	public org.lwjgl.util.vector.Vector3f pos;
 	public Vector3f vel = new Vector3f(0,0,0);
 	
 	public float angleX, angleY;
@@ -17,8 +19,8 @@ public abstract class GameObject {
 	public RigidBody rb;
 	
 	public GameObject(float x, float y, float z, Mesh m) {
-//		pos = new org.lwjgl.util.vector.Vector3f(x,y,z);
 		mesh = m;
+		objs.add(this);
 	}
 	
 	public void update() {
