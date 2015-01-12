@@ -40,8 +40,8 @@ public class Cuby extends GameObject {
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
-	public Cuby() {
-		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f, Color.BLUE));
+	public Cuby(float x, float y, float z) {
+		super(x, y, z, new Box(0.5f,0.5f,0.5f, Color.BLUE));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 5f, -3f), 1f));
 		
@@ -54,6 +54,10 @@ public class Cuby extends GameObject {
 		
 		controller = new KinematicCharacterController(go, (ConvexShape) cs, 0.1f);
 		controller.setJumpSpeed(5f);
+	}
+	
+	public Cuby() {
+		this(-5f, 5f, -3f);
 	}
 
 	public void update() {
@@ -74,6 +78,7 @@ public class Cuby extends GameObject {
 		}
 		
 		controller.setWalkDirection(finalVel);
+		System.out.println(controller.getMaxSlope());
 		
 		org.lwjgl.util.vector.Matrix4f mat = new org.lwjgl.util.vector.Matrix4f();
 		float[] matArray = new float[16];
