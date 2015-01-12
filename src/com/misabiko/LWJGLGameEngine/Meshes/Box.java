@@ -13,7 +13,7 @@ public class Box extends Mesh{
 				new Vertex(w/2,		-h/2,	d/2,	0f, 0f, 1f,		colors[0]),	//1
 				new Vertex(w/2,		h/2,	d/2,	0f, 0f, 1f,		colors[0]),	//2
 				new Vertex(-w/2,	h/2,	d/2,	0f, 0f, 1f,		colors[0]),	//3
-////				Back Face
+//				Back Face
 				new Vertex(-w/2,	-h/2,	-d/2,	0f, 0f, -1f,	colors[1]),	//4
 				new Vertex(w/2,		-h/2,	-d/2,	0f, 0f, -1f,	colors[1]),	//5
 				new Vertex(w/2,		h/2,	-d/2,	0f, 0f, -1f,	colors[1]),	//6
@@ -29,10 +29,10 @@ public class Box extends Mesh{
 				new Vertex(w/2,		h/2,	-d/2,	1f, 0f, 0f,		colors[3]),	//14
 				new Vertex(w/2,		h/2,	d/2,	1f, 0f, 0f,		colors[3]),	//15
 //				Top Face
-				new Vertex(-w/2,	h/2,	-d/2,	0f, -1f, 0f,	colors[4]),	//16
-				new Vertex(w/2,		h/2,	-d/2,	0f, -1f, 0f,	colors[4]),	//17
-				new Vertex(w/2,		h/2,	d/2,	0f, -1f, 0f,	colors[4]),	//18
-				new Vertex(-w/2,	h/2,	d/2,	0f, -1f, 0f,	colors[4]),	//19
+				new Vertex(-w/2,	h/2,	-d/2,	0f, 1f, 0f,	colors[4]),	//16
+				new Vertex(w/2,		h/2,	-d/2,	0f, 1f, 0f,	colors[4]),	//17
+				new Vertex(w/2,		h/2,	d/2,	0f, 1f, 0f,	colors[4]),	//18
+				new Vertex(-w/2,	h/2,	d/2,	0f, 1f, 0f,	colors[4]),	//19
 //				Bottom Face
 				new Vertex(-w/2,	-h/2,	-d/2,	0f, -1f, 0f,	colors[5]),	//20
 				new Vertex(w/2,		-h/2,	-d/2,	0f, -1f, 0f,	colors[5]),	//21

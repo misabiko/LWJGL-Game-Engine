@@ -11,6 +11,7 @@ import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
+import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -25,11 +26,11 @@ public class Core {
 	private ArrayList<GameObject> objs = new ArrayList<GameObject>();
 //	private Camera camera;
 	private Cuby cuby;
-	public static Light light;	//You'll find a proper way to get it to the shader in later time
-	
+	public static ArrayList<Light> lights = new ArrayList<Light>();
 	private boolean EscIsHeld = false;
 	
 //	Current task
+//		TODO make a light shader/engine ( or at least something to see the objes' borders )
 	
 //	Short term todos
 //		Prevent 360 cam spins
@@ -112,11 +113,15 @@ public class Core {
 		objs.add(ground);
 		dynamicsWorld.addRigidBody(ground.rb);
 		
-		Platform block = new Platform(-3f, -1.5f, -2f, 10f, 0.5f, 1f);
+//		Platform lightBlock = new Platform(0f, 3f, 0f, 1f,1f,1f);
+//		objs.add(lightBlock);
+//		dynamicsWorld.addRigidBody(lightBlock.rb);
+		
+		Platform block = new Platform(-3f, -1.5f, -2f, 1f, 1.5f, 3f);
 		objs.add(block);
 		dynamicsWorld.addRigidBody(block.rb);
 		
-		Platform block2 = new Platform(-3f, -1.725f, -1f, 10f, 0.05f, 1f);
+		Platform block2 = new Platform(0f, -1.5f, -2f, 1f, 1.5f, 3f);
 		objs.add(block2);
 		dynamicsWorld.addRigidBody(block2.rb);
 		
@@ -125,7 +130,8 @@ public class Core {
 		dynamicsWorld.addCollisionObject(cuby.go);
 		dynamicsWorld.addAction(cuby.controller);
 		
-		light = new Light(0f, -3f, 0f);
+		lights.add(new Light(-6f,-1.5f,-1f, 1f));
+		lights.add(new Light(10f,100f,10f, 0f));
 		
 //		objs.add(new Axis(0, 0, 0, 10f, 0, 0, Color.RED));
 //		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
@@ -179,8 +185,14 @@ public class Core {
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			cuby.controller.jump();
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			cuby.vel.y -= cuby.jumpStrength;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_R)){
+			Physic.speedCap = 0.04f;
+		}else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+			Physic.speedCap = 0.2f;
+		}else {
+			Physic.speedCap = 0.1f;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {

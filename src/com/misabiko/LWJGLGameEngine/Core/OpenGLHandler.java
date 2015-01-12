@@ -48,7 +48,7 @@ public abstract class OpenGLHandler {
 			System.exit(-1);
 		}
 		
-		glClearColor(1f,1f,1f,1f);
+		glClearColor(0f,0f,0f,1f);
 		
 		glViewport(0, 0, width, height);
 		
@@ -65,6 +65,7 @@ public abstract class OpenGLHandler {
 		int fragShaderId = loadShader("fragment.glsl", GL_FRAGMENT_SHADER);
 		
 		program = new Program(new int[] {vertShaderId, fragShaderId});
+		
 	}
 	
 	private static int loadShader(String filename, int type) {
@@ -160,8 +161,18 @@ public abstract class OpenGLHandler {
 			matrix3fBuffer.flip();
 			glUniformMatrix3(glGetUniformLocation(program.id, "normalMatrix"), false, matrix3fBuffer);
 			
-			glUniform3f(glGetUniformLocation(program.id, "lightPosition"), Core.light.position.x, Core.light.position.y, Core.light.position.z);
-			glUniform3f(glGetUniformLocation(program.id, "lightIntensities"), Core.light.intensities.x, Core.light.intensities.y, Core.light.intensities.z);
+			glUniform1f(glGetUniformLocation(program.id, "numLights"),	Core.lights.size());
+			for (int i = 0; i < Core.lights.size(); ++i) {
+				glUniform4f(glGetUniformLocation(program.id, "lights["+i+"].position"),				Core.lights.get(i).position.x,			Core.lights.get(i).position.y,		Core.lights.get(i).position.z,		Core.lights.get(i).position.w);
+				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].intensities"),			Core.lights.get(i).intensities.x,		Core.lights.get(i).intensities.y,	Core.lights.get(i).intensities.z);
+				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].coneDirection"),		Core.lights.get(i).coneDirection.x,		Core.lights.get(i).coneDirection.y,	Core.lights.get(i).coneDirection.z);
+				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].ambientCoefficient"),	Core.lights.get(i).ambientCoefficient);
+				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].attenuation"),			Core.lights.get(i).attenuation);
+				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].coneAngle"),			Core.lights.get(i).coneAngle);
+			}
+			
+
+			glUniform3f(glGetUniformLocation(program.id, "cameraPosition"), Camera.viewMatrix.m03, Camera.viewMatrix.m13, Camera.viewMatrix.m23);
 			
 			glBindVertexArray(vaoId);
 				glEnableVertexAttribArray(0);

@@ -1,36 +1,23 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
 import org.lwjgl.util.vector.Vector3f;
-
-//import java.nio.FloatBuffer;
-
-//import org.lwjgl.BufferUtils;
-//import static org.lwjgl.opengl.GL15.glGenBuffers;
-//import static org.lwjgl.opengl.GL15.glBindBuffer;
-//import static org.lwjgl.opengl.GL15.glBufferData;
-//import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-//import static org.lwjgl.opengl.GL31.GL_UNIFORM_BUFFER;;
+import org.lwjgl.util.vector.Vector4f;
 
 public class Light {
-//	private FloatBuffer buffer;
-//	public int bufferId = 0;
-	public Vector3f position, intensities;
-	
-	public Light(float x, float y, float z, float r, float g, float b) {
-		position = new Vector3f(x,y,z);
-		intensities = new Vector3f(r,g,b);
-//		buffer = BufferUtils.createFloatBuffer(6);
-//		buffer.put(new float[] {x,y,z,r,g,b});
-//		buffer.flip();
-//		
-//		bufferId = glGenBuffers();
-//		
-//		glBindBuffer(GL_UNIFORM_BUFFER, bufferId);
-//			glBufferData(bufferId, buffer, GL_STATIC_DRAW);
-//		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	public Vector4f position;
+	public Vector3f intensities, coneDirection;
+	public float ambientCoefficient, attenuation, coneAngle;
+
+	public Light(Vector4f pos, Vector3f color, float amb, float att, float cAngle, Vector3f cDirection) {
+		position = pos;
+		intensities = color;
+		ambientCoefficient = amb;
+		attenuation = att;
+		coneAngle = cAngle;
+		coneDirection = cDirection;
 	}
 	
-	public Light(float x, float y, float z) {
-		this(x, y, z, 1f, 1f, 1f);
+	public Light(float x, float y, float z, float w) {
+		this(new Vector4f(x,y,z,w), new Vector3f(1f,1f,1f), 0.005f, 0.5f, 180f, new Vector3f(0f,-1f,0f));
 	}
 }

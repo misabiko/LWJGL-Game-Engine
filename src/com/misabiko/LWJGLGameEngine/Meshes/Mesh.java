@@ -26,7 +26,7 @@ public abstract class Mesh {
 	public Texture texture = defaultTexture;
 
 	public static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
-	protected static Color defaultColor = Color.ORANGE;
+	protected static Color defaultColor = Color.WHITE;
 	
 	public Mesh	(Vertex[] vertices, int primType) {
 		modelMatrix = new Matrix4f();

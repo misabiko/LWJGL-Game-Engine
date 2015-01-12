@@ -16,16 +16,13 @@ public class Program {
 			glAttachShader(id, i);
 		}
 		
-//		glBindAttribLocation(id, 0, "in_Position");
-//		glBindAttribLocation(id, 1, "in_Color");
-//		glBindAttribLocation(id, 2, "in_TextureCoord");
-//		glBindAttribLocation(id, 3, "in_Normal");
-		
 		glBindFragDataLocation(id, 0, "out_Color");
 		
-		System.out.println(glGetProgramInfoLog(id, 10000));
+		if (glGetProgramInfoLog(id, 5).length() > 0)
+			System.out.println(glGetProgramInfoLog(id, 10000));
 		for (int i : shaderIds) {
-			System.out.println(glGetShaderInfoLog(i, 10000));
+			if (glGetShaderInfoLog(i, 5).length() > 0)
+				System.out.println(glGetShaderInfoLog(i, 10000));
 		}
 		
 		glLinkProgram(id);

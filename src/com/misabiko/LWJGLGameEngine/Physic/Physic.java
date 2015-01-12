@@ -3,7 +3,7 @@ package com.misabiko.LWJGLGameEngine.Physic;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 
 public class Physic {
-	private static float speedCap = 0.1f;
+	public static float speedCap = 0.1f;
 	private static float friction = 0.25f;
 	public static float gravity = -0.1f;
 	

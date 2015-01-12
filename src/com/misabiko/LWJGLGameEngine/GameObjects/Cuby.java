@@ -9,6 +9,7 @@ import javax.vecmath.Vector3f;
 
 
 
+
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -19,6 +20,7 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Core.Camera;
+import com.misabiko.LWJGLGameEngine.Core.Core;
 import com.misabiko.LWJGLGameEngine.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 
@@ -37,12 +39,12 @@ public class Cuby extends GameObject {
 
 	public Cuby() {
 		super(-5f, 5f, -3f, new Box(0.5f,0.5f,0.5f, new Color[] {
-				Color.RED,
-				Color.YELLOW,
-				Color.MAGENTA,
-				Color.GREEN,
 				Color.BLUE,
-				Color.RED
+				Color.BLUE,
+				Color.BLUE,
+				Color.BLUE,
+				Color.BLUE,
+				Color.BLUE
 		}));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 5f, -3f), 1f));
@@ -101,5 +103,6 @@ public class Cuby extends GameObject {
 		mesh.update(mat);
 		
 		Camera.update(new org.lwjgl.util.vector.Vector3f(trans.origin.x,trans.origin.y,trans.origin.z));
+		Core.lights.get(0).position = new org.lwjgl.util.vector.Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Core.lights.get(0).position.w);
 	}
 }
