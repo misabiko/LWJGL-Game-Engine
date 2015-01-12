@@ -8,6 +8,7 @@ import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 
 public class Controls {
 	private static boolean Esc = false;
+	private static float MouseWheelSensibility = 1/4000f;
 	
 	public static void update() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -39,8 +40,7 @@ public class Controls {
 			Mouse.getDY();
 		}
 		
-		Camera.zoom -= ((float) Mouse.getDWheel()/1000);
-		
+		Camera.zoomVel -= ((float) Mouse.getDWheel()*MouseWheelSensibility);
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			Core.cuby.angleY = Camera.angleY;
