@@ -1,9 +1,5 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
-import java.util.ArrayList;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
@@ -11,8 +7,6 @@ import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
-import com.misabiko.LWJGLGameEngine.Physic.Physic;
-import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 import com.misabiko.LWJGLGameEngine.Rendering.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 
@@ -29,7 +23,7 @@ public class Core {
 	public static Cuby cuby;
 	
 //	Current task
-//		TODO Prevent that weird step when jumping against surfaces
+//		Make velocity length always the same, currently diagonal is faster because it goes 1 front AND 1 left so about 1.4
 	
 //	Short term todos
 //		TODO Remove those .* imports, I don't like those

@@ -21,7 +21,7 @@ import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 
 public class Cuby extends GameObject {
 	
-	private static CollisionShape cs = new BoxShape(new Vector3f(0.25f,0.25f,0.25f));
+	private static CollisionShape cs = new BoxShape(new Vector3f(0.255f,0.25f,0.255f));
 	public PairCachingGhostObject go;
 	public CustomCharacterController controller;
 	
@@ -43,7 +43,7 @@ public class Cuby extends GameObject {
 		go.setCollisionShape(cs);
 		go.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
-		controller = new CustomCharacterController(go, (ConvexShape) cs, 0.1f);
+		controller = new CustomCharacterController(go, (ConvexShape) cs, 0.05f);
 		controller.setJumpSpeed(5f);
 	}
 	
@@ -69,7 +69,6 @@ public class Cuby extends GameObject {
 		}
 		
 		controller.setWalkDirection(finalVel);
-		System.out.println(controller.getMaxSlope());
 		
 		org.lwjgl.util.vector.Matrix4f mat = new org.lwjgl.util.vector.Matrix4f();
 		float[] matArray = new float[16];
