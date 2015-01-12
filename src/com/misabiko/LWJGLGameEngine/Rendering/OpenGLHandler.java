@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Core;
+package com.misabiko.LWJGLGameEngine.Rendering;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -22,10 +22,12 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 
+import com.misabiko.LWJGLGameEngine.Core.Core;
+import com.misabiko.LWJGLGameEngine.Core.Util;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
-import com.misabiko.LWJGLGameEngine.Meshes.Vertex;
-import com.misabiko.LWJGLGameEngine.Shaders.Program;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
+import com.misabiko.LWJGLGameEngine.Rendering.Shaders.Program;
 
 public abstract class OpenGLHandler {
 	
@@ -56,11 +58,11 @@ public abstract class OpenGLHandler {
 		
 		glEnable(GL_DEPTH_TEST);
 		
-		initShaders();
+		initProgram();
 		initMatrices(width,height);
 	}
 	
-	private static void initShaders() {
+	private static void initProgram() {
 		int vertShaderId = loadShader("vertex.glsl", GL_VERTEX_SHADER);
 		int fragShaderId = loadShader("fragment.glsl", GL_FRAGMENT_SHADER);
 		
@@ -115,7 +117,7 @@ public abstract class OpenGLHandler {
 		matrix3fBuffer = BufferUtils.createFloatBuffer(9);
 	}
 	
-	public static void initVBOs(ArrayList<GameObject> objs) {
+	public static void initBuffers(ArrayList<GameObject> objs) {
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
 			

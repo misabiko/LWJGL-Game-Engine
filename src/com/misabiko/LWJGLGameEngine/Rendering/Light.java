@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Core;
+package com.misabiko.LWJGLGameEngine.Rendering;
 
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;

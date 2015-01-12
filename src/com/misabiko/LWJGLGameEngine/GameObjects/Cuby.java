@@ -10,6 +10,8 @@ import javax.vecmath.Vector3f;
 
 
 
+
+
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -19,10 +21,10 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.misabiko.LWJGLGameEngine.Core.Camera;
 import com.misabiko.LWJGLGameEngine.Core.Core;
-import com.misabiko.LWJGLGameEngine.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
+import com.misabiko.LWJGLGameEngine.Rendering.Camera;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 
 public class Cuby extends GameObject {
 	

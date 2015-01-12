@@ -4,7 +4,7 @@ import javax.vecmath.Vector3f;
 
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
-import com.misabiko.LWJGLGameEngine.Meshes.Mesh;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 
 public abstract class GameObject {
 	

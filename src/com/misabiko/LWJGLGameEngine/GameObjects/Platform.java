@@ -11,7 +11,7 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-import com.misabiko.LWJGLGameEngine.Meshes.Box;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 
 public class Platform extends GameObject {;
 

@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Shaders;
+package com.misabiko.LWJGLGameEngine.Rendering.Shaders;
 
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;

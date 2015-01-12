@@ -12,6 +12,9 @@ import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
+import com.misabiko.LWJGLGameEngine.Rendering.Camera;
+import com.misabiko.LWJGLGameEngine.Rendering.Light;
+import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -30,11 +33,10 @@ public class Core {
 	private boolean EscIsHeld = false;
 	
 //	Current task
-//		TODO make a light shader/engine ( or at least something to see the objes' borders )
+//		Make "Rendering" package and add OpenGLHandler and Meshes in it
 	
 //	Short term todos
 //		Prevent 360 cam spins
-//		Make "Rendering" package and add OpenGLHandler and Meshes in it
 //		TODO make a control class
 	
 //	Long term todos
@@ -137,7 +139,7 @@ public class Core {
 //		objs.add(new Axis(0, 0, 0, 0f, 10f, 0f, Color.GREEN));
 //		objs.add(new Axis(0, 0, 0, 0f, 0f, -10f, Color.BLUE));
 		
-		OpenGLHandler.initVBOs(objs);
+		OpenGLHandler.initBuffers(objs);
 	}
 	
 	private void input() {
