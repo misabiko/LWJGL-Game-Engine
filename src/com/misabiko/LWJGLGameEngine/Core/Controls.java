@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import javax.vecmath.Vector3f;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -9,6 +11,12 @@ import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 public class Controls {
 	private static boolean Esc = false;
 	private static float MouseWheelSensibility = 1/4000f;
+	private static Vector3f preVel = new Vector3f(0f,0f,0f);
+	
+	private static final Vector3f frontVel 	= new Vector3f(0f,0f,-1f);
+	private static final Vector3f backVel	= new Vector3f(0f,0f,1f);
+	private static final Vector3f leftVel	= new Vector3f(-1f,0f,0f);
+	private static final Vector3f rightVel	= new Vector3f(1f,0f,0f);
 	
 	public static void update() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -42,14 +50,28 @@ public class Controls {
 		
 		Camera.zoomVel -= ((float) Mouse.getDWheel()*MouseWheelSensibility);
 		
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			Core.cuby.angleY = Camera.angleY;
+			
+			preVel.add(frontVel);
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)){
+			Core.cuby.angleY = Camera.angleY;
+			
+			preVel.add(leftVel);
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)){
+			Core.cuby.angleY = Camera.angleY;
+			
+			preVel.add(backVel);
+		}
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			Core.cuby.angleY = Camera.angleY;
 			
-			Core.cuby.vel.x += Core.cuby.speed;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_A)){
-			Core.cuby.angleY = Camera.angleY;
-			
-			Core.cuby.vel.x -= Core.cuby.speed;
+			preVel.add(rightVel);
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
@@ -64,16 +86,12 @@ public class Controls {
 			Physic.speedCap = 0.1f;
 		}
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			Core.cuby.angleY = Camera.angleY;
-			
-			Core.cuby.vel.z -= Core.cuby.speed;
-		}else if (Keyboard.isKeyDown(Keyboard.KEY_S)){
-			Core.cuby.angleY = Camera.angleY;
-			
-			Core.cuby.vel.z += Core.cuby.speed;
+		if (preVel.length() != 0f) {
+			preVel.normalize();
+			preVel.scale(Core.cuby.speed);
+			Core.cuby.vel.add(preVel);
+			preVel.set(0f,0f,0f);
 		}
-		
 	}
 
 }
