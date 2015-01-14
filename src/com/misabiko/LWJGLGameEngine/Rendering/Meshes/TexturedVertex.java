@@ -2,8 +2,6 @@ package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
 import java.awt.Color;
 
-import org.lwjgl.util.vector.Vector3f;
-
 public class TexturedVertex extends Vertex{
 	
 	public float[] st;

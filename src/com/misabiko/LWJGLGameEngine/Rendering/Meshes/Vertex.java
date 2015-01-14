@@ -2,8 +2,6 @@ package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
 import java.awt.Color;
 
-import org.lwjgl.util.vector.Vector3f;
-
 public class Vertex {
 	public float[] xyzw,rgba,normal;
 	public static final int posElementCount = 4;

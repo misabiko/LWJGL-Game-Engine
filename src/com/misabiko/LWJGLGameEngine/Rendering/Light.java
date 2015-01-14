@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-
 public class Light {
 	public static ArrayList<Light> lights = new ArrayList<Light>();
 	

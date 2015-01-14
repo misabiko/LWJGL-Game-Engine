@@ -1,7 +1,14 @@
 package com.misabiko.LWJGLGameEngine.Rendering.Shaders;
 
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL20.glCreateProgram;
+import static org.lwjgl.opengl.GL20.glAttachShader;
+import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
+import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
+import static org.lwjgl.opengl.GL20.glLinkProgram;
+import static org.lwjgl.opengl.GL20.glValidateProgram;
+import static org.lwjgl.opengl.GL20.glDetachShader;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
+import static org.lwjgl.opengl.GL30.glBindFragDataLocation;
 
 public class Program {
 	
