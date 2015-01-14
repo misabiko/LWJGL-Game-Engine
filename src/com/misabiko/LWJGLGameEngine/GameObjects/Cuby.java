@@ -25,7 +25,7 @@ public class Cuby extends GameObject {
 	public PairCachingGhostObject go;
 	public CustomCharacterController controller;
 	
-	public float jumpStrength = 1f;
+	private float jumpStrength = 5f;
 	public float speed = 1f;
 	
 	private float mass = 1;
@@ -34,7 +34,7 @@ public class Cuby extends GameObject {
 	public Cuby(float x, float y, float z) {
 		super(x, y, z, new Box(0.5f,0.5f,0.5f, Color.BLUE));
 		
-		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(-5f, 5f, -3f), 1f));
+		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(x, y, z), 1f));
 		
 		cs.calculateLocalInertia(mass, fallInertia);
 		
@@ -44,7 +44,7 @@ public class Cuby extends GameObject {
 		go.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
 		controller = new CustomCharacterController(go, (ConvexShape) cs, 0.05f);
-		controller.setJumpSpeed(5f);
+		controller.setJumpSpeed(jumpStrength);
 	}
 	
 	public Cuby() {

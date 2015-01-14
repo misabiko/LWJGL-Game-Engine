@@ -10,6 +10,7 @@ import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 
 public class Controls {
 	private static boolean Esc = false;
+	private static float MouseSensibility = 1/500f;
 	private static float MouseWheelSensibility = 1/4000f;
 	private static Vector3f preVel = new Vector3f(0f,0f,0f);
 	
@@ -29,8 +30,8 @@ public class Controls {
 		}
 		
 		if (Mouse.isGrabbed()) {
-			Camera.angleX += ((float) Mouse.getDY()/500);
-			Camera.angleY -= ((float) Mouse.getDX()/500);
+			Camera.angleX += ((float) Mouse.getDY()*MouseSensibility);
+			Camera.angleY -= ((float) Mouse.getDX()*MouseSensibility);
 			
 			if (Camera.angleX > Math.PI*2) {
 				Camera.angleX = Camera.angleX - (float) (Math.PI*2);

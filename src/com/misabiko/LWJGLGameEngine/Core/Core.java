@@ -23,17 +23,17 @@ public class Core {
 	public static Cuby cuby;
 	
 //	Current task
-//		Make velocity length always the same, currently diagonal is faster because it goes 1 front AND 1 left so about 1.4
+//		TODO Remove those .* imports, I don't like those
 	
 //	Short term todos
-//		TODO Remove those .* imports, I don't like those
-//		TODO Smooth rotating for Cuby
+//		TODO Custom (Blender or MagicaVoxel) models?
+//		Make detection areas
 	
 //	Long term todos
+//		TODO Smooth rotating for Cuby, Cube world style
 //		TODO Implement separate textures per-face on mesh
 //		TODO Reimplement lines and axis (axii? axises? axi? axes?)
 //		TODO learn to manage the projection matrix
-//		TODO Custom (Blender or MagicaVoxel) models?
 //		TODO Transition LWJGL 2 to 3
 	
 	public Core() {

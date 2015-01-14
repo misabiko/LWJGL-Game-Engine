@@ -23,11 +23,11 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 
 import com.misabiko.LWJGLGameEngine.Core.Core;
-import com.misabiko.LWJGLGameEngine.Core.Util;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Rendering.Shaders.Program;
+import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
 public abstract class OpenGLHandler {
 	
