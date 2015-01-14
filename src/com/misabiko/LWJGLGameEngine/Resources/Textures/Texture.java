@@ -31,13 +31,13 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 public class Texture {
 	public int texId = 0;
 	
-	public Texture(String filename, int textureUnit) {
+	public Texture(String parentPath, String filename, String extension, int textureUnit) {
 		int texWidth = 0;
 		int texHeight = 0;
 		ByteBuffer buffer = null;
 		
 		try {
-			InputStream input = new FileInputStream("src/com/misabiko/LWJGLGameEngine/Resources/Textures/"+filename);
+			InputStream input = new FileInputStream(parentPath+filename+extension);
 			
 			PNGDecoder decoder = new PNGDecoder(input);
 			texWidth = decoder.getWidth();
@@ -69,5 +69,9 @@ public class Texture {
 		
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	}
+	
+	public Texture(String fileName, String extension, int textureUnits) {
+		this("src/com/misabiko/LWJGLGameEngine/Resources/Textures/",fileName, extension,textureUnits);
 	}
 }

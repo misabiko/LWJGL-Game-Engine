@@ -23,11 +23,13 @@ public class Core {
 	public static Cuby cuby;
 	
 //	Current task
-//		TODO Remove those .* imports, I don't like those
+//		TODO Custom (Blender or MagicaVoxel) models?
 	
 //	Short term todos
-//		TODO Custom (Blender or MagicaVoxel) models?
-//		Make detection areas
+//		TODO Detection areas
+//		TODO Simple dummy npc
+//		TODO Attacks
+//		TODO UI
 	
 //	Long term todos
 //		TODO Smooth rotating for Cuby, Cube world style

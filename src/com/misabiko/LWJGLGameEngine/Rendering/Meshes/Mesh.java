@@ -1,6 +1,5 @@
 package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
 import java.awt.Color;
@@ -10,8 +9,6 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
-
-import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 
 public abstract class Mesh {
 	public Matrix4f modelMatrix;
@@ -23,9 +20,6 @@ public abstract class Mesh {
 	
 	public int primitiveType = GL_TRIANGLES;
 	
-	public Texture texture = defaultTexture;
-
-	public static Texture defaultTexture = new Texture("ash_uvgrid01.png", GL_TEXTURE0); 
 	protected static Color defaultColor = Color.WHITE;
 	
 	public Mesh	(Vertex[] vertices, int primType) {
