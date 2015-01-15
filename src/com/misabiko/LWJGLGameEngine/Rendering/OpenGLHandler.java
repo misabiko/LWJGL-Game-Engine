@@ -32,6 +32,7 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL20.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -49,6 +50,7 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.TexturedVertex;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Rendering.Shaders.Program;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
@@ -74,7 +76,7 @@ public abstract class OpenGLHandler {
 			System.exit(-1);
 		}
 		
-		glClearColor(0f,0f,0f,1f);
+		glClearColor(1f,1f,1f,1f);
 		
 		glViewport(0, 0, width, height);
 		
@@ -170,7 +172,7 @@ public abstract class OpenGLHandler {
 	
 	public static void render(GameObject obj) {
 		glUseProgram(program.id);
-			
+		
 			projectionMatrix.store(matrix4fBuffer);
 			matrix4fBuffer.flip();
 			glUniformMatrix4(glGetUniformLocation(program.id, "projectionMatrix"), false, matrix4fBuffer);
@@ -208,9 +210,10 @@ public abstract class OpenGLHandler {
 				
 					glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 					
-						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
-						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.colorOffset);
-						glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.normOffset);
+						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, 0);
+//						glVertexAttribPointer(1, 4, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.colorOffset);
+						glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, Vertex.normOffset);
+						glVertexAttribPointer(2, 2, GL_FLOAT, false, Vertex.bytesPerFloat*TexturedVertex.elementCount, TexturedVertex.stOffset);
 						
 						glDrawElements(GL_TRIANGLES, obj.mesh.indicesBuffer);
 						
@@ -238,12 +241,7 @@ public abstract class OpenGLHandler {
 		for (GameObject obj : GameObject.objs) {
 			glDeleteBuffers(obj.mesh.vboId);
 			glDeleteBuffers(obj.mesh.vboiId);
-			
-			if (obj.mesh.texture.texId != Mesh.defaultTexture.texId)
-				glDeleteTextures(obj.mesh.texture.texId);
 		}
-		
-		glDeleteTextures(Mesh.defaultTexture.texId);
 		
 		program.cleanUp();
 		
