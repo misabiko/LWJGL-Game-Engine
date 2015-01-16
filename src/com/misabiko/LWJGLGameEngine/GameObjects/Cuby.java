@@ -20,6 +20,7 @@ import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 import com.misabiko.LWJGLGameEngine.Rendering.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
+import com.misabiko.LWJGLGameEngine.Resources.Files.OBJParser;
 
 public class Cuby extends GameObject {
 	
@@ -34,8 +35,8 @@ public class Cuby extends GameObject {
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
 	public Cuby(float x, float y, float z) throws FileNotFoundException, IOException {
-		super(x, y, z, new Box(0.5f,0.5f,0.5f, Color.BLUE));
-//		super(x, y, z, OBJParser.parse(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Rendering/Meshes/OBJModels/", "chr_sword"));
+//		super(x, y, z, new Box(0.5f,0.5f,0.5f, Color.BLUE));
+		super(x, y, z, OBJParser.parse(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Rendering/Meshes/OBJModels/", "chr_sword"));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(x, y, z), 1f));
 		

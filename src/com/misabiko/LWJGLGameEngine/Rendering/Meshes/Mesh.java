@@ -27,7 +27,7 @@ public class Mesh {
 	public Texture texture;
 	public boolean isTextured;
 	
-	protected static Color defaultColor = Color.WHITE;
+	protected static Color defaultColor = Color.RED;
 	private static Texture defaultTexture = new Texture(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Resources/Textures/","ash_uvgrid01.png", GL13.GL_TEXTURE0);
 	
 	protected Mesh	(Vertex[] vertices, int primType) {
