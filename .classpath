@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="libs"/>
+	<classpathentry excluding="oObjLoader-master/|oObjLoader-master/|oObjLoader-master/com/|oObjLoader-master/com/owens/|oObjLoader-master/com/owens/oobjloader/|oObjLoader-master/com/owens/oobjloader/builder/|oObjLoader-master/com/owens/oobjloader/lwjgl/|oObjLoader-master/com/owens/oobjloader/parser/|oObjLoader-master/com/owens/oobjloader/test/" kind="src" path="libs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="libs/lwjgl.jar">
 		<attributes>
@@ -23,7 +23,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/vecmath.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="http://jbullet.advel.cz/javadoc/"/>
+			<attribute name="javadoc_location" value="http://docs.oracle.com/javase/8/docs/api/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

@@ -9,35 +9,35 @@ public class Box extends Mesh{
 		super(new Vertex[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
-				new Vertex(-w/2,	-h/2,	d/2,	0f, 0f, 1f,		colors[0]),	//0
-				new Vertex(w/2,		-h/2,	d/2,	0f, 0f, 1f,		colors[0]),	//1
-				new Vertex(w/2,		h/2,	d/2,	0f, 0f, 1f,		colors[0]),	//2
-				new Vertex(-w/2,	h/2,	d/2,	0f, 0f, 1f,		colors[0]),	//3
+				new Vertex(-w/2,	-h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	0f, 1f),	//0
+				new Vertex(w/2,		-h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	1f, 1f),	//1
+				new Vertex(w/2,		h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	1f, 0f),	//2
+				new Vertex(-w/2,	h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	0f, 0f),	//3
 //				Back Face
-				new Vertex(-w/2,	-h/2,	-d/2,	0f, 0f, -1f,	colors[1]),	//4
-				new Vertex(w/2,		-h/2,	-d/2,	0f, 0f, -1f,	colors[1]),	//5
-				new Vertex(w/2,		h/2,	-d/2,	0f, 0f, -1f,	colors[1]),	//6
-				new Vertex(-w/2,	h/2,	-d/2,	0f, 0f, -1f,	colors[1]),	//7
+				new Vertex(-w/2,	-h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	1f, 1f),	//4
+				new Vertex(w/2,		-h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	0f, 1f),	//5
+				new Vertex(w/2,		h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	0f, 0f),	//6
+				new Vertex(-w/2,	h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	1f, 0f),	//7
 //				Left Face
-				new Vertex(-w/2,	-h/2,	-d/2,	-1f, 0f, 0f,	colors[2]),	//8
-				new Vertex(-w/2,	-h/2,	d/2,	-1f, 0f, 0f,	colors[2]),	//9
-				new Vertex(-w/2,	h/2,	d/2,	-1f, 0f, 0f,	colors[2]),	//10
-				new Vertex(-w/2,	h/2,	-d/2,	-1f, 0f, 0f,	colors[2]),	//11
+				new Vertex(-w/2,	-h/2,	-d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	0f, 1f),	//8
+				new Vertex(-w/2,	-h/2,	d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	1f, 1f),	//9
+				new Vertex(-w/2,	h/2,	d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	1f, 0f),	//10
+				new Vertex(-w/2,	h/2,	-d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	0f, 0f),	//11
 //				Right Face
-				new Vertex(w/2,		-h/2,	d/2,	1f, 0f, 0f,		colors[3]),	//12
-				new Vertex(w/2,		-h/2,	-d/2,	1f, 0f, 0f,		colors[3]),	//13
-				new Vertex(w/2,		h/2,	-d/2,	1f, 0f, 0f,		colors[3]),	//14
-				new Vertex(w/2,		h/2,	d/2,	1f, 0f, 0f,		colors[3]),	//15
+				new Vertex(w/2,		-h/2,	d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	1f, 1f),	//12
+				new Vertex(w/2,		-h/2,	-d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	0f, 1f),	//13
+				new Vertex(w/2,		h/2,	-d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	0f, 0f),	//14
+				new Vertex(w/2,		h/2,	d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	1f, 0f),	//15
 //				Top Face
-				new Vertex(-w/2,	h/2,	-d/2,	0f, 1f, 0f,	colors[4]),	//16
-				new Vertex(w/2,		h/2,	-d/2,	0f, 1f, 0f,	colors[4]),	//17
-				new Vertex(w/2,		h/2,	d/2,	0f, 1f, 0f,	colors[4]),	//18
-				new Vertex(-w/2,	h/2,	d/2,	0f, 1f, 0f,	colors[4]),	//19
+				new Vertex(-w/2,	h/2,	-d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	0f, 1f),	//16
+				new Vertex(w/2,		h/2,	-d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	1f, 1f),	//17
+				new Vertex(w/2,		h/2,	d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	1f, 0f),	//18
+				new Vertex(-w/2,	h/2,	d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	0f, 0f),	//19
 //				Bottom Face
-				new Vertex(-w/2,	-h/2,	-d/2,	0f, -1f, 0f,	colors[5]),	//20
-				new Vertex(w/2,		-h/2,	-d/2,	0f, -1f, 0f,	colors[5]),	//21
-				new Vertex(w/2,		-h/2,	d/2,	0f, -1f, 0f,	colors[5]),	//22
-				new Vertex(-w/2,	-h/2,	d/2,	0f, -1f, 0f,	colors[5])	//23
+				new Vertex(-w/2,	-h/2,	-d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	1f, 1f),	//20
+				new Vertex(w/2,		-h/2,	-d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	0f, 1f),	//21
+				new Vertex(w/2,		-h/2,	d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	0f, 0f),	//22
+				new Vertex(-w/2,	-h/2,	d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	1f, 0f)		//23
 			}, new byte[] {
 //					Sets the order in which the vertices should be used to produce triangles
 //					Front Face

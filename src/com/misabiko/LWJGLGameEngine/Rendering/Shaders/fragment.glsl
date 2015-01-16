@@ -5,8 +5,10 @@ uniform mat3 normalMatrix;
 
 uniform vec3 cameraPosition;
 
+uniform sampler2D materialTex;
+uniform float isTextured;
+
 float materialShininess = 80.0;
-vec3 materialSpecularColor = vec3(1,1,1);
 
 uniform float numLights;
 uniform struct Light {
@@ -20,8 +22,11 @@ uniform struct Light {
 
 in VertexData {
 	vec4 position;
-	vec4 color;
 	vec3 normal;
+	vec4 aColor;
+	vec4 dColor;
+	vec4 sColor;
+	vec2 texCoords;
 } data;
 
 layout(location = 0) out vec4 out_Color;
@@ -47,26 +52,31 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
     }
 
     //ambient
-    vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.intensities;
+    vec3 ambient = light.ambientCoefficient * data.aColor.rgb * surfaceColor.rgb * light.intensities;
 
     //diffuse
     float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
-    vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
+    vec3 diffuse = diffuseCoefficient * data.dColor.rgb * surfaceColor.rgb * light.intensities;
     
 //	//specular
-//	float specularCoefficient = 0.0;
-//	if(diffuseCoefficient > 0.0)
-//		specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materialShininess);
-//	vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
+	float specularCoefficient = 0.0;
+	if(diffuseCoefficient > 0.0)
+		specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materialShininess);
+	vec3 specular = specularCoefficient * data.sColor.rgb * light.intensities;
 
     //linear color (color before gamma correction)
-	return ambient + attenuation*(diffuse /*+ specular*/);
+	return ambient + attenuation*(diffuse/* + specular*/);
 }
 
 void main(void) {
     vec3 normal = normalize(normalMatrix * data.normal);
     vec3 surfacePos = vec3(modelMatrix * data.position);
-    vec4 surfaceColor = data.color;
+    vec4 surfaceColor;
+    
+    if (isTextured > 0.5)
+    	surfaceColor = texture2D(materialTex, data.texCoords);
+    else
+    	surfaceColor = data.dColor;
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
 
 	vec3 linearColor = vec3(0);
@@ -75,6 +85,5 @@ void main(void) {
 	}
 	
 	vec3 gamma = vec3 (1.0/2.2);
-//	out_Color = vec4(pow(linearColor, gamma), surfaceColor.a);
-	out_Color = vec4(linearColor, surfaceColor.a);
+	out_Color = vec4(pow(linearColor, gamma), surfaceColor.a);
 }

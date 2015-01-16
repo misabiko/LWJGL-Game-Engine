@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.Display;
 
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
@@ -23,10 +25,11 @@ public class Core {
 	public static Cuby cuby;
 	
 //	Current task
-//		TODO Custom (Blender or MagicaVoxel) models?
+//		TODO Finishing ajusting to magicaVoxel meshes (so big)
+//		TODO Why are we green?
+//		TODO Detection areas
 	
 //	Short term todos
-//		TODO Detection areas
 //		TODO Simple dummy npc
 //		TODO Attacks
 //		TODO UI
@@ -109,7 +112,11 @@ public class Core {
 		Platform block2 = new Platform(0f, -1.5f, -2f, 1f, 1.5f, 3f);
 		dynamicsWorld.addRigidBody(block2.rb);
 		
-		cuby = new Cuby();
+		try {
+			cuby = new Cuby();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		dynamicsWorld.addCollisionObject(cuby.go);
 		dynamicsWorld.addAction(cuby.controller);
 		

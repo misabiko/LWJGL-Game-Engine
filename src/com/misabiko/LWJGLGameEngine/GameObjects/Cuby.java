@@ -1,6 +1,8 @@
 package com.misabiko.LWJGLGameEngine.GameObjects;
 
 import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
@@ -31,8 +33,9 @@ public class Cuby extends GameObject {
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
-	public Cuby(float x, float y, float z) {
+	public Cuby(float x, float y, float z) throws FileNotFoundException, IOException {
 		super(x, y, z, new Box(0.5f,0.5f,0.5f, Color.BLUE));
+//		super(x, y, z, OBJParser.parse(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Rendering/Meshes/OBJModels/", "chr_sword"));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(x, y, z), 1f));
 		
@@ -47,7 +50,7 @@ public class Cuby extends GameObject {
 		controller.setJumpSpeed(jumpStrength);
 	}
 	
-	public Cuby() {
+	public Cuby() throws FileNotFoundException, IOException {
 		this(-5f, 5f, -3f);
 	}
 

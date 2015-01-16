@@ -11,8 +11,6 @@ import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.Transform;
 
 public class CustomCharacterController extends KinematicCharacterController {
-	private boolean foo;
-	
 	private static Vector3f[] upAxisDirection = new Vector3f[] {
 		new Vector3f(1.0f, 0.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f),
 		new Vector3f(0.0f, 0.0f, 1.0f), };

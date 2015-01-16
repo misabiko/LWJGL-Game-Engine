@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_REPEAT;
 import static org.lwjgl.opengl.GL11.GL_RGB;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_RGBA8;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
@@ -30,14 +31,15 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class Texture {
 	public int texId = 0;
-	
-	public Texture(String parentPath, String filename, String extension, int textureUnit) {
+	public int textureUnit = 0;
+	public Texture(String parentPath, String fileName, int textureUnit) {
+		this.textureUnit = textureUnit;
 		int texWidth = 0;
 		int texHeight = 0;
 		ByteBuffer buffer = null;
 		
 		try {
-			InputStream input = new FileInputStream(parentPath+filename+extension);
+			InputStream input = new FileInputStream(parentPath+fileName);
 			
 			PNGDecoder decoder = new PNGDecoder(input);
 			texWidth = decoder.getWidth();
@@ -71,7 +73,25 @@ public class Texture {
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	}
 	
-	public Texture(String fileName, String extension, int textureUnits) {
-		this("src/com/misabiko/LWJGLGameEngine/Resources/Textures/",fileName, extension,textureUnits);
+	public Texture(ByteBuffer buffer, int w, int h, int textureUnit) {
+		this.textureUnit = textureUnit;
+		
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        
+		texId = glGenTextures();
+		
+		glActiveTexture(textureUnit);
+		glBindTexture(GL_TEXTURE_2D, texId);
+		
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 	}
 }
