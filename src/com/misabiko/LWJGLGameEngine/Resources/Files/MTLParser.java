@@ -39,9 +39,18 @@ public abstract class MTLParser {
 			if (line.startsWith("Ks ")) {
 				materials.get(numMaterials).specularColor = new Vector3f(Float.valueOf(line.split(" ")[1]), Float.valueOf(line.split(" ")[2]), Float.valueOf(line.split(" ")[3]));
 			}
-			if (line.startsWith("map_kd ")) {
-				ByteBuffer buffer = TGALoader.loadImage(new FileInputStream(parentPath+line.split(" ")[1]), true);
-				materials.get(numMaterials).diffuseTextureMap = new Texture(buffer, TGALoader.getLastWidth(), TGALoader.getLastTexHeight(), GL13.GL_TEXTURE0);
+			if (line.startsWith("Ns ")) {
+				materials.get(numMaterials).specularExponent = Float.valueOf(line.split(" ")[1]);
+			}
+			if (line.startsWith("map_kd ") || line.startsWith("map_Kd ")) {
+				String extension = line.split(" ")[1].substring(line.split(" ")[1].length()-3, line.split(" ")[1].length());
+				if (extension.equals("tga")) {
+					ByteBuffer buffer = TGALoader.loadImage(new FileInputStream(parentPath+line.split(" ")[1]), true);
+					materials.get(numMaterials).diffuseTextureMap = new Texture(buffer, TGALoader.getLastWidth(), TGALoader.getLastTexHeight(), GL13.GL_TEXTURE0);
+				}else if (extension.equals("png"))
+					materials.get(numMaterials).diffuseTextureMap = new Texture(parentPath, line.split(" ")[1], GL13.GL_TEXTURE0);
+				else
+					System.out.println("The heck is a ."+extension+" file?");
 			}
 		}
 		reader.close();

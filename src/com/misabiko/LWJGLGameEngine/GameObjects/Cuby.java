@@ -24,7 +24,7 @@ import com.misabiko.LWJGLGameEngine.Resources.Files.OBJParser;
 
 public class Cuby extends GameObject {
 	
-	private static CollisionShape cs = new BoxShape(new Vector3f(0.255f,0.25f,0.255f));
+//	private static CollisionShape cs = new BoxShape(new Vector3f(0.255f,0.25f,0.255f));
 	public PairCachingGhostObject go;
 	public CustomCharacterController controller;
 	
@@ -35,8 +35,9 @@ public class Cuby extends GameObject {
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
 	public Cuby(float x, float y, float z) throws FileNotFoundException, IOException {
-//		super(x, y, z, new Box(0.5f,0.5f,0.5f, Color.BLUE));
-		super(x, y, z, OBJParser.parse(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Rendering/Meshes/OBJModels/", "chr_sword"));
+		super(x, y, z, OBJParser.parse(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Rendering/Meshes/OBJModels/", "StoneHearthChar"));
+		
+		CollisionShape cs = new BoxShape(new Vector3f(mesh.size.x/2, mesh.size.y/2, mesh.size.z/2));
 		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(x, y, z), 1f));
 		
@@ -47,7 +48,7 @@ public class Cuby extends GameObject {
 		go.setCollisionShape(cs);
 		go.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
-		controller = new CustomCharacterController(go, (ConvexShape) cs, 0.05f);
+		controller = new CustomCharacterController(go, (ConvexShape) cs, mesh.size.y/10f);
 		controller.setJumpSpeed(jumpStrength);
 	}
 	
@@ -99,5 +100,8 @@ public class Cuby extends GameObject {
 		
 		Camera.update(new org.lwjgl.util.vector.Vector3f(trans.origin.x,trans.origin.y,trans.origin.z));
 		Light.lights.get(0).position = new org.lwjgl.util.vector.Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Light.lights.get(0).position.w);
+		Vector3f lamp = new Vector3f(finalVel);
+		lamp.normalize();
+		Light.lights.get(0).coneDirection = new org.lwjgl.util.vector.Vector3f(lamp.x, lamp.y, lamp.z);
 	}
 }

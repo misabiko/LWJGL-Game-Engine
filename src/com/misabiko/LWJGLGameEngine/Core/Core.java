@@ -3,6 +3,8 @@ package com.misabiko.LWJGLGameEngine.Core;
 import java.io.IOException;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
@@ -25,12 +27,9 @@ public class Core {
 	public static Cuby cuby;
 	
 //	Current task
-//		TODO Finishing ajusting to magicaVoxel meshes (so big)
-//		TODO Why are we green?
-//		TODO Adapt CollisionShape to custom meshes, using compound shape, a box per voxel
+//		TODO Detection areas
 	
 //	Short term todos
-//		TODO Detection areas
 //		TODO Simple dummy npc
 //		TODO Attacks
 //		TODO UI
@@ -100,17 +99,17 @@ public class Core {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
 		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
 		
-		Platform ground = new Platform(-3f, -2f, -2f, 16f,0.5f,16f);
+		Platform ground = new Platform(0f, 0f, 0f, 50f,5f,50f);
 		dynamicsWorld.addRigidBody(ground.rb);
 		
 //		Platform lightBlock = new Platform(0f, 3f, 0f, 1f,1f,1f);
 //		objs.add(lightBlock);
 //		dynamicsWorld.addRigidBody(lightBlock.rb);
 //		
-		Platform block = new Platform(-3f, -1.5f, -2f, 1f, 1.5f, 3f);
+		Platform block = new Platform(10f, 3f, -8f, 1f, 1f, 1f);
 		dynamicsWorld.addRigidBody(block.rb);
 		
-		Platform block2 = new Platform(0f, -1.5f, -2f, 1f, 1.5f, 3f);
+		Platform block2 = new Platform(0f, 3f, -2f, 1f, 1f, 1f);
 		dynamicsWorld.addRigidBody(block2.rb);
 		
 		try {
@@ -121,8 +120,11 @@ public class Core {
 		dynamicsWorld.addCollisionObject(cuby.go);
 		dynamicsWorld.addAction(cuby.controller);
 		
-		Light.lights.add(new Light(-6f,-1.5f,-1f, 1f));
-		Light.lights.add(new Light(10f,100f,10f, 0f));
+		Light.lights.add(new Light(new Vector4f(0f,0f,0f,1f), new Vector3f(1f,1f,1f), 0.005f, 0.5f, 45f, new Vector3f(0f,-1f,0f)));
+//		Light.lights.add(new Light(10f,100f,10f, 0f));
+//		Light.lights.add(new Light(-10f,100f,10f, 0f));
+//		Light.lights.add(new Light(10f,100f,-10f, 0f));
+//		Light.lights.add(new Light(-10f,100f,-10f, 0f));
 		
 		OpenGLHandler.initBuffers();
 	}

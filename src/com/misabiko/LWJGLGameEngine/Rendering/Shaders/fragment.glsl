@@ -8,7 +8,7 @@ uniform vec3 cameraPosition;
 uniform sampler2D materialTex;
 uniform float isTextured;
 
-float materialShininess = 80.0;
+uniform float materialShininess;
 
 uniform float numLights;
 uniform struct Light {
@@ -37,7 +37,7 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
     if(light.position.w == 0.0) {
         //directional light
         surfaceToLight = normalize(light.position.xyz);
-        attenuation = 0.6;
+        attenuation = 1.0;
     } else {
         //point light
         surfaceToLight = normalize(light.position.xyz - surfacePos);

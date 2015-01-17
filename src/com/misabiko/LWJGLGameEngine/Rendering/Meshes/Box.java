@@ -1,11 +1,13 @@
 package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
-import java.awt.Color;
+import javax.vecmath.Vector4f;
+
+import org.lwjgl.util.vector.Vector3f;
 
 public class Box extends Mesh{
 	float width, height, depth;
 	
-	public Box(float w, float h, float d, Color[] colors) {
+	public Box(float w, float h, float d, Vector4f[] colors) {
 		super(new Vertex[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
@@ -58,26 +60,26 @@ public class Box extends Mesh{
 //					Bottom Face
 					20,21,23,
 					21,22,23
-				});
+				}, new Vector3f(w,h,d), new Vector3f(0,0,0));
 		width = w;
 		height = h;
 		depth = d;
 	}
 	
 	public Box(float w, float h, float d, float r, float g, float b, float a) {
-		this(w,h,d, new Color[] {
-				new Color(r,g,b,a),
-				new Color(r,g,b,a),
-				new Color(r,g,b,a),
-				new Color(r,g,b,a),
-				new Color(r,g,b,a),
-				new Color(r,g,b,a)
+		this(w,h,d, new Vector4f[] {
+				new Vector4f(r,g,b,a),
+				new Vector4f(r,g,b,a),
+				new Vector4f(r,g,b,a),
+				new Vector4f(r,g,b,a),
+				new Vector4f(r,g,b,a),
+				new Vector4f(r,g,b,a)
 			}
 		);
 	}
 	
-	public Box(float w, float h, float d, Color color) {
-		this(w,h,d, new Color[] {
+	public Box(float w, float h, float d, Vector4f color) {
+		this(w,h,d, new Vector4f[] {
 				color,
 				color,
 				color,
@@ -89,7 +91,7 @@ public class Box extends Mesh{
 	}
 	
 	public Box(float w, float h, float d) {
-		this(w,h,d, new Color[] {
+		this(w,h,d, new Vector4f[] {
 				defaultColor,
 				defaultColor,
 				defaultColor,

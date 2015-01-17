@@ -2,6 +2,8 @@ package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
 import java.awt.Color;
 
+import javax.vecmath.Vector4f;
+
 public class Vertex {
 	public float[] position,aColor,dColor,sColor,normal,texCoords;
 	public static final int posElementCount = 4;
@@ -30,13 +32,13 @@ public class Vertex {
 		texCoords = new float[] {s,t};
 	}
 	
-	public Vertex(float x, float y, float z, float nX, float nY, float nZ, Color aColor, Color dColor, Color sColor, float s, float t) {
+	public Vertex(float x, float y, float z, float nX, float nY, float nZ, Vector4f aColor, Vector4f dColor, Vector4f sColor, float s, float t) {
 		this(
 			x,y,z,
 			nX,nY,nZ,
-			aColor.getRed()/255,aColor.getBlue()/255,aColor.getGreen()/255,aColor.getAlpha()/255,
-			dColor.getRed()/255,dColor.getBlue()/255,dColor.getGreen()/255,dColor.getAlpha()/255,
-			sColor.getRed()/255,sColor.getBlue()/255,sColor.getGreen()/255,sColor.getAlpha()/255,
+			aColor.x,aColor.y,aColor.z,aColor.w,
+			dColor.x,dColor.y,dColor.z,dColor.w,
+			sColor.x,sColor.y,sColor.z,sColor.w,
 			s,t);
 	}
 	

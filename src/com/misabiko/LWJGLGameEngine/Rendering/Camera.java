@@ -9,8 +9,8 @@ public class Camera {
 	
 	private static float angleXCap = 1.5f;
 	
-	private static float zoom = 1f;
-	private static float zoomCap = 0.55f;
+	private static float zoom = 5f;
+	private static float zoomCap = 2.5f;
 	private static float zoomVelCap = 0.1f;
 	private static float zoomNeutral = 0.0001f;
 	private static float zoomFriction = 0.002f;

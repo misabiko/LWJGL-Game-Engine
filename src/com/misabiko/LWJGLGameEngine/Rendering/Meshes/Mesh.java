@@ -2,10 +2,11 @@ package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
-import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+
+import javax.vecmath.Vector4f;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL13;
@@ -23,14 +24,20 @@ public class Mesh {
 	
 	public int indicesCount, vboId, vboiId = 0;
 	
+	public Vector3f size, center;
+	
 	public int primitiveType = GL_TRIANGLES;
-	public Texture texture;
+	public Texture texture = defaultTexture;
 	public boolean isTextured;
 	
-	protected static Color defaultColor = Color.RED;
+	public Material material = new Material("Default");
+	
+	protected static Vector4f defaultColor = new Vector4f(1f,1f,1f,1f);
 	private static Texture defaultTexture = new Texture(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Resources/Textures/","ash_uvgrid01.png", GL13.GL_TEXTURE0);
 	
-	protected Mesh	(Vertex[] vertices, int primType) {
+	protected Mesh	(Vertex[] vertices, int primType, Vector3f size, Vector3f center) {
+		this.size = size;
+		this.center = center;
 		modelMatrix = new Matrix4f();
 		
 		verticesBuffer = BufferUtils.createFloatBuffer(vertices.length*Vertex.elementCount);
@@ -44,8 +51,8 @@ public class Mesh {
 		isTextured = false;
 	}
 	
-	protected Mesh	(Vertex[] vertices, byte[] indices) {
-		this(vertices, GL_TRIANGLES);
+	protected Mesh	(Vertex[] vertices, byte[] indices, Vector3f size, Vector3f center) {
+		this(vertices, GL_TRIANGLES, size, center);
 		
 		indicesCount = indices.length;
 		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
@@ -53,12 +60,15 @@ public class Mesh {
 		indicesBuffer.flip();
 	}
 	
-	public Mesh	(Vector3f[] vertArray, Vector3f[] normArray, Vector2f[] stArray, int indiceCount, ArrayList<Material> mtls) {
-		indicesCount = indiceCount;
+	public Mesh	(Vector3f[] vertArray, Vector3f[] normArray, Vector2f[] stArray, int indicesCount, ArrayList<Material> mtls, Vector3f size, Vector3f center) {
+		this.indicesCount = indicesCount;
+		this.size = size;
+		this.center = center;
+		this.material = mtls.get(0);
 		modelMatrix = new Matrix4f();
 		
-		Vertex[] vertices = new Vertex[indiceCount];
-		for (int i = 0; i < indiceCount; i++) {
+		Vertex[] vertices = new Vertex[indicesCount];
+		for (int i = 0; i < indicesCount; i++) {
 			vertices[i] = new Vertex(
 					vertArray[i].x,
 					vertArray[i].y,
