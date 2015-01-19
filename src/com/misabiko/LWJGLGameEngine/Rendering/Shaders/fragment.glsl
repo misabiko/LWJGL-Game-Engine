@@ -84,6 +84,5 @@ void main(void) {
 		linearColor += ApplyLight(lights[i], surfaceColor.rgb, normal, surfacePos, surfaceToCamera);
 	}
 	
-	vec3 gamma = vec3 (1.0/2.2);
-	out_Color = vec4(pow(linearColor, gamma), surfaceColor.a);
+	out_Color = vec4(linearColor, surfaceColor.a);
 }
