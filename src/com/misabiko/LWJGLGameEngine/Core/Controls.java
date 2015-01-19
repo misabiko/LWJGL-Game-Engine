@@ -4,9 +4,11 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
+import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
 public class Controls {
 	private static boolean Esc = false;
@@ -80,16 +82,16 @@ public class Controls {
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_R)){
-			Physic.speedCap = 0.04f;
+			Core.cuby.speedCap = 0.06f;
 		}else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-			Physic.speedCap = 0.2f;
+			Core.cuby.speedCap = 0.3f;
 		}else {
-			Physic.speedCap = 0.1f;
+			Core.cuby.speedCap = 0.15f;
 		}
 		
 		if (preVel.length() != 0f) {
 			preVel.normalize();
-			preVel.scale(Core.cuby.speed);
+			preVel.scale(Core.cuby.accel);
 			Core.cuby.vel.add(preVel);
 			preVel.set(0f,0f,0f);
 		}

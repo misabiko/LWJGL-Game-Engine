@@ -11,8 +11,8 @@ import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
-import com.misabiko.LWJGLGameEngine.Rendering.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
+import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -121,10 +121,10 @@ public class Core {
 		dynamicsWorld.addAction(cuby.controller);
 		
 		Light.lights.add(new Light(new Vector4f(0f,0f,0f,1f), new Vector3f(1f,1f,1f), 0.005f, 0.5f, 45f, new Vector3f(0f,-1f,0f)));
-//		Light.lights.add(new Light(10f,100f,10f, 0f));
-//		Light.lights.add(new Light(-10f,100f,10f, 0f));
-//		Light.lights.add(new Light(10f,100f,-10f, 0f));
-//		Light.lights.add(new Light(-10f,100f,-10f, 0f));
+		Light.lights.add(new Light(10f,100f,10f, 0f));
+		Light.lights.add(new Light(-10f,100f,10f, 0f));
+		Light.lights.add(new Light(10f,100f,-10f, 0f));
+		Light.lights.add(new Light(-10f,100f,-10f, 0f));
 		
 		OpenGLHandler.initBuffers();
 	}

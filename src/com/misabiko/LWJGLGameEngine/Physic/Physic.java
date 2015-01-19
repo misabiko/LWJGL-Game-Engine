@@ -3,7 +3,6 @@ package com.misabiko.LWJGLGameEngine.Physic;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 
 public class Physic {
-	public static float speedCap = 0.1f;
 	private static float friction = 0.25f;
 	public static float gravity = -0.1f;
 	
@@ -16,10 +15,10 @@ public class Physic {
 			obj.vel.scale(0);
 		}
 		
-		if (obj.vel.length() > speedCap) {
-			obj.vel.scale(speedCap/obj.vel.length());
-		}else if (obj.vel.length() < -speedCap) {
-			obj.vel.scale(-speedCap/obj.vel.length());
+		if (obj.vel.length() > obj.speedCap) {
+			obj.vel.scale(obj.speedCap/obj.vel.length());
+		}else if (obj.vel.length() < -obj.speedCap) {
+			obj.vel.scale(-obj.speedCap/obj.vel.length());
 		}
 	}
 	

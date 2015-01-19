@@ -1,12 +1,13 @@
 package com.misabiko.LWJGLGameEngine.GameObjects;
 
-import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+
+import org.lwjgl.util.vector.Vector2f;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
@@ -18,9 +19,9 @@ import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Physic.CustomCharacterController;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
-import com.misabiko.LWJGLGameEngine.Rendering.Light;
-import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
+import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 import com.misabiko.LWJGLGameEngine.Resources.Files.OBJParser;
+import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
 public class Cuby extends GameObject {
 	
@@ -29,8 +30,7 @@ public class Cuby extends GameObject {
 	public CustomCharacterController controller;
 	
 	private float jumpStrength = 5f;
-	public float speed = 1f;
-	
+	private double lastVelAngle = angleY;
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 
@@ -62,12 +62,19 @@ public class Cuby extends GameObject {
 		Transform trans = new Transform();
 		go.getWorldTransform(trans);
 		
-		Quat4f rot = new Quat4f();
-		QuaternionUtil.setRotation(rot, new Vector3f(0,1f,0), angleY);
-		trans.setRotation(rot);
+		Quat4f camRot = new Quat4f();
+		QuaternionUtil.setRotation(camRot, new Vector3f(0,1f,0), angleY);
 		
 		Vector3f finalVel = new Vector3f();
-		QuaternionUtil.quatRotate(rot, vel, finalVel);
+		QuaternionUtil.quatRotate(camRot, vel, finalVel);
+		
+		double velAngle = Util.vector2fToAngle(new Vector2f(finalVel.x, finalVel.z != 0 ? -finalVel.z : finalVel.z), true)-(Math.PI/2);
+		velAngle = Double.isNaN(velAngle) ? lastVelAngle : velAngle;
+		lastVelAngle = velAngle;
+		Quat4f finalRot = new Quat4f();
+		QuaternionUtil.setRotation(finalRot, new Vector3f(0,1f,0), (float) velAngle);
+		
+		trans.setRotation(finalRot);
 		
 		if (!controller.canJump()) {
 			finalVel.scale(0.5f);
@@ -100,8 +107,5 @@ public class Cuby extends GameObject {
 		
 		Camera.update(new org.lwjgl.util.vector.Vector3f(trans.origin.x,trans.origin.y,trans.origin.z));
 		Light.lights.get(0).position = new org.lwjgl.util.vector.Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Light.lights.get(0).position.w);
-		Vector3f lamp = new Vector3f(finalVel);
-		lamp.normalize();
-		Light.lights.get(0).coneDirection = new org.lwjgl.util.vector.Vector3f(lamp.x, lamp.y, lamp.z);
 	}
 }

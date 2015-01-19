@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Rendering;
+package com.misabiko.LWJGLGameEngine.Rendering.Lights;
 
 import java.util.ArrayList;
 

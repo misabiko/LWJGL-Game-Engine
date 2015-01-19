@@ -37,6 +37,17 @@ public abstract class Util {
 		return angleToVector2f(angle,1f);
 	}
 	
+	public static double vector2fToAngle(Vector2f vec, boolean radian) {
+		double angle = Math.atan(vec.y/vec.x);
+		if (vec.x < 0 && vec.y >= 0)
+			angle = angle >= 0 ? Math.PI - angle : Math.PI + angle;
+		else if (vec.x < 0 && vec.y < 0)
+			angle += Math.PI;
+		else if (vec.x >= 0 && vec.y < 0)
+			angle += Math.PI*2;
+		return radian ? angle : Math.toDegrees(angle);
+	}
+	
 	public static Vector3f mulMatrix4fVector3f(Matrix4f mat, Vector3f vec) {
 		vec.set((vec.x*mat.m00)+(vec.y*mat.m10)+(vec.z*mat.m20),
 				(vec.x*mat.m01)+(vec.y*mat.m11)+(vec.z*mat.m21),

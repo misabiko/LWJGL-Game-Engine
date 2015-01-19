@@ -12,6 +12,8 @@ public abstract class GameObject {
 	public static ArrayList<GameObject> objs = new ArrayList<GameObject>();
 	
 	public Vector3f vel = new Vector3f(0,0,0);
+	public float accel = 3f;
+	public float speedCap = 0.3f;
 	
 	public float angleX, angleY;
 	
