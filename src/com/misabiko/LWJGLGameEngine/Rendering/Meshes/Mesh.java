@@ -29,6 +29,7 @@ public class Mesh {
 	public int primitiveType = GL_TRIANGLES;
 	public Texture texture = defaultTexture;
 	public boolean isTextured;
+	public boolean ignoreLightning = false;
 	
 	public Material material = new Material("Default");
 	

@@ -7,6 +7,7 @@ uniform vec3 cameraPosition;
 
 uniform sampler2D materialTex;
 uniform float isTextured;
+uniform float ignoreLightning;
 
 uniform float materialShininess;
 
@@ -84,5 +85,8 @@ void main(void) {
 		linearColor += ApplyLight(lights[i], surfaceColor.rgb, normal, surfacePos, surfaceToCamera);
 	}
 	
-	out_Color = vec4(linearColor, surfaceColor.a);
+	if (ignoreLightning > 0.5)
+		out_Color = data.dColor;
+	else
+		out_Color = vec4(linearColor, surfaceColor.a);
 }

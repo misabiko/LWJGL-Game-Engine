@@ -13,9 +13,9 @@ import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 
-public class Platform extends GameObject {;
+public class Block extends GameObject {;
 
-	public Platform(float x, float y, float z, float w, float h, float d) {
+	public Block(float x, float y, float z, float w, float h, float d) {
 //		super(x, y, z, new Box(w,h,d, 0f, 123f/255, 12f/255, 1f));
 		super(x, y, z, new Box(w,h,d, 1f, 1f, 1f, 1f));
 		

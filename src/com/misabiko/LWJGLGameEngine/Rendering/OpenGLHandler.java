@@ -217,6 +217,11 @@ public abstract class OpenGLHandler {
 			else
 				glUniform1f(glGetUniformLocation(program.id, "isTextured"), 0f);
 			
+			if (obj.mesh.ignoreLightning)
+				glUniform1f(glGetUniformLocation(program.id, "ignoreLightning"), 1f);
+			else
+				glUniform1f(glGetUniformLocation(program.id, "ignoreLightning"), 0f);
+			
 			glBindVertexArray(vaoId);
 				glEnableVertexAttribArray(0);	//position
 				glEnableVertexAttribArray(1);	//normal

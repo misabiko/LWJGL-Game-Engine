@@ -7,9 +7,10 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.misabiko.LWJGLGameEngine.GameObjects.Block;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
+import com.misabiko.LWJGLGameEngine.GameObjects.Sky;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
 import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
@@ -26,6 +27,7 @@ public class Core {
 	private static DiscreteDynamicsWorld dynamicsWorld;
 	
 	public static Cuby cuby;
+	public static Sky skybox;
 	
 //	Current task
 //		TODO Detection areas
@@ -100,17 +102,19 @@ public class Core {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
 		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
 		
-		Platform ground = new Platform(0f, 0f, 0f, 50f,5f,50f);
+		skybox = new Sky();
+		
+		Block ground = new Block(0f, 0f, 0f, 50f,5f,50f);
 		dynamicsWorld.addRigidBody(ground.rb);
 		
 //		Platform lightBlock = new Platform(0f, 3f, 0f, 1f,1f,1f);
 //		objs.add(lightBlock);
 //		dynamicsWorld.addRigidBody(lightBlock.rb);
 //		
-		Platform block = new Platform(10f, 3f, -8f, 1f, 1f, 1f);
+		Block block = new Block(10f, 3f, -8f, 1f, 1f, 1f);
 		dynamicsWorld.addRigidBody(block.rb);
 		
-		Platform block2 = new Platform(0f, 3f, -2f, 1f, 1f, 1f);
+		Block block2 = new Block(0f, 3f, -2f, 1f, 1f, 1f);
 		dynamicsWorld.addRigidBody(block2.rb);
 		
 		try {
