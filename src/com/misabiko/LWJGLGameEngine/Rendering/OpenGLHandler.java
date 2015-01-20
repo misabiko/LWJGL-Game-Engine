@@ -38,6 +38,7 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -87,6 +88,7 @@ public abstract class OpenGLHandler {
 		Mouse.setGrabbed(true);
 		
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
 		
 		initProgram();
 		initMatrices(width,height);

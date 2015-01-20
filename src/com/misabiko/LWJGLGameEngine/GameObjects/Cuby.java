@@ -9,6 +9,7 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.util.vector.Vector2f;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;

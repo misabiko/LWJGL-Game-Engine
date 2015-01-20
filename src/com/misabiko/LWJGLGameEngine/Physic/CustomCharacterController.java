@@ -3,6 +3,7 @@ package com.misabiko.LWJGLGameEngine.Physic;
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.BulletGlobals;
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
@@ -104,7 +105,7 @@ public class CustomCharacterController extends KinematicCharacterController {
 			world.convexSweepTest(convexShape, start, end, callback);
 		}
 
-		if (callback.hasHit()) {
+		if (callback.hasHit() && callback.hitCollisionObject.getCollisionFlags() != CollisionFlags.NO_CONTACT_RESPONSE) {
 			// we moved up only a fraction of the step height
 			currentStepOffset = stepHeight * callback.closestHitFraction;
 			currentPosition.interpolate(currentPosition, targetPosition, callback.closestHitFraction);
@@ -166,7 +167,8 @@ public class CustomCharacterController extends KinematicCharacterController {
 
 			fraction -= callback.closestHitFraction;
 
-			if (callback.hasHit()) {
+			if (callback.hasHit() && callback.hitCollisionObject.getCollisionFlags() != CollisionFlags.NO_CONTACT_RESPONSE) {
+				System.out.println(callback.hitCollisionObject.getCollisionFlags());
 				// we moved only a fraction
 				Vector3f hitDistanceVec = new Vector3f();
 				hitDistanceVec.sub(callback.hitPointWorld, currentPosition);
@@ -236,7 +238,7 @@ public class CustomCharacterController extends KinematicCharacterController {
 			collisionWorld.convexSweepTest(convexShape, start, end, callback);
 		}
 
-		if (callback.hasHit()) {
+		if (callback.hasHit() && callback.hitCollisionObject.getCollisionFlags() != CollisionFlags.NO_CONTACT_RESPONSE) {
 			// we dropped a fraction of the height -> hit floor
 			currentPosition.interpolate(currentPosition, targetPosition, callback.closestHitFraction);
 			if (verticalVelocity < 0f) {

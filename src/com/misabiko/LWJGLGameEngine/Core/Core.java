@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector4f;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.misabiko.LWJGLGameEngine.GameObjects.Block;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
+import com.misabiko.LWJGLGameEngine.GameObjects.DetectionArea;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Sky;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
@@ -24,7 +25,7 @@ public class Core {
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "LWJGL Game Engine";
 
-	private static DiscreteDynamicsWorld dynamicsWorld;
+	private static DiscreteDynamicsWorld dw;
 	
 	public static Cuby cuby;
 	public static Sky skybox;
@@ -72,7 +73,7 @@ public class Core {
 				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 				Controls.update();
 				
-				dynamicsWorld.stepSimulation(1/60f, 3);
+				dw.stepSimulation(1/60f, 3);
 				
 				for (GameObject obj : GameObject.objs) {
 					obj.update();
@@ -100,30 +101,33 @@ public class Core {
 	
 	private void init() {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
-		dynamicsWorld = JBulletHandler.init(dynamicsWorld);
+		dw = JBulletHandler.init(dw);
 		
 		skybox = new Sky();
 		
 		Block ground = new Block(0f, 0f, 0f, 50f,5f,50f);
-		dynamicsWorld.addRigidBody(ground.rb);
+		dw.addRigidBody(ground.rb);
 		
 //		Platform lightBlock = new Platform(0f, 3f, 0f, 1f,1f,1f);
 //		objs.add(lightBlock);
-//		dynamicsWorld.addRigidBody(lightBlock.rb);
+//		dw.addRigidBody(lightBlock.rb);
 //		
 		Block block = new Block(10f, 3f, -8f, 1f, 1f, 1f);
-		dynamicsWorld.addRigidBody(block.rb);
+		dw.addRigidBody(block.rb);
 		
 		Block block2 = new Block(0f, 3f, -2f, 1f, 1f, 1f);
-		dynamicsWorld.addRigidBody(block2.rb);
+		dw.addRigidBody(block2.rb);
+		
+		DetectionArea da = new DetectionArea(5f, 5f, 5f, 3f,3f,3f);
+//		dw.addCollisionObject(da.rb, collisionFilterGroup, collisionFilterMask);
 		
 		try {
 			cuby = new Cuby();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		dynamicsWorld.addCollisionObject(cuby.go);
-		dynamicsWorld.addAction(cuby.controller);
+		dw.addCollisionObject(cuby.go);
+		dw.addAction(cuby.controller);
 		
 		Light.lights.add(new Light(new Vector4f(0f,0f,0f,1f), new Vector3f(1f,1f,1f), 0.005f, 0.5f, 45f, new Vector3f(0f,-1f,0f)));
 		Light.lights.add(new Sun(new Vector3f(100f,100f,100f)));
@@ -138,6 +142,6 @@ public class Core {
 		OpenGLHandler.cleanUp();
 		JBulletHandler.cleanUp();
 	
-		dynamicsWorld.destroy();
+		dw.destroy();
 	}
 }
