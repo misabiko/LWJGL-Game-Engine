@@ -1,20 +1,29 @@
 package com.misabiko.LWJGLGameEngine.Physic;
 
+import java.util.Stack;
+
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.BulletGlobals;
+import com.bulletphysics.collision.broadphase.BroadphasePair;
 import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
+import com.bulletphysics.collision.narrowphase.ManifoldPoint;
+import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.util.ObjectArrayList;
 
 public class CustomCharacterController extends KinematicCharacterController {
 	private static Vector3f[] upAxisDirection = new Vector3f[] {
 		new Vector3f(1.0f, 0.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f),
 		new Vector3f(0.0f, 0.0f, 1.0f), };
+
+	// keep track of the contact manifolds
+	ObjectArrayList<PersistentManifold> manifoldArray = new ObjectArrayList<PersistentManifold>();
 	
 	public CustomCharacterController(PairCachingGhostObject ghostObject, ConvexShape convexShape, float stepHeight) {
 		super(ghostObject, convexShape, stepHeight);
@@ -76,6 +85,65 @@ public class CustomCharacterController extends KinematicCharacterController {
 
 		xform.origin.set(currentPosition);
 		ghostObject.setWorldTransform(xform);
+	}
+
+	protected boolean recoverFromPenetration(CollisionWorld collisionWorld) {
+		boolean penetration = false;
+
+		collisionWorld.getDispatcher().dispatchAllCollisionPairs(
+				ghostObject.getOverlappingPairCache(), collisionWorld.getDispatchInfo(), collisionWorld.getDispatcher());
+
+		currentPosition.set(ghostObject.getWorldTransform((new Transform())).origin);
+
+		float maxPen = 0.0f;
+		for (int i=0; i<ghostObject.getOverlappingPairCache().getNumOverlappingPairs(); i++) {
+			manifoldArray.clear();
+
+			BroadphasePair collisionPair = ghostObject.getOverlappingPairCache().getOverlappingPairArray().getQuick(i);
+			
+			//for trigger filtering
+			if (!((CollisionObject)(collisionPair.pProxy0.clientObject)).hasContactResponse() || !((CollisionObject)(collisionPair.pProxy1.clientObject)).hasContactResponse())
+			   continue;
+			
+			if (collisionPair.algorithm != null) {
+				collisionPair.algorithm.getAllContactManifolds(manifoldArray);
+			}
+
+			for (int j=0; j<manifoldArray.size(); j++) {
+				PersistentManifold manifold = manifoldArray.getQuick(j);
+				float directionSign = manifold.getBody0() == ghostObject? -1.0f : 1.0f;
+				for (int p=0; p<manifold.getNumContacts(); p++) {
+					ManifoldPoint pt = manifold.getContactPoint(p);
+
+					float dist = pt.getDistance();
+					if (dist < 0.0f) {
+						if (dist < maxPen) {
+							maxPen = dist;
+							touchingNormal.set(pt.normalWorldOnB);//??
+							touchingNormal.scale(directionSign);
+						}
+
+						currentPosition.scaleAdd(directionSign * dist * 0.2f, pt.normalWorldOnB, currentPosition);
+
+						penetration = true;
+					}
+					else {
+						//printf("touching %f\n", dist);
+					}
+				}
+
+				//manifold->clearManifold();
+			}
+		}
+		
+		Transform newTrans = ghostObject.getWorldTransform(new Transform());
+		newTrans.origin.set(currentPosition);
+		ghostObject.setWorldTransform(newTrans);
+		//printf("m_touchingNormal = %f,%f,%f\n",m_touchingNormal[0],m_touchingNormal[1],m_touchingNormal[2]);
+
+		//System.out.println("recoverFromPenetration "+penetration+" "+touchingNormal);
+
+		return penetration;
 	}
 	
 	protected void stepUp(CollisionWorld world) {
@@ -267,9 +335,11 @@ public class CustomCharacterController extends KinematicCharacterController {
 			}
 
 			@Override
-			public float addSingleResult(
-					CollisionWorld.LocalConvexResult convexResult,
-					boolean normalInWorldSpace) {
+			public float addSingleResult(CollisionWorld.LocalConvexResult convexResult, boolean normalInWorldSpace) {
+				//for trigger filtering
+				if (!convexResult.hitCollisionObject.hasContactResponse())
+				   return 1.0f;
+				
 				if (convexResult.hitCollisionObject == me) {
 					return 1.0f;
 				}

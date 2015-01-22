@@ -78,6 +78,7 @@ void main(void) {
 	 	surfaceColor = texture2D(materialTex, data.texCoords);
 	else
     	surfaceColor = data.dColor;
+    	
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
 
 	vec3 linearColor = vec3(0);

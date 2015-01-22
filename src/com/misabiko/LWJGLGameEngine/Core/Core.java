@@ -3,9 +3,12 @@ package com.misabiko.LWJGLGameEngine.Core;
 import java.io.IOException;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import com.bulletphysics.collision.broadphase.BroadphaseProxy;
+import com.bulletphysics.collision.broadphase.CollisionFilterGroups;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.misabiko.LWJGLGameEngine.GameObjects.Block;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
@@ -25,18 +28,17 @@ public class Core {
 	private static final int HEIGHT = 600;
 	private static final String TITLE = "LWJGL Game Engine";
 
-	private static DiscreteDynamicsWorld dw;
+	public static DiscreteDynamicsWorld dw;
 	
 	public static Cuby cuby;
 	public static Sky skybox;
 	
 //	Current task
-//		TODO Detection areas
+//		TODO UI
 	
 //	Short term todos
 //		TODO Simple dummy npc
 //		TODO Attacks
-//		TODO UI
 	
 //	Long term todos
 //		TODO Smooth rotating for Cuby, Cube world style
@@ -76,9 +78,25 @@ public class Core {
 				dw.stepSimulation(1/60f, 3);
 				
 				for (GameObject obj : GameObject.objs) {
-					obj.update();
-					OpenGLHandler.render(obj);
+					if (!obj.mesh.isTransparent) {
+						obj.update();
+						OpenGLHandler.render(obj);
+					}
 				}
+				
+				GL11.glDepthMask(false);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				
+				for (GameObject obj : GameObject.objs) {
+					if (obj.mesh.isTransparent) {
+						obj.update();
+						OpenGLHandler.render(obj);
+					}
+				}
+				
+				GL11.glDisable(GL11.GL_BLEND);
+				GL11.glDepthMask(true);
 				
 				delta -= 1;
 				shouldRender = true;
@@ -119,7 +137,7 @@ public class Core {
 		dw.addRigidBody(block2.rb);
 		
 		DetectionArea da = new DetectionArea(5f, 5f, 5f, 3f,3f,3f);
-//		dw.addCollisionObject(da.rb, collisionFilterGroup, collisionFilterMask);
+		dw.addCollisionObject(da.go);
 		
 		try {
 			cuby = new Cuby();

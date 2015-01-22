@@ -30,13 +30,14 @@ public class Mesh {
 	public Texture texture = defaultTexture;
 	public boolean isTextured;
 	public boolean ignoreLightning = false;
+	public boolean isTransparent;
 	
 	public Material material = new Material("Default");
 	
 	protected static Vector4f defaultColor = new Vector4f(1f,1f,1f,1f);
 	private static Texture defaultTexture = new Texture(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Resources/Textures/","ash_uvgrid01.png", GL13.GL_TEXTURE0);
 	
-	protected Mesh	(Vertex[] vertices, int primType, Vector3f size, Vector3f center) {
+	protected Mesh (Vertex[] vertices, int primType, Vector3f size, Vector3f center) {
 		this.size = size;
 		this.center = center;
 		modelMatrix = new Matrix4f();
@@ -50,9 +51,10 @@ public class Mesh {
 		primitiveType = primType;
 		texture = defaultTexture;
 		isTextured = false;
+		isTransparent = (vertices[0].dColor[3] != 1f);
 	}
 	
-	protected Mesh	(Vertex[] vertices, byte[] indices, Vector3f size, Vector3f center) {
+	protected Mesh (Vertex[] vertices, byte[] indices, Vector3f size, Vector3f center) {
 		this(vertices, GL_TRIANGLES, size, center);
 		
 		indicesCount = indices.length;
@@ -109,6 +111,7 @@ public class Mesh {
 		primitiveType = GL_TRIANGLES;
 		texture = mtls.get(0).diffuseTextureMap;
 		isTextured = true;
+		isTransparent = (vertices[0].dColor[3] != 1f);
 	}
 	
 	public void update(Vector3f pos, float angleX, float angleY) {
