@@ -215,7 +215,7 @@ public abstract class OpenGLHandler {
 
 			glUniform3f(glGetUniformLocation(program.id, "cameraPosition"), Camera.viewMatrix.m03, Camera.viewMatrix.m13, Camera.viewMatrix.m23);
 			
-			glUniform1i(glGetUniformLocation(program.id, "materialTex"), GL_TEXTURE_2D);
+//			glUniform1i(glGetUniformLocation(program.id, "materialTex"), GL_TEXTURE_2D);
 			glUniform1f(glGetUniformLocation(program.id, "materialShininess"), obj.mesh.material.specularExponent);
 			
 			if (obj.mesh.isTextured)

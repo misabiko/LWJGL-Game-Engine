@@ -49,7 +49,8 @@ public class Core {
 	
 	public Core() {
 		init();
-		run();
+//		run();
+		originalRun();
 		cleanUp();
 	}
 	
@@ -115,6 +116,40 @@ public class Core {
 			}
 
 		}
+	}
+	
+	private void originalRun() {
+		while (!Display.isCloseRequested()) {
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+			Controls.update();
+			
+			dw.stepSimulation(1/60f, 3);
+			
+			for (GameObject obj : GameObject.objs) {
+				if (!obj.mesh.isTransparent) {
+					obj.update();
+					OpenGLHandler.render(obj);
+				}
+			}
+			
+			GL11.glDepthMask(false);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			
+			for (GameObject obj : GameObject.objs) {
+				if (obj.mesh.isTransparent) {
+					obj.update();
+					OpenGLHandler.render(obj);
+				}
+			}
+			
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glDepthMask(true);
+			
+			Display.sync(60);
+			Display.update();
+		}
+		cleanUp();
 	}
 	
 	private void init() {

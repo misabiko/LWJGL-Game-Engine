@@ -17,6 +17,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.misabiko.LWJGLGameEngine.Core.Core;
 import com.misabiko.LWJGLGameEngine.Physic.CustomCharacterController;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
@@ -34,6 +35,8 @@ public class Cuby extends GameObject {
 	private double lastVelAngle = angleY;
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
+	
+	private DetectionArea attackDA;
 
 	public Cuby(float x, float y, float z) throws FileNotFoundException, IOException {
 		super(x, y, z, OBJParser.parse(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Rendering/Meshes/OBJModels/", "StoneHearthChar"));
@@ -51,6 +54,9 @@ public class Cuby extends GameObject {
 		
 		controller = new CustomCharacterController(go, (ConvexShape) cs, mesh.size.y/10f);
 		controller.setJumpSpeed(jumpStrength);
+		
+		attackDA = new DetectionArea(x, y, z, 3f,3f,3f);
+		Core.dw.addCollisionObject(attackDA.go);
 	}
 	
 	public Cuby() throws FileNotFoundException, IOException {
@@ -108,5 +114,11 @@ public class Cuby extends GameObject {
 		
 		Camera.update(new org.lwjgl.util.vector.Vector3f(trans.origin.x,trans.origin.y,trans.origin.z));
 		Light.lights.get(0).position = new org.lwjgl.util.vector.Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Light.lights.get(0).position.w);
+		
+		Transform attackTrans = trans;
+		Vector3f attackOffset = finalVel;
+		attackOffset.normalize();
+		attackTrans.origin.add(attackOffset);
+		attackDA.go.setWorldTransform(attackTrans);
 	}
 }

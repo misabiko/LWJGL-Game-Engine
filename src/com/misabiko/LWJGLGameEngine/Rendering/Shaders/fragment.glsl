@@ -38,7 +38,7 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
     if(light.position.w == 0.0) {
         //directional light
         surfaceToLight = normalize(light.position.xyz);
-        attenuation = 1.0;
+        attenuation = light.attenuation;
     } else {
         //point light
         surfaceToLight = normalize(light.position.xyz - surfacePos);
@@ -66,7 +66,10 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
 	vec3 specular = specularCoefficient * data.sColor.rgb * light.intensities;
 
     //linear color (color before gamma correction)
-	return ambient + attenuation*(diffuse/* + specular*/);
+	if (isTextured > 0.5)
+		return ambient + 1.0 * diffuse;
+	else
+		return ambient + 0.5 * diffuse;
 }
 
 void main(void) {
@@ -75,7 +78,7 @@ void main(void) {
     vec4 surfaceColor;
     
 	if (isTextured > 0.5)
-	 	surfaceColor = texture2D(materialTex, data.texCoords);
+	 	surfaceColor = texture(materialTex, data.texCoords);
 	else
     	surfaceColor = data.dColor;
     	
