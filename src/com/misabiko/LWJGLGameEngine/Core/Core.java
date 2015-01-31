@@ -4,11 +4,9 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
-import com.bulletphysics.collision.broadphase.BroadphaseProxy;
-import com.bulletphysics.collision.broadphase.CollisionFilterGroups;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.misabiko.LWJGLGameEngine.GameObjects.Block;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
@@ -53,7 +51,6 @@ public class Core {
 		originalRun();
 		cleanUp();
 	}
-	
 	private void run() {
 		long lastTime = System.nanoTime();
 		double nsPerTick = 1000000000D / 60D;
@@ -117,7 +114,6 @@ public class Core {
 
 		}
 	}
-	
 	private void originalRun() {
 		while (!Display.isCloseRequested()) {
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -149,26 +145,24 @@ public class Core {
 			Display.sync(60);
 			Display.update();
 		}
-		cleanUp();
 	}
-	
 	private void init() {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
 		dw = JBulletHandler.init(dw);
 		
 		skybox = new Sky();
 		
-		Block ground = new Block(0f, 0f, 0f, 50f,5f,50f);
+		Block ground = new Block(0f, 0f, 0f, 50f,5f,50f, new Vector4f(0f, 1f, 0f, 1f));
 		dw.addRigidBody(ground.rb);
 		
 //		Platform lightBlock = new Platform(0f, 3f, 0f, 1f,1f,1f);
 //		objs.add(lightBlock);
 //		dw.addRigidBody(lightBlock.rb);
 //		
-		Block block = new Block(10f, 3f, -8f, 1f, 1f, 1f);
+		Block block = new Block(6f, 5f, -6f, 3f, 1f, 2f, new Vector4f(1f, 1f, 0f, 1f));
 		dw.addRigidBody(block.rb);
 		
-		Block block2 = new Block(0f, 3f, -2f, 1f, 1f, 1f);
+		Block block2 = new Block(0f, 3.25f, -2f, 5f, 1.5f, 4f, new Vector4f(0f, 0f, 1f, 1f));
 		dw.addRigidBody(block2.rb);
 		
 		DetectionArea da = new DetectionArea(5f, 5f, 5f, 3f,3f,3f);
@@ -190,7 +184,6 @@ public class Core {
 		
 		OpenGLHandler.initBuffers();
 	}
-	
 	public void cleanUp() {
 		OpenGLHandler.cleanUp();
 		JBulletHandler.cleanUp();

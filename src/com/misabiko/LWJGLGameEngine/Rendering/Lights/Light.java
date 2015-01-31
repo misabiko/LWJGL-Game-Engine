@@ -2,8 +2,8 @@ package com.misabiko.LWJGLGameEngine.Rendering.Lights;
 
 import java.util.ArrayList;
 
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 public class Light {
 	public static ArrayList<Light> lights = new ArrayList<Light>();

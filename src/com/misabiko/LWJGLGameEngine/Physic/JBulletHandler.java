@@ -22,7 +22,7 @@ public class JBulletHandler {
 		broadphase.getOverlappingPairCache().setInternalGhostPairCallback(new GhostPairCallback());
 		
 		collisionConfig = new DefaultCollisionConfiguration();
-		dispatcher = new CollisionDispatcher(collisionConfig);
+		dispatcher = new CustomDispatcher(collisionConfig);
 		
 		GImpactCollisionAlgorithm.registerAlgorithm(dispatcher);
 		

@@ -67,7 +67,7 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
 
     //linear color (color before gamma correction)
 	if (isTextured > 0.5)
-		return ambient + 1.0 * diffuse;
+		return ambient + 0.8 * diffuse;
 	else
 		return ambient + 0.5 * diffuse;
 }

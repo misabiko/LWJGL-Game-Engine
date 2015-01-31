@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Skybox extends Mesh{
 	private static final Vector4f topColor = new Vector4f(0f,0f,1f,1f);
-	private static final Vector4f bottomColor = new Vector4f(0f,0.5f,1f,1f);
+	private static final Vector4f bottomColor = new Vector4f(0f,0.8f,1f,1f);
 	
 	public Skybox() {
 		super(new Vertex[] {

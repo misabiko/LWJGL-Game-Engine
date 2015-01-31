@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import org.lwjgl.util.vector.Vector2f;
 
@@ -31,7 +32,7 @@ public class Cuby extends GameObject {
 	public PairCachingGhostObject go;
 	public CustomCharacterController controller;
 	
-	private float jumpStrength = 5f;
+	private float jumpStrength = 8f;
 	private double lastVelAngle = angleY;
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
@@ -54,9 +55,10 @@ public class Cuby extends GameObject {
 		
 		controller = new CustomCharacterController(go, (ConvexShape) cs, mesh.size.y/10f);
 		controller.setJumpSpeed(jumpStrength);
+		controller.setGravity(13f);
 		
-		attackDA = new DetectionArea(x, y, z, 3f,3f,3f);
-		Core.dw.addCollisionObject(attackDA.go);
+//		attackDA = new DetectionArea(x, y, z, 3f,3f,3f);
+//		Core.dw.addCollisionObject(attackDA.go);
 	}
 	
 	public Cuby() throws FileNotFoundException, IOException {
@@ -84,7 +86,7 @@ public class Cuby extends GameObject {
 		trans.setRotation(finalRot);
 		
 		if (!controller.canJump()) {
-			finalVel.scale(0.5f);
+			finalVel.scale(0.7f);
 		}
 		
 		controller.setWalkDirection(finalVel);
@@ -113,12 +115,12 @@ public class Cuby extends GameObject {
 		mesh.update(mat);
 		
 		Camera.update(new org.lwjgl.util.vector.Vector3f(trans.origin.x,trans.origin.y,trans.origin.z));
-		Light.lights.get(0).position = new org.lwjgl.util.vector.Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Light.lights.get(0).position.w);
+		Light.lights.get(0).position = new Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Light.lights.get(0).position.w);
 		
-		Transform attackTrans = trans;
-		Vector3f attackOffset = finalVel;
-		attackOffset.normalize();
-		attackTrans.origin.add(attackOffset);
-		attackDA.go.setWorldTransform(attackTrans);
+//		Transform attackTrans = trans;
+//		Vector3f attackOffset = finalVel;
+//		attackOffset.normalize();
+//		attackTrans.origin.add(attackOffset);
+//		attackDA.go.setWorldTransform(attackTrans);
 	}
 }

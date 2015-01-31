@@ -7,39 +7,39 @@ import org.lwjgl.util.vector.Vector3f;
 public class Box extends Mesh{
 	float width, height, depth;
 	
-	public Box(float w, float h, float d, Vector4f[] colors) {
+	public Box(float w, float h, float d, Vector4f[] aColors, Vector4f[] dColors, Vector4f[] sColors) {
 		super(new Vertex[] {
 //				Vertices are set in a counterclockwise manner starting from bottom-left
 //				Front Face
-				new Vertex(-w/2,	-h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	0f, 1f),	//0
-				new Vertex(w/2,		-h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	1f, 1f),	//1
-				new Vertex(w/2,		h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	1f, 0f),	//2
-				new Vertex(-w/2,	h/2,	d/2,		0f,		0f,		1f,		colors[0],	colors[0],	colors[0],	0f, 0f),	//3
+				new Vertex(-w/2,	-h/2,	d/2,		0f,		0f,		1f,		aColors[0],	dColors[0],	sColors[0],	0f, 1f),	//0
+				new Vertex(w/2,		-h/2,	d/2,		0f,		0f,		1f,		aColors[0],	dColors[0],	sColors[0],	1f, 1f),	//1
+				new Vertex(w/2,		h/2,	d/2,		0f,		0f,		1f,		aColors[0],	dColors[0],	sColors[0],	1f, 0f),	//2
+				new Vertex(-w/2,	h/2,	d/2,		0f,		0f,		1f,		aColors[0],	dColors[0],	sColors[0],	0f, 0f),	//3
 //				Back Face
-				new Vertex(-w/2,	-h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	1f, 1f),	//4
-				new Vertex(w/2,		-h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	0f, 1f),	//5
-				new Vertex(w/2,		h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	0f, 0f),	//6
-				new Vertex(-w/2,	h/2,	-d/2,		0f,		0f,		-1f,	colors[1],	colors[1],	colors[1],	1f, 0f),	//7
+				new Vertex(-w/2,	-h/2,	-d/2,		0f,		0f,		-1f,	aColors[1],	dColors[1],	sColors[1],	1f, 1f),	//4
+				new Vertex(w/2,		-h/2,	-d/2,		0f,		0f,		-1f,	aColors[1],	dColors[1],	sColors[1],	0f, 1f),	//5
+				new Vertex(w/2,		h/2,	-d/2,		0f,		0f,		-1f,	aColors[1],	dColors[1],	sColors[1],	0f, 0f),	//6
+				new Vertex(-w/2,	h/2,	-d/2,		0f,		0f,		-1f,	aColors[1],	dColors[1],	sColors[1],	1f, 0f),	//7
 //				Left Face
-				new Vertex(-w/2,	-h/2,	-d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	0f, 1f),	//8
-				new Vertex(-w/2,	-h/2,	d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	1f, 1f),	//9
-				new Vertex(-w/2,	h/2,	d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	1f, 0f),	//10
-				new Vertex(-w/2,	h/2,	-d/2,		-1f,	0f,		0f,		colors[2],	colors[2],	colors[2],	0f, 0f),	//11
+				new Vertex(-w/2,	-h/2,	-d/2,		-1f,	0f,		0f,		aColors[2],	dColors[2],	sColors[2],	0f, 1f),	//8
+				new Vertex(-w/2,	-h/2,	d/2,		-1f,	0f,		0f,		aColors[2],	dColors[2],	sColors[2],	1f, 1f),	//9
+				new Vertex(-w/2,	h/2,	d/2,		-1f,	0f,		0f,		aColors[2],	dColors[2],	sColors[2],	1f, 0f),	//10
+				new Vertex(-w/2,	h/2,	-d/2,		-1f,	0f,		0f,		aColors[2],	dColors[2],	sColors[2],	0f, 0f),	//11
 //				Right Face
-				new Vertex(w/2,		-h/2,	d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	1f, 1f),	//12
-				new Vertex(w/2,		-h/2,	-d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	0f, 1f),	//13
-				new Vertex(w/2,		h/2,	-d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	0f, 0f),	//14
-				new Vertex(w/2,		h/2,	d/2,		1f,		0f,		0f,		colors[3],	colors[3],	colors[3],	1f, 0f),	//15
+				new Vertex(w/2,		-h/2,	d/2,		1f,		0f,		0f,		aColors[3],	dColors[3],	sColors[3],	1f, 1f),	//12
+				new Vertex(w/2,		-h/2,	-d/2,		1f,		0f,		0f,		aColors[3],	dColors[3],	sColors[3],	0f, 1f),	//13
+				new Vertex(w/2,		h/2,	-d/2,		1f,		0f,		0f,		aColors[3],	dColors[3],	sColors[3],	0f, 0f),	//14
+				new Vertex(w/2,		h/2,	d/2,		1f,		0f,		0f,		aColors[3],	dColors[3],	sColors[3],	1f, 0f),	//15
 //				Top Face
-				new Vertex(-w/2,	h/2,	-d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	0f, 1f),	//16
-				new Vertex(w/2,		h/2,	-d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	1f, 1f),	//17
-				new Vertex(w/2,		h/2,	d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	1f, 0f),	//18
-				new Vertex(-w/2,	h/2,	d/2,		0f,		1f,		0f,		colors[4],	colors[4],	colors[4],	0f, 0f),	//19
+				new Vertex(-w/2,	h/2,	-d/2,		0f,		1f,		0f,		aColors[4],	dColors[4],	sColors[4],	0f, 1f),	//16
+				new Vertex(w/2,		h/2,	-d/2,		0f,		1f,		0f,		aColors[4],	dColors[4],	sColors[4],	1f, 1f),	//17
+				new Vertex(w/2,		h/2,	d/2,		0f,		1f,		0f,		aColors[4],	dColors[4],	sColors[4],	1f, 0f),	//18
+				new Vertex(-w/2,	h/2,	d/2,		0f,		1f,		0f,		aColors[4],	dColors[4],	sColors[4],	0f, 0f),	//19
 //				Bottom Face
-				new Vertex(-w/2,	-h/2,	-d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	1f, 1f),	//20
-				new Vertex(w/2,		-h/2,	-d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	0f, 1f),	//21
-				new Vertex(w/2,		-h/2,	d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	0f, 0f),	//22
-				new Vertex(-w/2,	-h/2,	d/2,		0f,		-1f,	0f,		colors[5],	colors[5],	colors[5],	1f, 0f)		//23
+				new Vertex(-w/2,	-h/2,	-d/2,		0f,		-1f,	0f,		aColors[5],	dColors[5],	sColors[5],	1f, 1f),	//20
+				new Vertex(w/2,		-h/2,	-d/2,		0f,		-1f,	0f,		aColors[5],	dColors[5],	sColors[5],	0f, 1f),	//21
+				new Vertex(w/2,		-h/2,	d/2,		0f,		-1f,	0f,		aColors[5],	dColors[5],	sColors[5],	0f, 0f),	//22
+				new Vertex(-w/2,	-h/2,	d/2,		0f,		-1f,	0f,		aColors[5],	dColors[5],	sColors[5],	1f, 0f)		//23
 			}, new byte[] {
 //					Sets the order in which the vertices should be used to produce triangles
 //					Front Face
@@ -65,33 +65,75 @@ public class Box extends Mesh{
 		height = h;
 		depth = d;
 	}
+//	
+//	public Box(float w, float h, float d, float aR, float aG, float aB, float aA, float dR, float dG, float dB, float dA, float sR, float sG, float sB, float sA) {
+//		this(w,h,d, new Vector4f[] {
+//				new Vector4f(aR, aG, aB, aA),
+//				new Vector4f(aR, aG, aB, aA),
+//				new Vector4f(aR, aG, aB, aA),
+//				new Vector4f(aR, aG, aB, aA),
+//				new Vector4f(aR, aG, aB, aA),
+//				new Vector4f(aR, aG, aB, aA)
+//			}, new Vector4f[] {
+//				new Vector4f(dR, dG, dB, dA),
+//				new Vector4f(dR, dG, dB, dA),
+//				new Vector4f(dR, dG, dB, dA),
+//				new Vector4f(dR, dG, dB, dA),
+//				new Vector4f(dR, dG, dB, dA),
+//				new Vector4f(dR, dG, dB, dA)
+//			}, new Vector4f[] {
+//				new Vector4f(sR, sG, sB, sA),
+//				new Vector4f(sR, sG, sB, sA),
+//				new Vector4f(sR, sG, sB, sA),
+//				new Vector4f(sR, sG, sB, sA),
+//				new Vector4f(sR, sG, sB, sA),
+//				new Vector4f(sR, sG, sB, sA)
+//			}
+//		);
+//	}
 	
-	public Box(float w, float h, float d, float r, float g, float b, float a) {
+	public Box(float w, float h, float d, Vector4f aColor, Vector4f dColor, Vector4f sColor) {
 		this(w,h,d, new Vector4f[] {
-				new Vector4f(r,g,b,a),
-				new Vector4f(r,g,b,a),
-				new Vector4f(r,g,b,a),
-				new Vector4f(r,g,b,a),
-				new Vector4f(r,g,b,a),
-				new Vector4f(r,g,b,a)
-			}
-		);
-	}
-	
-	public Box(float w, float h, float d, Vector4f color) {
-		this(w,h,d, new Vector4f[] {
-				color,
-				color,
-				color,
-				color,
-				color,
-				color
+				aColor,
+				aColor,
+				aColor,
+				aColor,
+				aColor,
+				aColor
+			}, new Vector4f[] {
+				dColor,
+				dColor,
+				dColor,
+				dColor,
+				dColor,
+				dColor
+			}, new Vector4f[] {
+				sColor,
+				sColor,
+				sColor,
+				sColor,
+				sColor,
+				sColor
 			}
 		);
 	}
 	
 	public Box(float w, float h, float d) {
 		this(w,h,d, new Vector4f[] {
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor
+			}, new Vector4f[] {
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor,
+				defaultColor
+			}, new Vector4f[] {
 				defaultColor,
 				defaultColor,
 				defaultColor,
