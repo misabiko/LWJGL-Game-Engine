@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import javax.vecmath.Vector3f;
 
-import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 
 public abstract class GameObject {
 	public static ArrayList<GameObject> objs = new ArrayList<GameObject>();
+	public static ArrayList<GameObject> shouldUpdate = new ArrayList<GameObject>();
+	public static ArrayList<GameObject> entities = new ArrayList<GameObject>();	//TODO move to entity class
 	
 	public Vector3f vel = new Vector3f(0,0,0);
 	public float accel = 3f;
@@ -18,16 +20,19 @@ public abstract class GameObject {
 	public float angleX, angleY;
 	
 	public Mesh mesh;
-	public RigidBody rb;
+	public CollisionObject co;
+	
+	public boolean needUpdate = false;
 	
 	public GameObject(float x, float y, float z, Mesh m) {
 		mesh = m;
 		objs.add(this);
+		shouldUpdate.add(this);
 	}
 	
 	public void update() {
 		Transform trans = new Transform();
-		rb.getMotionState().getWorldTransform(trans);
+		co.getWorldTransform(trans);
 		
 //		pos.set(trans.origin.x, trans.origin.y, trans.origin.z);
 

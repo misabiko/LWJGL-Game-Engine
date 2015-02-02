@@ -6,11 +6,9 @@ import java.io.IOException;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 
 import org.lwjgl.util.vector.Vector2f;
 
-import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.PairCachingGhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
@@ -18,18 +16,15 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.misabiko.LWJGLGameEngine.Core.Core;
 import com.misabiko.LWJGLGameEngine.Physic.CustomCharacterController;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
-import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 import com.misabiko.LWJGLGameEngine.Resources.Files.OBJParser;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
 public class Cuby extends GameObject {
 	
 //	private static CollisionShape cs = new BoxShape(new Vector3f(0.255f,0.25f,0.255f));
-	public PairCachingGhostObject go;
 	public CustomCharacterController controller;
 	
 	private float jumpStrength = 8f;
@@ -48,28 +43,31 @@ public class Cuby extends GameObject {
 		
 		cs.calculateLocalInertia(mass, fallInertia);
 		
-		go = new PairCachingGhostObject();
-		go.setWorldTransform(initTrans);
-		go.setCollisionShape(cs);
-		go.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
+		co = new PairCachingGhostObject();
+		co.setWorldTransform(initTrans);
+		co.setCollisionShape(cs);
+		co.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 		
-		controller = new CustomCharacterController(go, (ConvexShape) cs, mesh.size.y/10f);
+		controller = new CustomCharacterController((PairCachingGhostObject)co, (ConvexShape) cs, mesh.size.y/10f);
 		controller.setJumpSpeed(jumpStrength);
 		controller.setGravity(13f);
 		
-//		attackDA = new DetectionArea(x, y, z, 3f,3f,3f);
-//		Core.dw.addCollisionObject(attackDA.go);
+//		attackDA = new DetectionArea(x, y, z, 3f, 3f, 3f, false);
+//		Core.dw.addCollisionObject(attackDA.co);
+//		attackDA.gameObjectList.add(this);
+		
+		entities.add(this);
 	}
 	
 	public Cuby() throws FileNotFoundException, IOException {
-		this(-5f, 5f, -3f);
+		this(0f, 15f, 0f);
 	}
 
 	public void update() {
 		Physic.update(this);
 		
 		Transform trans = new Transform();
-		go.getWorldTransform(trans);
+		co.getWorldTransform(trans);
 		
 		Quat4f camRot = new Quat4f();
 		QuaternionUtil.setRotation(camRot, new Vector3f(0,1f,0), angleY);
@@ -115,12 +113,12 @@ public class Cuby extends GameObject {
 		mesh.update(mat);
 		
 		Camera.update(new org.lwjgl.util.vector.Vector3f(trans.origin.x,trans.origin.y,trans.origin.z));
-		Light.lights.get(0).position = new Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Light.lights.get(0).position.w);
+//		Light.lights.get(0).position = new Vector4f(trans.origin.x,trans.origin.y,trans.origin.z, Light.lights.get(0).position.w);
 		
 //		Transform attackTrans = trans;
-//		Vector3f attackOffset = finalVel;
-//		attackOffset.normalize();
+//		Vector3f attackOffset = new Vector3f(0f, 0f, -1f);
+//		QuaternionUtil.quatRotate(finalRot, attackOffset, attackOffset);
 //		attackTrans.origin.add(attackOffset);
-//		attackDA.go.setWorldTransform(attackTrans);
+//		attackDA.co.setWorldTransform(attackTrans);
 	}
 }

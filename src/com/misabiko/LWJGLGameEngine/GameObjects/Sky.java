@@ -14,7 +14,7 @@ public class Sky extends GameObject{
 	
 	public void update() {
 		Transform trans = new Transform();
-		Core.cuby.go.getWorldTransform(trans);
+		Core.cuby.co.getWorldTransform(trans);
 		
 		mesh.update(new Vector3f(trans.origin.x,trans.origin.y,trans.origin.z), 0f, 0f);
 	}

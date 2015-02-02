@@ -1,7 +1,5 @@
 package com.misabiko.LWJGLGameEngine.Physic;
 
-import java.util.Stack;
-
 import javax.vecmath.Vector3f;
 
 import com.bulletphysics.BulletGlobals;
@@ -236,7 +234,6 @@ public class CustomCharacterController extends KinematicCharacterController {
 			fraction -= callback.closestHitFraction;
 
 			if (callback.hasHit() && callback.hitCollisionObject.getCollisionFlags() != CollisionFlags.NO_CONTACT_RESPONSE) {
-				System.out.println(callback.hitCollisionObject.getCollisionFlags());
 				// we moved only a fraction
 				Vector3f hitDistanceVec = new Vector3f();
 				hitDistanceVec.sub(callback.hitPointWorld, currentPosition);

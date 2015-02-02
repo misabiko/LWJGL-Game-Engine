@@ -1,9 +1,12 @@
 package com.misabiko.LWJGLGameEngine.Rendering;
 
+import java.util.ArrayList;
+
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.misabiko.LWJGLGameEngine.Core.Core;
+import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 
 public class Camera {
 	public static Matrix4f viewMatrix = new Matrix4f();
@@ -16,6 +19,19 @@ public class Camera {
 	private static float zoomVelCap = 0.1f;
 	private static float zoomNeutral = 0.0001f;
 	private static float zoomFriction = 0.002f;
+	
+	public ArrayList<Mesh> shouldRender(ArrayList<GameObject> objs) {
+		ArrayList<Mesh> shouldRender = new ArrayList<Mesh>();
+		
+		
+		
+		for (GameObject obj : objs) {
+			if ((true) && (true) && (true) && (true) && (true) && (true))
+				shouldRender.add(obj.mesh);
+		}
+		
+		return shouldRender;
+	}
 	
 	public static void update(Vector3f pos) {
 		if (zoomVel <= zoomNeutral && zoomVel >= -zoomNeutral)

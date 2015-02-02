@@ -11,9 +11,6 @@ import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
@@ -41,7 +38,6 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL11.GL_BLEND;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -71,12 +67,13 @@ public abstract class OpenGLHandler {
 	private static int vaoId = 0;
 	
 	public static void init(String title, int width, int height) {
+//		System.setProperty("org.lwjgl.librarypath", new File("native").getAbsolutePath());
 		PixelFormat pixelFormat = new PixelFormat();
 		ContextAttribs contextAttribs = new ContextAttribs(3,3).withForwardCompatible(true).withProfileCore(true);
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(width,height));
-			Display.setTitle(title);
+			Display.setTitle(title+" - FPS:");
 			Display.create(pixelFormat,contextAttribs);
 			
 		} catch (LWJGLException e) {
@@ -91,13 +88,10 @@ public abstract class OpenGLHandler {
 		Mouse.setGrabbed(true);
 		
 		glEnable(GL_DEPTH_TEST);
-//		glEnable(GL_BLEND);
-//		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 		
 		initProgram();
 		initMatrices(width,height);
 	}
-	
 	private static void initProgram() {
 		int vertShaderId = loadShader("vertex.glsl", GL_VERTEX_SHADER);
 		int fragShaderId = loadShader("fragment.glsl", GL_FRAGMENT_SHADER);
@@ -105,7 +99,6 @@ public abstract class OpenGLHandler {
 		program = new Program(new int[] {vertShaderId, fragShaderId});
 		
 	}
-	
 	private static int loadShader(String filename, int type) {
 		StringBuilder shaderSource = new StringBuilder();
 		int shaderID = 0;
@@ -130,10 +123,9 @@ public abstract class OpenGLHandler {
 		
 		return shaderID;
 	}
-	
 	private static void initMatrices(int width, int height) {
 		projectionMatrix = new Matrix4f();
-		float fov = 150f;
+		float fov = 200f;
 		float aspectRatio = (float) width / (float) height;
 		float nearPlane = 0.1f;
 		float farPlane = 100f;
@@ -152,7 +144,6 @@ public abstract class OpenGLHandler {
 		matrix4fBuffer = BufferUtils.createFloatBuffer(16);
 		matrix3fBuffer = BufferUtils.createFloatBuffer(9);
 	}
-	
 	public static void initBuffers() {
 		vaoId = glGenVertexArrays();
 		glBindVertexArray(vaoId);
@@ -179,7 +170,6 @@ public abstract class OpenGLHandler {
 		glBindVertexArray(0);
 		
 	}
-	
 	public static void render(GameObject obj) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, obj.mesh.texture.texId);
@@ -263,7 +253,6 @@ public abstract class OpenGLHandler {
 		glUseProgram(0);
 //		}
 	}
-	
 	public static void cleanUp() {
 		glUseProgram(0);
 		

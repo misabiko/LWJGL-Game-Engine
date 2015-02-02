@@ -4,12 +4,8 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.util.vector.Vector2f;
 
-import com.misabiko.LWJGLGameEngine.Physic.Physic;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
-import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
-import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
 public class Controls {
 	private static boolean Esc = false;

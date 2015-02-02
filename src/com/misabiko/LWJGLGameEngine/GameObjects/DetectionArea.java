@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.GameObjects;
 
+import java.util.ArrayList;
+
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
@@ -8,27 +10,29 @@ import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.linearmath.Transform;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 
-public class DetectionArea extends Block{
-	public GhostObject go;
+public class DetectionArea extends GameObject{
+	public ArrayList<GameObject> gameObjectList = new ArrayList<GameObject>();
+	private boolean whitelist;
 	
-	public DetectionArea(float x, float y, float z, float w, float h, float d) {
-		super(x, y, z, w, h, d, new Vector4f(1f, 102/255f, 0f, 0.5f));
+	public DetectionArea(float x, float y, float z, float w, float h, float d, boolean whitelist) {
+		super(x, y, z, new Box(w, h, d, new Vector4f(0.3f, 0.3f, 0.3f, 1f), new Vector4f(1f, 1f, 0f, 0.5f), new Vector4f(0.5f, 0.5f, 0.5f, 1f)));
 		
+		this.whitelist = whitelist;
 		CollisionShape cs = new BoxShape(new Vector3f(w/2,h/2,d/2));
 		
-		go = new GhostObject();
+		co = new GhostObject();
 		Transform initTrans = new Transform();
-		rb.getWorldTransform(initTrans);
-		go.setWorldTransform(initTrans);
-		go.setCollisionShape(cs);
-		go.setCollisionFlags(go.getCollisionFlags() | CollisionFlags.NO_CONTACT_RESPONSE);
+		co.setWorldTransform(initTrans);
+		co.setCollisionShape(cs);
+		co.setCollisionFlags(co.getCollisionFlags() | CollisionFlags.NO_CONTACT_RESPONSE);
 		
 	}
 	
 	public void update() {
 		Transform trans = new Transform();
-		go.getWorldTransform(trans);
+		co.getWorldTransform(trans);
 		
 //		pos.set(trans.origin.x, trans.origin.y, trans.origin.z);
 
@@ -55,6 +59,14 @@ public class DetectionArea extends Block{
 		
 		mesh.update(mat);
 		
-		mesh.ignoreLightning = (go.getOverlappingPairs().size() > 0);
+		mesh.ignoreLightning = false;
+//		for (GameObject gObj : gameObjectList) {
+//			if (whitelist ? go.getOverlappingPairs().contains(co) : !go.getOverlappingPairs().contains(co)) {
+//				mesh.ignoreLightning = true;
+//				System.out.println("set to true");
+//			}
+//		}
+//		
+//		mesh.ignoreLightning = (!go.getOverlappingPairs().isEmpty());
 	}
 }
