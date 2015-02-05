@@ -44,23 +44,23 @@ public class Skybox extends Mesh{
 			}, new byte[] {
 //					Sets the order in which the vertices should be used to produce triangles
 //					Front Face
-					0,1,3,
-					1,2,3,
+					3,1,0,
+					3,2,1,
 //					Back Face
-					4,7,5,
-					5,7,6,
+					5,7,4,
+					6,7,5,
 //					Left Face
-					8,9,11,
-					9,10,11,
+					11,9,8,
+					11,10,9,
 //					Right Face
-					12,13,15,
-					13,14,15,
+					15,13,12,
+					15,14,13,
 //					Top Face
-					16,19,17,
-					19,18,17,
+					17,19,16,
+					17,18,19,
 //					Bottom Face
-					20,21,23,
-					21,22,23
+					23,21,20,
+					23,22,21
 				}, new Vector3f(90f,90f,90f), new Vector3f(0,0,0));
 		ignoreLightning = true;
 	}

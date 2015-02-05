@@ -60,7 +60,7 @@ public class Cuby extends GameObject {
 	}
 	
 	public Cuby() throws FileNotFoundException, IOException {
-		this(0f, 15f, 0f);
+		this(-4f, 15f, -4f);
 	}
 
 	public void update() {

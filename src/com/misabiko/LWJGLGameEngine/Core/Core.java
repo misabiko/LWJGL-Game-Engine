@@ -13,6 +13,7 @@ import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Sky;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
+import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Sun;
@@ -33,14 +34,20 @@ public class Core {
 	public static Sky skybox;
 	
 //	Current task
-//		TODO Simple dummy npc
+//		TODO being able to change mesh color post-creation
+//		TODO make air block an actual thing with an actual mesh
+//		TODO make invisible mesh a thing
+//		TODO make mesh face editing post-creation a thing
+//		TODO put all chunk's blocks' meshes' vertices 'n indice buffers in a big one, make a vbo/vboi(ibo?vibo?) for it, render all at once
+	
 	
 //	Short term todos
+//		TODO Simple dummy npc
 //		TODO Attacks
 //		TODO UI
 	
 //	Long term todos
-//		TODO Alter mesh's vertices post-creation
+//		TODO sparse voxel octree thing
 //		TODO Smooth rotating for Cuby, Cube world style
 //		TODO Implement separate textures per-face on mesh
 //		TODO Reimplement lines and axis (axii? axises? axi? axes?)
@@ -49,10 +56,10 @@ public class Core {
 	
 	public Core() {
 		init();
-		originalRun();
+		run();
 		cleanUp();
 	}
-	private void originalRun() {
+	private void run() {
 		int fps = 0;
 		long currentTime = System.currentTimeMillis();
 		long lastTime = currentTime;
@@ -71,25 +78,22 @@ public class Core {
 			
 			GameObject.shouldUpdate.clear();
 			
-			for (GameObject obj : GameObject.objs) {
-				if (!obj.mesh.isTransparent)
+			for (GameObject obj : Camera.shouldRender()) {
+				if (obj.mesh.isTransparent) {
+					GL11.glDepthMask(false);
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					
+					OpenGLHandler.render(obj);
+			
+					GL11.glDisable(GL11.GL_BLEND);
+					GL11.glDepthMask(true);
+				}else
 					OpenGLHandler.render(obj);
 			}
-			
-			GL11.glDepthMask(false);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			
-			for (GameObject obj : GameObject.objs) {
-				if (obj.mesh.isTransparent)
-					OpenGLHandler.render(obj);
-			}
-			
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glDepthMask(true);
 			
 			if (currentTime - lastTime > 1000) {
-				Display.setTitle(TITLE+" - FPS: "+fps);
+				Display.setTitle(TITLE+" - FPS: "+fps+" - Entities: "+Camera.shouldRender().size());
 				fps = 0;
 				lastTime = System.currentTimeMillis();
 			}
@@ -107,7 +111,7 @@ public class Core {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
 		dw = JBulletHandler.init(dw);
 		
-		world = new World(1);
+		world = new World(2);
 		skybox = new Sky();
 		
 		try {

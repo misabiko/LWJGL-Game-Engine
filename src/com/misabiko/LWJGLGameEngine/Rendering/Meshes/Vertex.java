@@ -1,5 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 public class Vertex {
@@ -48,7 +50,9 @@ public class Vertex {
 //		sColor.get(this.sColor);
 //		st.get(texCoords);
 //	}
-	
+	public org.lwjgl.util.vector.Vector4f getPosition() {
+		return new org.lwjgl.util.vector.Vector4f(position[0],position[1],position[2],position[3]);
+	}
 	public float[] getElements() {
 		return new float[] {
 				position[0],

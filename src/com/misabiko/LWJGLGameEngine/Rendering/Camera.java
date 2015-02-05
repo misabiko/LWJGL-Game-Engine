@@ -3,10 +3,13 @@ package com.misabiko.LWJGLGameEngine.Rendering;
 import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Matrix3f;
+import org.lwjgl.util.vector.Vector4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
+import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
 public class Camera {
 	public static Matrix4f viewMatrix = new Matrix4f();
@@ -20,17 +23,62 @@ public class Camera {
 	private static float zoomNeutral = 0.0001f;
 	private static float zoomFriction = 0.002f;
 	
-	public ArrayList<Mesh> shouldRender(ArrayList<GameObject> objs) {
-		ArrayList<Mesh> shouldRender = new ArrayList<Mesh>();
+	private static ArrayList<GameObject> sortFrontToBack(ArrayList<GameObject> objs) {
+		ArrayList<GameObject> unsortedObjs = objs;
+		ArrayList<GameObject> sortedObjs = new ArrayList<GameObject>();
+		Vector3f camPos = getPosition();
 		
-		
-		
-		for (GameObject obj : objs) {
-			if ((true) && (true) && (true) && (true) && (true) && (true))
-				shouldRender.add(obj.mesh);
+		while (unsortedObjs.size() > 0) {
+			GameObject temp = unsortedObjs.get(0);
+			for (GameObject obj : unsortedObjs) {
+				if ((Vector3f.sub(camPos, obj.mesh.getPosition(), new Vector3f()).length()) < (Vector3f.sub(camPos, temp.mesh.getPosition(), new Vector3f()).length())) {
+					temp = obj;
+					
+				}
+			}
+			sortedObjs.add(temp);
+			unsortedObjs.remove(temp);
 		}
 		
-		return shouldRender;
+		return sortedObjs;
+	}
+	
+	public static ArrayList<GameObject> shouldRender() {
+		ArrayList<GameObject> shouldRender = new ArrayList<GameObject>();
+		Matrix4f pmMatrix = new Matrix4f();
+		Matrix4f.mul(OpenGLHandler.projectionMatrix, viewMatrix, pmMatrix);
+		Vector4f[] planeTests = new Vector4f[] {
+				new Vector4f(pmMatrix.m03+pmMatrix.m00, pmMatrix.m13+pmMatrix.m10, pmMatrix.m23+pmMatrix.m20, pmMatrix.m33+pmMatrix.m30),	//Left plane, 	v.dot(row4+row1)
+				new Vector4f(pmMatrix.m03-pmMatrix.m00, pmMatrix.m13-pmMatrix.m10, pmMatrix.m23-pmMatrix.m20, pmMatrix.m33-pmMatrix.m30),	//Right plane,	v.dot(row4-row1)
+				new Vector4f(pmMatrix.m03+pmMatrix.m01, pmMatrix.m13+pmMatrix.m11, pmMatrix.m23+pmMatrix.m21, pmMatrix.m33+pmMatrix.m31),	//Bottom plane,	v.dot(row4+row2)
+				new Vector4f(pmMatrix.m03-pmMatrix.m01, pmMatrix.m13-pmMatrix.m11, pmMatrix.m23-pmMatrix.m21, pmMatrix.m33-pmMatrix.m31),	//Top plane,	v.dot(row4-row2)
+				new Vector4f(pmMatrix.m03+pmMatrix.m02, pmMatrix.m13+pmMatrix.m12, pmMatrix.m23+pmMatrix.m22, pmMatrix.m33+pmMatrix.m32),	//Near plane,	v.dot(row4+row3)
+				new Vector4f(pmMatrix.m03-pmMatrix.m02, pmMatrix.m13-pmMatrix.m12, pmMatrix.m23-pmMatrix.m22, pmMatrix.m33-pmMatrix.m32)	//Far plane,	v.dot(row4-row3)
+		};
+		
+		for (GameObject obj : GameObject.objs) {
+			for (Vertex vert : obj.mesh.vertices) {
+				if ((0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[0])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[1])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[2])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[3])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[4])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[5]))) {
+						shouldRender.add(obj);
+						
+						break;
+				}
+			}
+		}
+		
+		return sortFrontToBack(shouldRender);
+	}
+	
+	public static Vector3f getPosition() {
+		Vector3f pos = new Vector3f(viewMatrix.m02, viewMatrix.m12, viewMatrix.m22);
+		Matrix3f rot = Util.mat4ToMat3(viewMatrix);
+		Matrix3f.transform(rot, pos.negate(pos), pos);
+		return pos;
 	}
 	
 	public static void update(Vector3f pos) {

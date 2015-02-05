@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
@@ -50,11 +51,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Rendering.Shaders.Program;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
@@ -62,9 +65,9 @@ import com.misabiko.LWJGLGameEngine.Utilities.Util;
 public abstract class OpenGLHandler {
 	
 	private static Program program;
-	private static Matrix4f projectionMatrix;
 	private static FloatBuffer matrix4fBuffer, matrix3fBuffer;
 	private static int vaoId = 0;
+	public static Matrix4f projectionMatrix;
 	
 	public static void init(String title, int width, int height) {
 //		System.setProperty("org.lwjgl.librarypath", new File("native").getAbsolutePath());
@@ -88,7 +91,8 @@ public abstract class OpenGLHandler {
 		Mouse.setGrabbed(true);
 		
 		glEnable(GL_DEPTH_TEST);
-		
+//		glEnable(GL_CULL_FACE);
+//		 GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		initProgram();
 		initMatrices(width,height);
 	}
@@ -125,7 +129,7 @@ public abstract class OpenGLHandler {
 	}
 	private static void initMatrices(int width, int height) {
 		projectionMatrix = new Matrix4f();
-		float fov = 200f;
+		float fov = 150f;
 		float aspectRatio = (float) width / (float) height;
 		float nearPlane = 0.1f;
 		float farPlane = 100f;
@@ -169,6 +173,9 @@ public abstract class OpenGLHandler {
 			
 		glBindVertexArray(0);
 		
+	}
+	public static int getVAOID() {
+		return vaoId;
 	}
 	public static void render(GameObject obj) {
 		glActiveTexture(GL_TEXTURE0);
