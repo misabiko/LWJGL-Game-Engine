@@ -1,6 +1,6 @@
 package com.misabiko.LWJGLGameEngine.World;
 
-import static com.misabiko.LWJGLGameEngine.World.BlockSpace.BlockID;
+import static com.misabiko.LWJGLGameEngine.GameObjects.Blocks.BlockTypes.BlockID;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
