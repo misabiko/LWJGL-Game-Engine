@@ -44,6 +44,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -56,6 +57,7 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
+import com.misabiko.LWJGLGameEngine.GameObjects.Blocks.Block;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
@@ -66,7 +68,7 @@ public abstract class OpenGLHandler {
 	
 	private static Program program;
 	private static FloatBuffer matrix4fBuffer, matrix3fBuffer;
-	private static int vaoId = 0;
+	private static int meshVAO, worldVAO = 0;
 	public static Matrix4f projectionMatrix;
 	
 	public static void init(String title, int width, int height) {
@@ -148,9 +150,11 @@ public abstract class OpenGLHandler {
 		matrix4fBuffer = BufferUtils.createFloatBuffer(16);
 		matrix3fBuffer = BufferUtils.createFloatBuffer(9);
 	}
-	public static void initBuffers() {
-		vaoId = glGenVertexArrays();
-		glBindVertexArray(vaoId);
+	
+	public static void initVAOs() {
+		meshVAO = glGenVertexArrays();
+		worldVAO = glGenVertexArrays();
+		glBindVertexArray(meshVAO);
 			
 			for (GameObject obj : GameObject.objs) {
 				obj.mesh.vboId = glGenBuffers();
@@ -158,8 +162,6 @@ public abstract class OpenGLHandler {
 				glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
 				
 					glBufferData(GL_ARRAY_BUFFER,obj.mesh.verticesBuffer,GL_STATIC_DRAW);
-					
-				glBindBuffer(GL_ARRAY_BUFFER,0);
 				
 				if (obj.mesh.indicesBuffer != null) {
 					obj.mesh.vboiId = glGenBuffers();
@@ -169,17 +171,28 @@ public abstract class OpenGLHandler {
 					
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 				}
+				
+				glEnableVertexAttribArray(0);	//position
+				glEnableVertexAttribArray(1);	//normal
+				glEnableVertexAttribArray(2);	//aColor
+				glEnableVertexAttribArray(3);	//dColor
+				glEnableVertexAttribArray(4);	//sColor
+				glEnableVertexAttribArray(5);	//texCoords
+					
+				glBindBuffer(GL_ARRAY_BUFFER,0);
 			}
-			
+
+//		glBindVertexArray(worldVAO);
+//		
+//			
+//		
 		glBindVertexArray(0);
 		
 	}
-	public static int getVAOID() {
-		return vaoId;
-	}
-	public static void render(GameObject obj) {
+	
+	public static void render(Mesh mesh) {
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, obj.mesh.texture.texId);
+		glBindTexture(GL_TEXTURE_2D, mesh.texture.texId);
 		
 		glUseProgram(program.id);
 			
@@ -191,11 +204,11 @@ public abstract class OpenGLHandler {
 			matrix4fBuffer.flip();
 			glUniformMatrix4(glGetUniformLocation(program.id, "viewMatrix"), false, matrix4fBuffer);
 			
-			obj.mesh.modelMatrix.store(matrix4fBuffer);
+			mesh.modelMatrix.store(matrix4fBuffer);
 			matrix4fBuffer.flip();
 			glUniformMatrix4(glGetUniformLocation(program.id, "modelMatrix"), false, matrix4fBuffer);
 			
-			Util.mat4ToMat3(obj.mesh.modelMatrix).invert().transpose().store(matrix3fBuffer);
+			Util.mat4ToMat3(mesh.modelMatrix).invert().transpose().store(matrix3fBuffer);
 			matrix3fBuffer.flip();
 			glUniformMatrix3(glGetUniformLocation(program.id, "normalMatrix"), false, matrix3fBuffer);
 			
@@ -213,27 +226,15 @@ public abstract class OpenGLHandler {
 			glUniform3f(glGetUniformLocation(program.id, "cameraPosition"), Camera.viewMatrix.m03, Camera.viewMatrix.m13, Camera.viewMatrix.m23);
 			
 			glUniform1i(glGetUniformLocation(program.id, "materialTex"), GL_TEXTURE_2D);
-			glUniform1f(glGetUniformLocation(program.id, "materialShininess"), obj.mesh.material.specularExponent);
+			glUniform1f(glGetUniformLocation(program.id, "materialShininess"), mesh.material.specularExponent);
 			
-			if (obj.mesh.isTextured)
-				glUniform1f(glGetUniformLocation(program.id, "isTextured"), 1f);
-			else
-				glUniform1f(glGetUniformLocation(program.id, "isTextured"), 0f);
+			glUniform1f(glGetUniformLocation(program.id, "isTextured"), mesh.isTextured ? 1f : 0f);
 			
-			if (obj.mesh.ignoreLightning)
-				glUniform1f(glGetUniformLocation(program.id, "ignoreLightning"), 1f);
-			else
-				glUniform1f(glGetUniformLocation(program.id, "ignoreLightning"), 0f);
+			glUniform1f(glGetUniformLocation(program.id, "ignoreLightning"), mesh.ignoreLightning ? 1f : 0f);
 			
-			glBindVertexArray(vaoId);
-				glEnableVertexAttribArray(0);	//position
-				glEnableVertexAttribArray(1);	//normal
-				glEnableVertexAttribArray(2);	//aColor
-				glEnableVertexAttribArray(3);	//dColor
-				glEnableVertexAttribArray(4);	//sColor
-				glEnableVertexAttribArray(5);	//texCoords
+			glBindVertexArray(meshVAO);
 				
-					glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
+					glBindBuffer(GL_ARRAY_BUFFER, mesh.vboId);
 					
 						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
 						glVertexAttribPointer(1, 3, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.normOffset);
@@ -242,19 +243,13 @@ public abstract class OpenGLHandler {
 						glVertexAttribPointer(4, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.sColorOffset);
 						glVertexAttribPointer(5, 2, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.texCoordsOffset);
 						
-						if (obj.mesh.indicesBuffer != null)
-							glDrawElements(GL_TRIANGLES, obj.mesh.indicesBuffer);
+						if (mesh.indicesBuffer != null)
+							glDrawElements(GL_TRIANGLES, mesh.indicesBuffer);
 						else
-							glDrawArrays(GL_TRIANGLES, 0, obj.mesh.indicesCount);
+							glDrawArrays(GL_TRIANGLES, 0, mesh.indicesCount);
 						
 					glBindBuffer(GL_ARRAY_BUFFER,0);
 				
-				glDisableVertexAttribArray(0);
-				glDisableVertexAttribArray(1);
-				glDisableVertexAttribArray(2);
-				glDisableVertexAttribArray(3);
-				glDisableVertexAttribArray(4);
-				glDisableVertexAttribArray(5);
 			glBindVertexArray(0);
 	
 		glUseProgram(0);
@@ -265,7 +260,10 @@ public abstract class OpenGLHandler {
 		
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 		glDisableVertexAttribArray(3);
+		glDisableVertexAttribArray(4);
+		glDisableVertexAttribArray(5);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

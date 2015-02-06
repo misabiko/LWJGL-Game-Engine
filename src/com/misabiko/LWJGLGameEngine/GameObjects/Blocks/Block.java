@@ -20,32 +20,29 @@ import com.misabiko.LWJGLGameEngine.GameObjects.Blocks.BlockTypes.BlockType;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 
-public class Block{
+public class Block extends GameObject{
 	private static CollisionShape cs = new BoxShape(new Vector3f(0.5f, 0.5f, 0.5f));
-	private CollisionObject co;
 	
 	public Mesh mesh;
 	
 	public Block(float x, float y, float z, BlockType type) {
-		mesh = new Box(1f, 1f, 1f, new Vector4f(0.3f, 0.3f, 0.3f, 1f), type.color, new Vector4f(0.5f, 0.5f, 0.5f, 1f));
+		super(x, y, z, new Box(1f, 1f, 1f, new Vector4f(0.3f, 0.3f, 0.3f, 1f), type.color, new Vector4f(0.5f, 0.5f, 0.5f, 1f)));
+//		mesh = new Box(1f, 1f, 1f, new Vector4f(0.3f, 0.3f, 0.3f, 1f), type.color, new Vector4f(0.5f, 0.5f, 0.5f, 1f));
+		
 		Transform initTrans = new Transform(new Matrix4f(new Quat4f(0,0,0,1f), new Vector3f(x,y,z), 1f));
 		
-		if (type.collideable) {
+//		if (type.collideable) {
 			MotionState ms = new DefaultMotionState(initTrans);
 			RigidBodyConstructionInfo rbConstructInfo = new RigidBodyConstructionInfo(0, ms, cs, new Vector3f(0f,0f,0f));
 			co = new RigidBody(rbConstructInfo);
 			
 			Core.dw.addRigidBody((RigidBody) co);
-		}else {
-			co = new GhostObject();
-			co.setCollisionShape(cs);
-			co.setWorldTransform(initTrans);
-			
-			Core.dw.addCollisionObject(co);
-		}
-	}
-	
-	public void update() {
-		
+//		}else {
+//			co = new GhostObject();
+//			co.setCollisionShape(cs);
+//			co.setWorldTransform(initTrans);
+//			
+//			Core.dw.addCollisionObject(co);
+//		}
 	}
 }

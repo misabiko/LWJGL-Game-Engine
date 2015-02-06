@@ -13,7 +13,8 @@ public class BlockSpace {
 	public boolean active;
 	
 	public BlockSpace(int x, int y, int z) {
-		id = BlockID.AIR;
+//		createBlock(BlockID.AIR);
+		active = true;
 		
 		this.x = x;
 		this.y = y;
@@ -29,8 +30,15 @@ public class BlockSpace {
 	}
 	
 	public void createBlock(BlockID id) {
-		this.id = id;
-		
-		block = new Block(x, y, z, BlockTypes.getType(id));
+		if (id == this.id)
+			System.out.println("You already created that block, at that place");
+		else {
+			this.id = id;
+			if (id != BlockID.AIR) {
+				active = true;
+			block = new Block(x, y, z, BlockTypes.getType(id));
+			}else
+				block = null;
+		}
 	}
 }
