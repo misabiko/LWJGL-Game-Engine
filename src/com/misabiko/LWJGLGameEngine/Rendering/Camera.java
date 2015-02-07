@@ -1,5 +1,9 @@
 package com.misabiko.LWJGLGameEngine.Rendering;
 
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4;
+import static org.lwjgl.opengl.GL20.glUseProgram;
+
 import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Matrix4f;
@@ -112,5 +116,13 @@ public class Camera {
 		Matrix4f.rotate(-angleY, new Vector3f(0,1f,0), viewMatrix, viewMatrix);
 		
 		Matrix4f.translate(pos.negate(new Vector3f()), viewMatrix, viewMatrix);
+		
+		glUseProgram(OpenGLHandler.program.id);
+			
+			viewMatrix.store(OpenGLHandler.matrix4fBuffer);
+			OpenGLHandler.matrix4fBuffer.flip();
+			glUniformMatrix4(glGetUniformLocation(OpenGLHandler.program.id, "viewMatrix"), false, OpenGLHandler.matrix4fBuffer);
+			
+		glUseProgram(0);
 	}
 }

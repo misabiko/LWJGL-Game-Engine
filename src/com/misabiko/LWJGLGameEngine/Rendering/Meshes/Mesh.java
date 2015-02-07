@@ -1,6 +1,9 @@
 package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -10,11 +13,15 @@ import javax.vecmath.Vector4f;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Rendering.Camera;
+import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
@@ -118,6 +125,23 @@ public class Mesh {
 		isTransparent = (vertices[0].dColor[3] != 1f);
 	}
 	
+	public Vector3f getPosition() {
+		return Matrix3f.transform(Util.mat4ToMat3(modelMatrix), center, new Vector3f());
+	}
+	
+	public void changeDiffuseColor(Vector4f dColor) {
+		GL30.glBindVertexArray(OpenGLHandler.VAO);
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
+				for (Vertex vertex : vertices) {
+					dColor.get(vertex.dColor);
+					verticesBuffer.put(vertex.getElements());
+				}
+				verticesBuffer.flip();
+				GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer, GL15.GL_DYNAMIC_DRAW);
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GL30.glBindVertexArray(0);
+	}
+	
 	public void update(Vector3f pos, float angleX, float angleY) {
 		Matrix4f.setIdentity(modelMatrix);
 		
@@ -125,10 +149,6 @@ public class Mesh {
 		
 		Matrix4f.rotate(angleY, new Vector3f(0,1f,0), modelMatrix, modelMatrix);
 		Matrix4f.rotate(angleX, new Vector3f(1f,0,0), modelMatrix, modelMatrix);
-	}
-	
-	public Vector3f getPosition() {
-		return Matrix3f.transform(Util.mat4ToMat3(modelMatrix), center, new Vector3f());
 	}
 	
 	public void update(Matrix4f mat) {

@@ -18,6 +18,7 @@ import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Sun;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.World.World;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -66,7 +67,7 @@ public class Core {
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
 		dw = JBulletHandler.init(dw);
 		
-		world = new World(3);
+		world = new World(2);
 
 //		new Platform(0f, 0f, 0f, 10f, 2f, 10f);
 		skybox = new Sky();
@@ -79,12 +80,10 @@ public class Core {
 		dw.addCollisionObject(cuby.co);
 		dw.addAction(cuby.controller);
 		
-		Light.lights.add(new Light(new Vector4f(0f,0f,0f,1f), new Vector3f(1f,1f,1f), 0.005f, 0.5f, 45f, new Vector3f(0f,-1f,0f)));
-		Light.lights.add(new Sun(new Vector3f(100f,100f,100f)));
-//		Light.lights.add(new Sun(new Vector3f(-100f,100f,100f)));
+		new Light(new Vector4f(0f, 15f, 0f, 1f), new Vector3f(1f, 1f, 1f), 0.2f, 0.3f, 360f, new Vector3f(0f,-1f,0f));
+		new Sun(new Vector3f(100f,100f,100f));
 		
 		OpenGLHandler.initVAOs();
-//		world.initBuffer();
 	}
 	
 	private void run() {
@@ -120,10 +119,22 @@ public class Core {
 					OpenGLHandler.render(obj.mesh);
 			}
 			
-//			world.render();
+			for (Mesh mesh : world.getMeshes(false)) {
+				if (mesh.isTransparent) {
+					GL11.glDepthMask(false);
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					
+					OpenGLHandler.render(mesh);
+			
+					GL11.glDisable(GL11.GL_BLEND);
+					GL11.glDepthMask(true);
+				}else
+					OpenGLHandler.render(mesh);
+			}
 			
 			if (currentTime - lastTime > 1000) {
-				Display.setTitle(TITLE+" - FPS: "+fps+" - Entities: "+Camera.shouldRender().size());
+				Display.setTitle(TITLE+" - FPS: "+fps+" - Entities: "+Camera.shouldRender().size()+" - Position: "+cuby.getPosition().toString());
 				fps = 0;
 				lastTime = System.currentTimeMillis();
 			}

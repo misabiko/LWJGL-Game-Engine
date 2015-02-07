@@ -62,6 +62,13 @@ public class Cuby extends GameObject {
 	public Cuby() throws FileNotFoundException, IOException {
 		this(-4f, 15f, -4f);
 	}
+	
+	public Vector3f getPosition() {
+		Transform trans = new Transform();
+		co.getWorldTransform(trans);
+		
+		return trans.origin;
+	}
 
 	public void update() {
 		Physic.update(this);

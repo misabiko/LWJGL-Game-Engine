@@ -53,9 +53,12 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Core.Core;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
 import com.misabiko.LWJGLGameEngine.GameObjects.Blocks.Block;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
@@ -63,12 +66,14 @@ import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Rendering.Shaders.Program;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
+import com.misabiko.LWJGLGameEngine.World.Chunk;
 
 public abstract class OpenGLHandler {
 	
-	private static Program program;
-	private static FloatBuffer matrix4fBuffer, matrix3fBuffer;
-	private static int meshVAO, worldVAO = 0;
+	public static int VAO = 0;
+	public static Program program;
+	public static FloatBuffer matrix4fBuffer = BufferUtils.createFloatBuffer(16);
+	public static FloatBuffer matrix3fBuffer = BufferUtils.createFloatBuffer(9);
 	public static Matrix4f projectionMatrix;
 	
 	public static void init(String title, int width, int height) {
@@ -147,14 +152,18 @@ public abstract class OpenGLHandler {
 		projectionMatrix.m32 = -((2 * nearPlane * farPlane) / frustumLength);
 		projectionMatrix.m33 = 0;
 		
-		matrix4fBuffer = BufferUtils.createFloatBuffer(16);
-		matrix3fBuffer = BufferUtils.createFloatBuffer(9);
+		glUseProgram(program.id);
+			
+			projectionMatrix.store(matrix4fBuffer);
+			matrix4fBuffer.flip();
+			glUniformMatrix4(glGetUniformLocation(program.id, "projectionMatrix"), false, matrix4fBuffer);
+			
+		glUseProgram(0);
 	}
 	
 	public static void initVAOs() {
-		meshVAO = glGenVertexArrays();
-		worldVAO = glGenVertexArrays();
-		glBindVertexArray(meshVAO);
+		VAO = glGenVertexArrays();
+		glBindVertexArray(VAO);
 			
 			for (GameObject obj : GameObject.objs) {
 				obj.mesh.vboId = glGenBuffers();
@@ -181,6 +190,33 @@ public abstract class OpenGLHandler {
 					
 				glBindBuffer(GL_ARRAY_BUFFER,0);
 			}
+			
+			for (Mesh mesh : Core.world.getMeshes(false)) {
+				mesh.vboId = glGenBuffers();
+				
+				glBindBuffer(GL_ARRAY_BUFFER, mesh.vboId);
+				
+					glBufferData(GL_ARRAY_BUFFER, mesh.verticesBuffer, GL15.GL_DYNAMIC_DRAW);
+				
+				if ( mesh.indicesBuffer != null) {
+					 mesh.vboiId = glGenBuffers();
+						
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,  mesh.vboiId);
+						glBufferData(GL_ELEMENT_ARRAY_BUFFER,  mesh.indicesBuffer, GL15.GL_DYNAMIC_DRAW);
+					
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+				}
+				
+				glEnableVertexAttribArray(0);	//position
+				glEnableVertexAttribArray(1);	//normal
+				glEnableVertexAttribArray(2);	//aColor
+				glEnableVertexAttribArray(3);	//dColor
+				glEnableVertexAttribArray(4);	//sColor
+				glEnableVertexAttribArray(5);	//texCoords
+					
+				glBindBuffer(GL_ARRAY_BUFFER,0);
+			}
+				
 
 //		glBindVertexArray(worldVAO);
 //		
@@ -196,14 +232,6 @@ public abstract class OpenGLHandler {
 		
 		glUseProgram(program.id);
 			
-			projectionMatrix.store(matrix4fBuffer);
-			matrix4fBuffer.flip();
-			glUniformMatrix4(glGetUniformLocation(program.id, "projectionMatrix"), false, matrix4fBuffer);
-			
-			Camera.viewMatrix.store(matrix4fBuffer);
-			matrix4fBuffer.flip();
-			glUniformMatrix4(glGetUniformLocation(program.id, "viewMatrix"), false, matrix4fBuffer);
-			
 			mesh.modelMatrix.store(matrix4fBuffer);
 			matrix4fBuffer.flip();
 			glUniformMatrix4(glGetUniformLocation(program.id, "modelMatrix"), false, matrix4fBuffer);
@@ -212,18 +240,8 @@ public abstract class OpenGLHandler {
 			matrix3fBuffer.flip();
 			glUniformMatrix3(glGetUniformLocation(program.id, "normalMatrix"), false, matrix3fBuffer);
 			
-			glUniform1f(glGetUniformLocation(program.id, "numLights"),	Light.lights.size());
-			for (Light light : Light.lights) {
-				int i = Light.lights.indexOf(light);
-				glUniform4f(glGetUniformLocation(program.id, "lights["+i+"].position"),				light.position.x,			light.position.y,		light.position.z,		light.position.w);
-				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].intensities"),			light.intensities.x,		light.intensities.y,	light.intensities.z);
-				glUniform3f(glGetUniformLocation(program.id, "lights["+i+"].coneDirection"),		light.coneDirection.x,		light.coneDirection.y,	light.coneDirection.z);
-				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].ambientCoefficient"),	light.ambientCoefficient);
-				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].attenuation"),			light.attenuation);
-				glUniform1f(glGetUniformLocation(program.id, "lights["+i+"].coneAngle"),			light.coneAngle);
-			}
-
-			glUniform3f(glGetUniformLocation(program.id, "cameraPosition"), Camera.viewMatrix.m03, Camera.viewMatrix.m13, Camera.viewMatrix.m23);
+			Vector3f camPos = Camera.getPosition();
+			glUniform3f(glGetUniformLocation(program.id, "cameraPosition"), camPos.x, camPos.y, camPos.z);
 			
 			glUniform1i(glGetUniformLocation(program.id, "materialTex"), GL_TEXTURE_2D);
 			glUniform1f(glGetUniformLocation(program.id, "materialShininess"), mesh.material.specularExponent);
@@ -232,7 +250,7 @@ public abstract class OpenGLHandler {
 			
 			glUniform1f(glGetUniformLocation(program.id, "ignoreLightning"), mesh.ignoreLightning ? 1f : 0f);
 			
-			glBindVertexArray(meshVAO);
+			glBindVertexArray(VAO);
 				
 					glBindBuffer(GL_ARRAY_BUFFER, mesh.vboId);
 					
@@ -253,7 +271,6 @@ public abstract class OpenGLHandler {
 			glBindVertexArray(0);
 	
 		glUseProgram(0);
-//		}
 	}
 	public static void cleanUp() {
 		glUseProgram(0);

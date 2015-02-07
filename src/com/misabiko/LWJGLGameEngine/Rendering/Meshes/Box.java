@@ -65,32 +65,6 @@ public class Box extends Mesh{
 		height = h;
 		depth = d;
 	}
-//	
-//	public Box(float w, float h, float d, float aR, float aG, float aB, float aA, float dR, float dG, float dB, float dA, float sR, float sG, float sB, float sA) {
-//		this(w,h,d, new Vector4f[] {
-//				new Vector4f(aR, aG, aB, aA),
-//				new Vector4f(aR, aG, aB, aA),
-//				new Vector4f(aR, aG, aB, aA),
-//				new Vector4f(aR, aG, aB, aA),
-//				new Vector4f(aR, aG, aB, aA),
-//				new Vector4f(aR, aG, aB, aA)
-//			}, new Vector4f[] {
-//				new Vector4f(dR, dG, dB, dA),
-//				new Vector4f(dR, dG, dB, dA),
-//				new Vector4f(dR, dG, dB, dA),
-//				new Vector4f(dR, dG, dB, dA),
-//				new Vector4f(dR, dG, dB, dA),
-//				new Vector4f(dR, dG, dB, dA)
-//			}, new Vector4f[] {
-//				new Vector4f(sR, sG, sB, sA),
-//				new Vector4f(sR, sG, sB, sA),
-//				new Vector4f(sR, sG, sB, sA),
-//				new Vector4f(sR, sG, sB, sA),
-//				new Vector4f(sR, sG, sB, sA),
-//				new Vector4f(sR, sG, sB, sA)
-//			}
-//		);
-//	}
 	
 	public Box(float w, float h, float d, Vector4f aColor, Vector4f dColor, Vector4f sColor) {
 		this(w,h,d, new Vector4f[] {

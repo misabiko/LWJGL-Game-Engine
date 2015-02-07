@@ -1,6 +1,7 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -9,6 +10,7 @@ import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 
 public class Controls {
 	private static boolean Esc = false;
+	private static boolean J = false;
 	private static float MouseSensibility = 1/500f;
 	private static float MouseWheelSensibility = 1/4000f;
 	private static Vector3f preVel = new Vector3f(0f,0f,0f);

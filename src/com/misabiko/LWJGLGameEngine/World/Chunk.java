@@ -1,79 +1,98 @@
 package com.misabiko.LWJGLGameEngine.World;
 
-import static com.misabiko.LWJGLGameEngine.GameObjects.Blocks.BlockTypes.BlockID;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static com.misabiko.LWJGLGameEngine.World.BlockSpace.BlockID;
+import java.util.ArrayList;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
-
-import com.misabiko.LWJGLGameEngine.GameObjects.Blocks.Block;
-import com.misabiko.LWJGLGameEngine.GameObjects.Blocks.BlockTypes;
-import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
-import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 
 public class Chunk {
 	private final int HEIGHT = 20;
 	private final int SIDES = 8;
 	
 	private int x, y;
-//	private BlockSpace[][][] blockSpaces = new BlockSpace[SIDES][SIDES][HEIGHT];
-	private Block[][][] blocks = new Block[SIDES][SIDES][HEIGHT];
-	
-	private int vboId, vboiId = 0;
-	FloatBuffer verticesBuffer;
-	ByteBuffer indicesBuffer;
+	private BlockSpace[][][] blockSpaces = new BlockSpace[SIDES][SIDES][HEIGHT];
 	
 	public Chunk(int x, int y, int landLevel) {
 		this.x = x;
 		this.y = y;
 
-//		for (int i = 0; i < blockSpaces.length; i++)
-//			for (int j = 0; j < blockSpaces[0].length; j++)
-//				for (int k = 0; k < blockSpaces[0][0].length; k++)
-//					blockSpaces[i][j][k] = new BlockSpace((x*SIDES)+j, i, (y*SIDES)+k);
+//		init BlockSpaces
+		for (int i = 0; i < blockSpaces.length; i++)
+			for (int j = 0; j < blockSpaces[0].length; j++)
+				for (int k = 0; k < blockSpaces[0][0].length; k++)
+					blockSpaces[i][j][k] = new BlockSpace((x*SIDES)+i, k, (y*SIDES)+j);
 		
-//		for (int i = 0; i < landLevel-5; i++)
-//			for (int j = 0; j < SIDES; j++)
-//				for (int k = 0; k < SIDES; k++)
-//					blocks[j][k][i].block = new Stone((x*SIDES)+j, i, (y*SIDES)+k);
-//		
-//		for (int i = 8; i < landLevel; i++)
-//			for (int j = 0; j < SIDES; j++)
-//				for (int k = 0; k < SIDES; k++)
-//					blocks[j][k][i].block = new Dirt((x*SIDES)+j, i, (y*SIDES)+k);
-		
+		for (int i = 0; i < landLevel; i++)
 			for (int j = 0; j < SIDES; j++)
 				for (int k = 0; k < SIDES; k++)
-//					blockSpaces[j][k][landLevel].createBlock(BlockID.GRASS);
-					blocks[j][k][landLevel] = new Block((float)((x*SIDES)+j), (float)landLevel, (float)((y*SIDES)+k), BlockTypes.getType(BlockID.GRASS));
+					blockSpaces[j][k][i].createBlock(BlockID.DIRT);
+		
+		for (int j = 0; j < SIDES; j++)
+			for (int k = 0; k < SIDES; k++)
+				blockSpaces[j][k][landLevel].createBlock(BlockID.GRASS);
 	}
 	
-	public void initBuffer() {
-//		for (int i = 0; i < blockSpaces.length; i++)
-//			for (int j = 0; j < blockSpaces[0].length; j++)
-//				for (int k = 0; k < blockSpaces[0][0].length; k++) {
-//					OpenGLHandler.initBuffers(blockSpaces[i][j][k].getBlock());
-//				}
+	protected void updateFaces(boolean front, boolean back, boolean left, boolean right) {
+		for (int i = 0; i < blockSpaces.length; i++)
+			for (int j = 0; j < blockSpaces[0].length; j++)
+				for (int k = 0; k < blockSpaces[0][0].length; k++) {
+					boolean frontFace = false;
+					boolean backFace = false;
+					boolean leftFace = false;
+					boolean rightFace = false;
+					boolean topFace = false;
+					boolean bottomFace = false;
+					
+					if (j+1 < SIDES) {
+						if (blockSpaces[i][j+1][k] != null)
+							if (!blockSpaces[i][j+1][k].active)
+								frontFace = true;
+					}else if (front)
+						frontFace = true;
+					if (j-1 >= 0) {
+						if (blockSpaces[i][j-1][k] != null)
+							if (!blockSpaces[i][j-1][k].active)
+								backFace = true;
+					}else if (back)
+						backFace = true;
+					
+					if (i-1 >= 0) {
+						if (blockSpaces[i-1][j][k] != null)
+							if (!blockSpaces[i-1][j][k].active)
+								leftFace = true;
+					}else if (left)
+						leftFace = true;
+					if (i+1 < SIDES) {
+						if (blockSpaces[i+1][j][k] != null)
+							if (!blockSpaces[i+1][j][k].active)
+								rightFace = true;
+					}else if (right)
+						rightFace = true;
+					
+					if (k+1 < HEIGHT) {
+						if (blockSpaces[i][j][k+1] != null)
+							if (!blockSpaces[i][j][k+1].active)
+								topFace = true;
+					}else
+						topFace = true;
+					if (k-1 >= 0) {
+						if (blockSpaces[i][j][k-1] != null)
+							if (!blockSpaces[i][j][k-1].active)
+								bottomFace = true;
+					}else
+						bottomFace = true;
+					
+					blockSpaces[i][j][k].updateFaces(frontFace, backFace, leftFace, rightFace, topFace, bottomFace);
+				}
 	}
-
-	public void render() {
-//		int foo = 0;
-//		for (int i = 0; i < blockSpaces.length; i++)
-//			for (int j = 0; j < blockSpaces[0].length; j++)
-//				for (int k = 0; k < blockSpaces[0][0].length; k++) {
-//					if (blockSpaces[i][j][k].active) {
-//						foo++;
-//						OpenGLHandler.render(blockSpaces[i][j][k].getBlock().mesh);
-//					}
-//				}
-//		System.out.println(foo);
+	
+	public ArrayList<Mesh> getMeshes(boolean allMeshes) {
+		ArrayList<Mesh> meshes = new ArrayList<Mesh>();
+		for (BlockSpace[][] blockSpaces2 : blockSpaces)
+			for (BlockSpace[] blockSpaces : blockSpaces2)
+				for (BlockSpace blockSpace : blockSpaces)
+					if (blockSpace.active || allMeshes)
+						meshes.add(blockSpace.getMesh());
+		return meshes;
 	}
 }
