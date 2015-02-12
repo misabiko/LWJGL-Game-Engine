@@ -36,11 +36,7 @@ public class Core {
 	public static Sky skybox;
 	
 //	Current task
-//		TODO being able to change mesh color post-creation
-//		TODO make air block an actual thing with an actual mesh
-//		TODO make invisible mesh a thing
-//		TODO make mesh face editing post-creation a thing
-//		TODO put all chunk's blocks' meshes' vertices 'n indice buffers in a big one, make a vbo/vboi(ibo?vibo?) for it, render all at once
+//		TODO Multiple normals per vertex? binding normals to indices maybe?
 	
 	
 //	Short term todos

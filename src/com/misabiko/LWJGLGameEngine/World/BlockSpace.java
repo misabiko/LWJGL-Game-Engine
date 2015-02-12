@@ -17,18 +17,18 @@ import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 public class BlockSpace {
 	public static enum BlockID {AIR,GRASS,DIRT,STONE}
 	
-	private static final byte[] frontIndices = 	new byte[] {0, 1, 3, 1, 2, 3};
-	private static final byte[] backIndices = 	new byte[] {4, 7, 5, 5, 7, 6};
-	private static final byte[] leftIndices = 	new byte[] {8, 9, 11, 9, 10, 11};
-	private static final byte[] rightIndices = 	new byte[] {12, 13, 15, 13, 14, 15};
-	private static final byte[] topIndices = 	new byte[] {16, 19, 17, 19, 18, 17};
-	private static final byte[] bottomIndices = new byte[] {20, 21, 23, 21, 22, 23};
+	private static final byte[] frontIndices = 	new byte[] {0,	1,	3,	1,	2,	3};
+	private static final byte[] backIndices = 	new byte[] {4,	7,	5,	5,	7,	6};
+	private static final byte[] leftIndices = 	new byte[] {8,	9,	11,	9,	10,	11};
+	private static final byte[] rightIndices = 	new byte[] {12,	13,	15,	13,	14,	15};
+	private static final byte[] topIndices = 	new byte[] {16,	19,	17,	19,	18,	17};
+	private static final byte[] bottomIndices = new byte[] {20,	21,	23,	21,	22,	23};
 	
 	private Mesh mesh;
 	private Block block;
 	private BlockID id;
 	
-	private int x, y, z;
+	public int x, y, z;
 	
 	public boolean active;
 	
