@@ -13,6 +13,7 @@ import com.misabiko.LWJGLGameEngine.GameObjects.Blocks.StoneBlock;
 import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
 
 public class BlockSpace {
 	public static enum BlockID {AIR,GRASS,DIRT,STONE}
@@ -27,6 +28,9 @@ public class BlockSpace {
 	private Mesh mesh;
 	private Block block;
 	private BlockID id;
+	
+	private static final Vector4f defaultColor = new Vector4f(1f, 1f, 1f, 1f);
+	private Vector4f color = defaultColor;
 	
 	public int x, y, z;
 	
@@ -50,6 +54,76 @@ public class BlockSpace {
 	
 	public Block getBlock() {
 		return block;
+	}
+	
+	public float[] getVertices() {
+		return new float[] {
+				x-0.5f,		y-0.5f,		z+0.5f,		0f,		0f,		1f,
+				x+0.5f,		y-0.5f,		z+0.5f,		0f,		0f,		1f,
+				x+0.5f,		y+0.5f,		z+0.5f,		0f,		0f,		1f,
+				x-0.5f,		y+0.5f,		z+0.5f,		0f,		0f,		1f,
+
+				x-0.5f,		y-0.5f,		z-0.5f,		0f,		0f,		-1f,
+				x+0.5f,		y-0.5f,		z-0.5f,		0f,		0f,		-1f,
+				x+0.5f,		y+0.5f,		z-0.5f,		0f,		0f,		-1f,
+				x-0.5f,		y+0.5f,		z-0.5f,		0f,		0f,		-1f,
+
+				x-0.5f,		y-0.5f,		z-0.5f,		-1f,	0f,		0f,
+				x-0.5f,		y-0.5f,		z+0.5f,		-1f,	0f,		0f,
+				x-0.5f,		y+0.5f,		z+0.5f,		-1f,	0f,		0f,
+				x-0.5f,		y+0.5f,		z-0.5f,		-1f,	0f,		0f,
+
+				x+0.5f,		y-0.5f,		z+0.5f,		1f,		0f,		0f,
+				x+0.5f,		y-0.5f,		z-0.5f,		1f,		0f,		0f,
+				x+0.5f,		y+0.5f,		z-0.5f,		1f,		0f,		0f,
+				x+0.5f,		y+0.5f,		z+0.5f,		1f,		0f,		0f,
+
+				x-0.5f,		y+0.5f,		z-0.5f,		0f,		1f,		0f,
+				x+0.5f,		y+0.5f,		z-0.5f,		0f,		1f,		0f,
+				x+0.5f,		y+0.5f,		z+0.5f,		0f,		1f,		0f,
+				x-0.5f,		y+0.5f,		z+0.5f,		0f,		1f,		0f,
+
+				x-0.5f,		y-0.5f,		z-0.5f,		0f,		-1f,	0f,
+				x+0.5f,		y-0.5f,		z-0.5f,		0f,		-1f,	0f,
+				x+0.5f,		y-0.5f,		z+0.5f,		0f,		-1f,	0f,
+				x-0.5f,		y-0.5f,		z+0.5f,		0f,		-1f,	0f,
+		};
+	}
+	
+	public float[] getColors() {
+		Vector4f aColor = new Vector4f(0.3f, 0.3f, 0.3f, 1f);
+		Vector4f sColor = new Vector4f(0.5f, 0.5f, 0.5f, 1f);
+		return new float[] {
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w, 	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 0f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 0f,
+
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 0f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 0f,
+
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 0f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 0f,
+
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 0f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 0f,
+
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 0f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 0f,
+
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 1f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	0f, 0f,
+				aColor.x,	aColor.y,	aColor.z,	aColor.w,	color.x,	color.y,	color.z,	color.w,	sColor.x,	sColor.y,	sColor.z,	sColor.w,	1f, 0f
+		};
 	}
 	
 	public Mesh getMesh() {
@@ -88,16 +162,19 @@ public class BlockSpace {
 			case GRASS:
 				block = new GrassBlock(x, y, z);
 				mesh.changeDiffuseColor(GrassBlock.color);
+				color = GrassBlock.color;
 				active = true;
 				break;
 			case DIRT:
 				block = new DirtBlock(x, y, z);
 				mesh.changeDiffuseColor(DirtBlock.color);
+				color = DirtBlock.color;
 				active = true;
 				break;
 			case STONE:
 				block = new StoneBlock(x, y, z);
 				mesh.changeDiffuseColor(StoneBlock.color);
+				color = StoneBlock.color;
 				active = true;
 				break;
 			default:

@@ -11,7 +11,9 @@ import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Vector4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.misabiko.LWJGLGameEngine.Core.Core;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
+import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
 
@@ -27,16 +29,16 @@ public class Camera {
 	private static float zoomNeutral = 0.0001f;
 	private static float zoomFriction = 0.002f;
 	
-	private static ArrayList<GameObject> sortFrontToBack(ArrayList<GameObject> objs) {
-		ArrayList<GameObject> unsortedObjs = objs;
-		ArrayList<GameObject> sortedObjs = new ArrayList<GameObject>();
+	private static ArrayList<Mesh> sortFrontToBack(ArrayList<Mesh> objs) {
+		ArrayList<Mesh> unsortedObjs = objs;
+		ArrayList<Mesh> sortedObjs = new ArrayList<Mesh>();
 		Vector3f camPos = getPosition();
 		
 		while (unsortedObjs.size() > 0) {
-			GameObject temp = unsortedObjs.get(0);
-			for (GameObject obj : unsortedObjs) {
-				if ((Vector3f.sub(camPos, obj.mesh.getPosition(), new Vector3f()).length()) < (Vector3f.sub(camPos, temp.mesh.getPosition(), new Vector3f()).length())) {
-					temp = obj;
+			Mesh temp = unsortedObjs.get(0);
+			for (Mesh mesh : unsortedObjs) {
+				if ((Vector3f.sub(camPos, mesh.getPosition(), new Vector3f()).length()) < (Vector3f.sub(camPos, temp.getPosition(), new Vector3f()).length())) {
+					temp = mesh;
 					
 				}
 			}
@@ -47,8 +49,8 @@ public class Camera {
 		return sortedObjs;
 	}
 	
-	public static ArrayList<GameObject> shouldRender() {
-		ArrayList<GameObject> shouldRender = new ArrayList<GameObject>();
+	public static ArrayList<Mesh> shouldRender() {
+		ArrayList<Mesh> shouldRender = new ArrayList<Mesh>();
 		Matrix4f pmMatrix = new Matrix4f();
 		Matrix4f.mul(OpenGLHandler.projectionMatrix, viewMatrix, pmMatrix);
 		Vector4f[] planeTests = new Vector4f[] {
@@ -68,7 +70,22 @@ public class Camera {
 					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[3])) &&
 					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[4])) &&
 					(0f < Vector4f.dot(Matrix4f.transform(obj.mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[5]))) {
-						shouldRender.add(obj);
+						shouldRender.add(obj.mesh);
+						
+						break;
+				}
+			}
+		}
+		
+		for (Mesh mesh : Core.world.getMeshes(false)) {
+			for (Vertex vert : mesh.vertices) {
+				if ((0f < Vector4f.dot(Matrix4f.transform(mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[0])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[1])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[2])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[3])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[4])) &&
+					(0f < Vector4f.dot(Matrix4f.transform(mesh.modelMatrix, vert.getPosition(), new Vector4f()), planeTests[5]))) {
+						shouldRender.add(mesh);
 						
 						break;
 				}

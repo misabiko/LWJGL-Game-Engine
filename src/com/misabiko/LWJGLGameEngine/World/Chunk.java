@@ -40,28 +40,51 @@ public class Chunk {
 			for (int k = 0; k < SIDES; k++)
 				blockSpaces[j][k][landLevel].createBlock(BlockID.GRASS);
 		
-		initBuffers();
+		
+//		initBuffers();
 	}
 	
 	private void initBuffers() {
 		VAO = GL30.glGenVertexArrays();
-		posVBO = GL15.glGenBuffers();		//Position
+		posVBO = GL15.glGenBuffers();		//Position+Normals
 		colorVBO = GL15.glGenBuffers();		//Colors+TexCoords
 		indiceVBO = GL15.glGenBuffers();	//Indices
 
-		FloatBuffer posBuffer = BufferUtils.createFloatBuffer((SIDES+1)*(SIDES+1)*(HEIGHT+1)*28);	//Total vertices * ((4 component position + 3 component normal) * 4 bytes per float)
-		FloatBuffer colorBuffer = BufferUtils.createFloatBuffer((SIDES+1)*(SIDES+1)*(HEIGHT+1)*56);	//Total vertices * ((4 component for each ambient, diffuse and specular colors + 2 component for texture coords) * 4 bytes per float)
-		ByteBuffer indiceBuffer = BufferUtils.createByteBuffer(SIDES*SIDES*HEIGHT*36); //3 vertices per triangle, 2 triangles per face, 6 faces per cube. 3*2*6=36
+		FloatBuffer posBuffer = BufferUtils.createFloatBuffer(SIDES*SIDES*HEIGHT*672);
+		FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(SIDES*SIDES*HEIGHT*1344);
+		ByteBuffer indiceBuffer = BufferUtils.createByteBuffer(SIDES*SIDES*HEIGHT*36);
 		
 //		float[] posArray = new float[(SIDES+1)*(SIDES+1)*(HEIGHT+1)*7];
 //		float[] colorArray = new float[(SIDES+1)*(SIDES+1)*(HEIGHT+1)*14];
 //		byte[] indiceArray = new byte[SIDES*SIDES*HEIGHT*36];
-
-		for (int i = 0; i < SIDES+1; i++)
-			for (int j = 0; j < HEIGHT+1; j++)
-				for (int k = 0; k < SIDES+1; k++)
-					posBuffer.put(new float[] {(x*SIDES)+i-0.5f, k-0.5f, (y*SIDES)+j-0.5f,});
 		
+		byte i = 0;
+		
+		for (BlockSpace[][] blockSpaces2 : blockSpaces)
+			for (BlockSpace[] blockSpaces : blockSpaces2)
+				for (BlockSpace blockSpace : blockSpaces) {
+					posBuffer.put(blockSpace.getVertices());
+					colorBuffer.put(blockSpace.getColors());
+//					indiceBuffer.put(new byte[] {
+//						(i*36)*0,1,3,
+//						1,2,3,
+//						
+//						4,7,5,
+//						5,7,6,
+//						
+//						8,9,11,
+//						9,10,11,
+//						
+//						12,13,15,
+//						13,14,15,
+//						
+//						16,19,17,
+//						19,18,17,
+//						
+//						20,21,23,
+//						21,22,23
+//					});
+				}
 		
 //					blockSpaces[i][j][k] = new BlockSpace((x*SIDES)+i, k, (y*SIDES)+j);
 	}

@@ -77,9 +77,9 @@ void main(void) {
     vec3 surfacePos = vec3(modelMatrix * data.position);
     vec4 surfaceColor;
     
-	if (isTextured > 0.5)
-	 	surfaceColor = texture(materialTex, data.texCoords);
-	else
+//	if (isTextured > 0.5)
+//	 	surfaceColor = texture(materialTex, data.texCoords);
+//	else
     	surfaceColor = data.dColor;
     	
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
