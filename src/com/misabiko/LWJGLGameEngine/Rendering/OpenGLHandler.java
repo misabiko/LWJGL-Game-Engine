@@ -1,50 +1,9 @@
 package com.misabiko.LWJGLGameEngine.Rendering;
 
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.glDrawElements;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
-import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
-import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
-import static org.lwjgl.opengl.GL20.glCreateShader;
-import static org.lwjgl.opengl.GL20.glShaderSource;
-import static org.lwjgl.opengl.GL20.glCompileShader;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4;
-import static org.lwjgl.opengl.GL20.glGetUniformLocation;
-import static org.lwjgl.opengl.GL20.glUniformMatrix3;
-import static org.lwjgl.opengl.GL20.glUniform1f;
-import static org.lwjgl.opengl.GL20.glUniform3f;
-import static org.lwjgl.opengl.GL20.glUniform4f;
-import static org.lwjgl.opengl.GL20.glUniform1i;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -53,37 +12,35 @@ import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.misabiko.LWJGLGameEngine.Core.Core;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-import com.misabiko.LWJGLGameEngine.GameObjects.Blocks.Block;
-import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Vertex;
 import com.misabiko.LWJGLGameEngine.Rendering.Shaders.Program;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
-import com.misabiko.LWJGLGameEngine.World.Chunk;
 
 public abstract class OpenGLHandler {
 	
 	public static int VAO = 0;
-	public static Program program;
+	public static Program program, program2D;
 	public static FloatBuffer matrix4fBuffer = BufferUtils.createFloatBuffer(16);
 	public static FloatBuffer matrix3fBuffer = BufferUtils.createFloatBuffer(9);
 	public static Matrix4f projectionMatrix;
 	
 	public static void init(String title, int width, int height) {
-//		System.setProperty("org.lwjgl.librarypath", new File("native").getAbsolutePath());
 		PixelFormat pixelFormat = new PixelFormat();
 		ContextAttribs contextAttribs = new ContextAttribs(3,3).withForwardCompatible(true).withProfileCore(true);
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(width,height));
-			Display.setTitle(title+" - FPS:");
+			Display.setTitle(title);
 			Display.create(pixelFormat,contextAttribs);
 			
 		} catch (LWJGLException e) {
@@ -91,25 +48,35 @@ public abstract class OpenGLHandler {
 			System.exit(-1);
 		}
 		
-		glClearColor(0f,0f,0f,1f);
+		GL11.glClearColor(0f,0f,0f,1f);
 		
-		glViewport(0, 0, width, height);
+		GL11.glViewport(0, 0, width, height);
 		
 		Mouse.setGrabbed(true);
 		
-		glEnable(GL_DEPTH_TEST);
-//		glEnable(GL_CULL_FACE);
-//		 GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		
 		initProgram();
 		initMatrices(width,height);
 	}
+	
 	private static void initProgram() {
-		int vertShaderId = loadShader("vertex.glsl", GL_VERTEX_SHADER);
-		int fragShaderId = loadShader("fragment.glsl", GL_FRAGMENT_SHADER);
+		int vertShaderId = loadShader("vertex.glsl", GL20.GL_VERTEX_SHADER);
+		int fragShaderId = loadShader("fragment.glsl", GL20.GL_FRAGMENT_SHADER);
 		
 		program = new Program(new int[] {vertShaderId, fragShaderId});
+
+		int vert2dShaderId = loadShader("2dVertex.glsl", GL20.GL_VERTEX_SHADER);
+		int frag2dShaderId = loadShader("2dFragment.glsl", GL20.GL_FRAGMENT_SHADER);
 		
+		program2D = new Program(new int[] {vert2dShaderId, frag2dShaderId});
+		
+		GL20.glUseProgram(program2D.id);
+			GL20.glUniform1i(GL20.glGetUniformLocation(program2D.id, "textureUnit"), GL11.GL_TEXTURE_2D);
+		GL20.glUseProgram(0);
 	}
+	
 	private static int loadShader(String filename, int type) {
 		StringBuilder shaderSource = new StringBuilder();
 		int shaderID = 0;
@@ -128,15 +95,16 @@ public abstract class OpenGLHandler {
 			System.exit(-1);
 		}
 		
-		shaderID = glCreateShader(type);
-		glShaderSource(shaderID, shaderSource);
-		glCompileShader(shaderID);
+		shaderID = GL20.glCreateShader(type);
+		GL20.glShaderSource(shaderID, shaderSource);
+		GL20.glCompileShader(shaderID);
 		
 		return shaderID;
 	}
+	
 	private static void initMatrices(int width, int height) {
 		projectionMatrix = new Matrix4f();
-		float fov = 150f;
+		float fov = 360f;
 		float aspectRatio = (float) width / (float) height;
 		float nearPlane = 0.1f;
 		float farPlane = 100f;
@@ -152,143 +120,114 @@ public abstract class OpenGLHandler {
 		projectionMatrix.m32 = -((2 * nearPlane * farPlane) / frustumLength);
 		projectionMatrix.m33 = 0;
 		
-		glUseProgram(program.id);
 			
 			projectionMatrix.store(matrix4fBuffer);
 			matrix4fBuffer.flip();
-			glUniformMatrix4(glGetUniformLocation(program.id, "projectionMatrix"), false, matrix4fBuffer);
-			
-		glUseProgram(0);
+		GL20.glUseProgram(program.id);
+			GL20.glUniformMatrix4(GL20.glGetUniformLocation(program.id, "projectionMatrix"), false, matrix4fBuffer);
+		GL20.glUseProgram(program2D.id);
+			GL20.glUniformMatrix4(GL20.glGetUniformLocation(program2D.id, "projectionMatrix"), false, matrix4fBuffer);
+		GL20.glUseProgram(0);
 	}
 	
 	public static void initVAOs() {
-		VAO = glGenVertexArrays();
-		glBindVertexArray(VAO);
+		VAO = GL30.glGenVertexArrays();
+		GL30.glBindVertexArray(VAO);
 			
 			for (GameObject obj : GameObject.objs) {
-				obj.mesh.vboId = glGenBuffers();
+				obj.mesh.vboId = GL15.glGenBuffers();
 				
-				glBindBuffer(GL_ARRAY_BUFFER,obj.mesh.vboId);
+				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,obj.mesh.vboId);
 				
-					glBufferData(GL_ARRAY_BUFFER,obj.mesh.verticesBuffer,GL_STATIC_DRAW);
+					GL15.glBufferData(GL15.GL_ARRAY_BUFFER,obj.mesh.verticesBuffer,GL15.GL_STATIC_DRAW);
 				
-				if (obj.mesh.indicesBuffer != null) {
-					obj.mesh.vboiId = glGenBuffers();
+					if (obj.mesh.indicesBuffer != null) {
+						obj.mesh.vboiId = GL15.glGenBuffers();
 						
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj.mesh.vboiId);
-						glBufferData(GL_ELEMENT_ARRAY_BUFFER, obj.mesh.indicesBuffer, GL_STATIC_DRAW);
+					GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, obj.mesh.vboiId);
+					GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, obj.mesh.indicesBuffer, GL15.GL_STATIC_DRAW);
 					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+					GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER,0);
 				}
 				
-				glEnableVertexAttribArray(0);	//position
-				glEnableVertexAttribArray(1);	//normal
-				glEnableVertexAttribArray(2);	//aColor
-				glEnableVertexAttribArray(3);	//dColor
-				glEnableVertexAttribArray(4);	//sColor
-				glEnableVertexAttribArray(5);	//texCoords
+				GL20.glEnableVertexAttribArray(0);	//position
+				GL20.glEnableVertexAttribArray(1);	//normal
+				GL20.glEnableVertexAttribArray(2);	//aColor
+				GL20.glEnableVertexAttribArray(3);	//dColor
+				GL20.glEnableVertexAttribArray(4);	//sColor
+				GL20.glEnableVertexAttribArray(5);	//texCoords
 					
-				glBindBuffer(GL_ARRAY_BUFFER,0);
+				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,0);
 			}
 			
-			for (Mesh mesh : Core.world.getMeshes(false)) {
-				mesh.vboId = glGenBuffers();
-				
-				glBindBuffer(GL_ARRAY_BUFFER, mesh.vboId);
-				
-					glBufferData(GL_ARRAY_BUFFER, mesh.verticesBuffer, GL15.GL_DYNAMIC_DRAW);
-				
-				if ( mesh.indicesBuffer != null) {
-					 mesh.vboiId = glGenBuffers();
-						
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,  mesh.vboiId);
-						glBufferData(GL_ELEMENT_ARRAY_BUFFER,  mesh.indicesBuffer, GL15.GL_DYNAMIC_DRAW);
-					
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-				}
-				
-				glEnableVertexAttribArray(0);	//position
-				glEnableVertexAttribArray(1);	//normal
-				glEnableVertexAttribArray(2);	//aColor
-				glEnableVertexAttribArray(3);	//dColor
-				glEnableVertexAttribArray(4);	//sColor
-				glEnableVertexAttribArray(5);	//texCoords
-					
-				glBindBuffer(GL_ARRAY_BUFFER,0);
-			}
-				
-
-//		glBindVertexArray(worldVAO);
-//		
-//			
-//		
-		glBindVertexArray(0);
+		GL30.glBindVertexArray(0);
 		
 	}
 	
 	public static void render(Mesh mesh) {
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh.texture.texId);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, mesh.texture.texId);
 		
-		glUseProgram(program.id);
+		GL20.glUseProgram(program.id);
 			
 			mesh.modelMatrix.store(matrix4fBuffer);
 			matrix4fBuffer.flip();
-			glUniformMatrix4(glGetUniformLocation(program.id, "modelMatrix"), false, matrix4fBuffer);
+			GL20.glUniformMatrix4(GL20.glGetUniformLocation(program.id, "modelMatrix"), false, matrix4fBuffer);
 			
 			Util.mat4ToMat3(mesh.modelMatrix).invert().transpose().store(matrix3fBuffer);
 			matrix3fBuffer.flip();
-			glUniformMatrix3(glGetUniformLocation(program.id, "normalMatrix"), false, matrix3fBuffer);
+			GL20.glUniformMatrix3(GL20.glGetUniformLocation(program.id, "normalMatrix"), false, matrix3fBuffer);
 			
 			Vector3f camPos = Camera.getPosition();
-			glUniform3f(glGetUniformLocation(program.id, "cameraPosition"), camPos.x, camPos.y, camPos.z);
+			GL20.glUniform3f(GL20.glGetUniformLocation(program.id, "cameraPosition"), camPos.x, camPos.y, camPos.z);
 			
-			glUniform1i(glGetUniformLocation(program.id, "materialTex"), GL_TEXTURE_2D);
-			glUniform1f(glGetUniformLocation(program.id, "materialShininess"), mesh.material.specularExponent);
+			GL20.glUniform1i(GL20.glGetUniformLocation(program.id, "materialTex"), GL11.GL_TEXTURE_2D);
+			GL20.glUniform1f(GL20.glGetUniformLocation(program.id, "materialShininess"), mesh.material.specularExponent);
 			
-			glUniform1f(glGetUniformLocation(program.id, "isTextured"), mesh.isTextured ? 1f : 0f);
+			GL20.glUniform1f(GL20.glGetUniformLocation(program.id, "isTextured"), mesh.isTextured ? 1f : 0f);
 			
-			glUniform1f(glGetUniformLocation(program.id, "ignoreLightning"), mesh.ignoreLightning ? 1f : 0f);
+			GL20.glUniform1f(GL20.glGetUniformLocation(program.id, "ignoreLightning"), mesh.ignoreLightning ? 1f : 0f);
 			
-			glBindVertexArray(VAO);
+			GL30.glBindVertexArray(VAO);
 				
-					glBindBuffer(GL_ARRAY_BUFFER, mesh.vboId);
+				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, mesh.vboId);
 					
-						glVertexAttribPointer(0, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
-						glVertexAttribPointer(1, 3, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.normOffset);
-						glVertexAttribPointer(2, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.aColorOffset);
-						glVertexAttribPointer(3, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.dColorOffset);
-						glVertexAttribPointer(4, 4, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.sColorOffset);
-						glVertexAttribPointer(5, 2, GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.texCoordsOffset);
+					GL20.glVertexAttribPointer(0, 4, GL11.GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, 0);
+					GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.normOffset);
+					GL20.glVertexAttribPointer(2, 4, GL11.GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.aColorOffset);
+					GL20.glVertexAttribPointer(3, 4, GL11.GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.dColorOffset);
+					GL20.glVertexAttribPointer(4, 4, GL11.GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.sColorOffset);
+					GL20.glVertexAttribPointer(5, 2, GL11.GL_FLOAT, false, Vertex.bytesPerFloat*Vertex.elementCount, Vertex.texCoordsOffset);
 						
-						if (mesh.indicesBuffer != null)
-							glDrawElements(GL_TRIANGLES, mesh.indicesBuffer);
-						else
-							glDrawArrays(GL_TRIANGLES, 0, mesh.indicesCount);
+					if (mesh.indicesBuffer != null)
+						GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.indicesBuffer);
+					else
+						GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.indicesCount);
 						
-					glBindBuffer(GL_ARRAY_BUFFER,0);
+				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,0);
 				
-			glBindVertexArray(0);
+			GL30.glBindVertexArray(0);
 	
-		glUseProgram(0);
+		GL20.glUseProgram(0);
 	}
+	
 	public static void cleanUp() {
-		glUseProgram(0);
+		GL20.glUseProgram(0);
 		
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-		glDisableVertexAttribArray(3);
-		glDisableVertexAttribArray(4);
-		glDisableVertexAttribArray(5);
+		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
+		GL20.glDisableVertexAttribArray(3);
+		GL20.glDisableVertexAttribArray(4);
+		GL20.glDisableVertexAttribArray(5);
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		
 		for (GameObject obj : GameObject.objs) {
-			glDeleteBuffers(obj.mesh.vboId);
-			glDeleteBuffers(obj.mesh.vboiId);
-			glDeleteTextures(obj.mesh.texture.texId);
+			GL15.glDeleteBuffers(obj.mesh.vboId);
+			GL15.glDeleteBuffers(obj.mesh.vboiId);
+			GL11.glDeleteTextures(obj.mesh.texture.texId);
 		}
 		
 		program.cleanUp();

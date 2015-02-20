@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Physic;
+package com.misabiko.LWJGLGameEngine.Physic.Customs;
 
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.InternalTickCallback;

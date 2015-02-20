@@ -14,7 +14,6 @@ import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.misabiko.LWJGLGameEngine.Core.Core;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
-import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
 
 public class Platform extends GameObject{
 	private  CollisionShape cs;

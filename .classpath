@@ -23,7 +23,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/vecmath.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="http://docs.oracle.com/javase/8/docs/api/"/>
+			<attribute name="javadoc_location" value="http://docs.oracle.com/cd/E17802_01/j2se/javase/technologies/desktop/java3d/forDevelopers/j3dapi/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

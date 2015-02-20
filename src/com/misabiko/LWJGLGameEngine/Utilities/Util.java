@@ -4,6 +4,7 @@ import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 public abstract class Util {
 	public static Vector3f angleToVector3f(float angleX, float angleY, float length) {
@@ -52,7 +53,7 @@ public abstract class Util {
 		vec.set((vec.x*mat.m00)+(vec.y*mat.m10)+(vec.z*mat.m20),
 				(vec.x*mat.m01)+(vec.y*mat.m11)+(vec.z*mat.m21),
 				(vec.x*mat.m02)+(vec.y*mat.m12)+(vec.z*mat.m22));
-		
+
 		return vec;
 	}
 	
@@ -79,17 +80,27 @@ public abstract class Util {
 		return (float) Math.sqrt(((y2-y)*(y2-y))+((x2-x)*(x2-x)));
 	}
 	
-	public static float getYForAnXOnALine(float x, float x1, float y1, float x2, float y2) {
-		float a = (y2-y1)/(x2-x1);
-		float b = y1-(a*x1);
-		
-		return (a*x)+b;
+	public static Vector2f vecmathToLwjgl(javax.vecmath.Vector2f vec) {
+		return new Vector2f(vec.x, vec.y);
 	}
 	
-	public static float getXForAnYOnALine(float y, float x1, float y1, float x2, float y2) {
-		float a = (y2-y1)/(x2-x1);
-		float b = y1-(a*x1);
-		
-		return (y-b)/a;
+	public static Vector3f vecmathToLwjgl(javax.vecmath.Vector3f vec) {
+		return new Vector3f(vec.x, vec.y, vec.z);
+	}
+	
+	public static Vector4f vecmathToLwjgl(javax.vecmath.Vector4f vec) {
+		return new Vector4f(vec.x, vec.y, vec.z, vec.w);
+	}
+	
+	public static javax.vecmath.Vector2f lwjglToVecmath(Vector2f vec) {
+		return new javax.vecmath.Vector2f(vec.x, vec.y);
+	}
+	
+	public static javax.vecmath.Vector3f lwjglToVecmath(Vector3f vec) {
+		return new javax.vecmath.Vector3f(vec.x, vec.y, vec.z);
+	}
+	
+	public static javax.vecmath.Vector4f lwjglToVecmath(Vector4f vec) {
+		return new javax.vecmath.Vector4f(vec.x, vec.y, vec.z, vec.w);
 	}
 }

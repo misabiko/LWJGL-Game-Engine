@@ -41,7 +41,7 @@ public class Skybox extends Mesh{
 				new Vertex(45f,		-45f,	-45f,		0f,		1f,		0f,		bottomColor,	bottomColor,	bottomColor,	0f, 1f),	//21
 				new Vertex(45f,		-45f,	45f,		0f,		1f,		0f,		bottomColor,	bottomColor,	bottomColor,	0f, 0f),	//22
 				new Vertex(-45f,	-45f,	45f,		0f,		1f,		0f,		bottomColor,	bottomColor,	bottomColor,	1f, 0f)		//23
-			}, new byte[] {
+			}, new int[] {
 //					Sets the order in which the vertices should be used to produce triangles
 //					Front Face
 					3,1,0,

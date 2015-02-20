@@ -16,8 +16,8 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import com.misabiko.LWJGLGameEngine.Physic.CustomCharacterController;
 import com.misabiko.LWJGLGameEngine.Physic.Physic;
+import com.misabiko.LWJGLGameEngine.Physic.Customs.CustomCharacterController;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 import com.misabiko.LWJGLGameEngine.Resources.Files.OBJParser;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
@@ -32,7 +32,7 @@ public class Cuby extends GameObject {
 	private float mass = 1;
 	private Vector3f fallInertia = new Vector3f(0,0,0);
 	
-	private DetectionArea attackDA;
+//	private DetectionArea attackDA;
 
 	public Cuby(float x, float y, float z) throws FileNotFoundException, IOException {
 		super(x, y, z, OBJParser.parse(System.getProperty("user.dir")+"/src/com/misabiko/LWJGLGameEngine/Rendering/Meshes/OBJModels/", "StoneHearthChar"));
@@ -51,6 +51,7 @@ public class Cuby extends GameObject {
 		controller = new CustomCharacterController((PairCachingGhostObject)co, (ConvexShape) cs, mesh.size.y/10f);
 		controller.setJumpSpeed(jumpStrength);
 		controller.setGravity(13f);
+		
 		
 //		attackDA = new DetectionArea(x, y, z, 3f, 3f, 3f, false);
 //		Core.dw.addCollisionObject(attackDA.co);

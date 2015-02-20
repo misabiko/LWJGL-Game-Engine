@@ -14,12 +14,12 @@ import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Box;
 
 public class DetectionArea extends GameObject{
 	public ArrayList<GameObject> gameObjectList = new ArrayList<GameObject>();
-	private boolean whitelist;
+//	private boolean whitelist;
 	
 	public DetectionArea(float x, float y, float z, float w, float h, float d, boolean whitelist) {
 		super(x, y, z, new Box(w, h, d, new Vector4f(0.3f, 0.3f, 0.3f, 1f), new Vector4f(1f, 1f, 0f, 0.5f), new Vector4f(0.5f, 0.5f, 0.5f, 1f)));
 		
-		this.whitelist = whitelist;
+//		this.whitelist = whitelist;
 		CollisionShape cs = new BoxShape(new Vector3f(w/2,h/2,d/2));
 		
 		co = new GhostObject();

@@ -11,7 +11,6 @@ import javax.vecmath.Vector4f;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.misabiko.LWJGLGameEngine.GameObjects.Cuby;
 import com.misabiko.LWJGLGameEngine.GameObjects.GameObject;
-import com.misabiko.LWJGLGameEngine.GameObjects.Platform;
 import com.misabiko.LWJGLGameEngine.GameObjects.Sky;
 import com.misabiko.LWJGLGameEngine.Physic.JBulletHandler;
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
@@ -19,6 +18,7 @@ import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Light;
 import com.misabiko.LWJGLGameEngine.Rendering.Lights.Sun;
 import com.misabiko.LWJGLGameEngine.Rendering.Meshes.Mesh;
+import com.misabiko.LWJGLGameEngine.UI.UI;
 import com.misabiko.LWJGLGameEngine.World.World;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -36,13 +36,12 @@ public class Core {
 	public static Sky skybox;
 	
 //	Current task
-//		TODO Multiple normals per vertex? binding normals to indices maybe?
+//		TODO UI
 	
 	
 //	Short term todos
 //		TODO Simple dummy npc
 //		TODO Attacks
-//		TODO UI
 	
 //	Long term todos
 //		TODO sparse voxel octree thing
@@ -59,11 +58,10 @@ public class Core {
 	}
 	
 	private void init() {
-		
 		OpenGLHandler.init(TITLE, WIDTH, HEIGHT);
 		dw = JBulletHandler.init(dw);
-		
-		world = new World(2);
+//		world = new World(3);
+		UI.init();
 
 //		new Platform(0f, 0f, 0f, 10f, 2f, 10f);
 		skybox = new Sky();
@@ -86,12 +84,12 @@ public class Core {
 		int fps = 0;
 		long currentTime = System.currentTimeMillis();
 		long lastTime = currentTime;
-		long delta = 0;
+//		long delta = 0;
 		while (!Display.isCloseRequested()) {
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			Controls.update();
 			
-			dw.stepSimulation(1/60f, 3);
+//			dw.stepSimulation(1/60f, 3);
 			
 			for (GameObject obj : GameObject.shouldUpdate)
 				obj.update();
@@ -114,6 +112,9 @@ public class Core {
 				}else
 					OpenGLHandler.render(mesh);
 			}
+			
+//			world.render();
+			UI.render();
 			
 			if (currentTime - lastTime > 1000) {
 				Display.setTitle(TITLE+" - FPS: "+fps+" - Entities: "+Camera.shouldRender().size()+" - Position: "+cuby.getPosition().toString());

@@ -8,6 +8,7 @@ import com.bulletphysics.collision.dispatch.GhostPairCallback;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
+import com.misabiko.LWJGLGameEngine.Physic.Customs.CustomDispatcher;
 
 public class JBulletHandler {
 	private static BroadphaseInterface broadphase;

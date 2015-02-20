@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Physic;
+package com.misabiko.LWJGLGameEngine.Physic.Customs;
 
 import javax.vecmath.Vector3f;
 
@@ -316,7 +316,7 @@ public class CustomCharacterController extends KinematicCharacterController {
 		}
 	}
 
-	// //////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////
 
 	private static class KinematicClosestNotMeConvexResultCallback extends CollisionWorld.ClosestConvexResultCallback {
 			protected CollisionObject me;

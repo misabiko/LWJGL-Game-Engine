@@ -40,7 +40,7 @@ public class Box extends Mesh{
 				new Vertex(w/2,		-h/2,	-d/2,		0f,		-1f,	0f,		aColors[5],	dColors[5],	sColors[5],	0f, 1f),	//21
 				new Vertex(w/2,		-h/2,	d/2,		0f,		-1f,	0f,		aColors[5],	dColors[5],	sColors[5],	0f, 0f),	//22
 				new Vertex(-w/2,	-h/2,	d/2,		0f,		-1f,	0f,		aColors[5],	dColors[5],	sColors[5],	1f, 0f)		//23
-			}, new byte[] {
+			}, new int[] {
 //					Sets the order in which the vertices should be used to produce triangles
 //					Front Face
 					0,1,3,

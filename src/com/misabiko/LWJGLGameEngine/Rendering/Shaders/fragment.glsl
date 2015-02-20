@@ -66,10 +66,7 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
 	vec3 specular = specularCoefficient * data.sColor.rgb * light.intensities;
 
     //linear color (color before gamma correction)
-	if (isTextured > 0.5)
-		return ambient + 0.8 * diffuse;
-	else
-		return ambient + 0.5 * diffuse;
+		return ambient + light.attenuation * (diffuse);
 }
 
 void main(void) {
@@ -77,9 +74,9 @@ void main(void) {
     vec3 surfacePos = vec3(modelMatrix * data.position);
     vec4 surfaceColor;
     
-//	if (isTextured > 0.5)
-//	 	surfaceColor = texture(materialTex, data.texCoords);
-//	else
+	if (isTextured > 0.5)
+	 	surfaceColor = texture(materialTex, data.texCoords);
+	else
     	surfaceColor = data.dColor;
     	
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);

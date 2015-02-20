@@ -1,16 +1,23 @@
 package com.misabiko.LWJGLGameEngine.Core;
 
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 
 public class Controls {
 	private static boolean Esc = false;
 	private static boolean J = false;
+	private static boolean Up = false;
+	private static boolean Down = false;
+	
+	private static boolean wireframe = false;
+	public static int fooIndex = 10;
+	private static int fooIndexIncrement = 10;
+	
 	private static float MouseSensibility = 1/500f;
 	private static float MouseWheelSensibility = 1/4000f;
 	private static Vector3f preVel = new Vector3f(0f,0f,0f);
@@ -28,6 +35,41 @@ public class Controls {
 			Esc = true;
 		}else {
 			Esc = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_J)) {
+			if (!J) {
+				if (wireframe) {
+					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+					wireframe = false;
+				}else {
+					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+					wireframe = true;
+				}
+			}
+			J = true;
+		}else {
+			J = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+			if (!Up) {
+				fooIndex += fooIndexIncrement;
+				System.out.println(fooIndex);
+			}
+			Up = true;
+		}else {
+			Up = false;
+		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+			if (!Down) {
+				fooIndex -= fooIndexIncrement;
+				System.out.println(fooIndex);
+			}
+			Down = true;
+		}else {
+			Down = false;
 		}
 		
 		if (Mouse.isGrabbed()) {

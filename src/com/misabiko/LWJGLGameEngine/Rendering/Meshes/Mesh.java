@@ -1,17 +1,13 @@
 package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL20.glGetUniformLocation;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import javax.vecmath.Vector4f;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
@@ -20,7 +16,6 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.misabiko.LWJGLGameEngine.Rendering.Camera;
 import com.misabiko.LWJGLGameEngine.Rendering.OpenGLHandler;
 import com.misabiko.LWJGLGameEngine.Resources.Textures.Texture;
 import com.misabiko.LWJGLGameEngine.Utilities.Util;
@@ -29,14 +24,14 @@ public class Mesh {
 	public Matrix4f modelMatrix;
 	
 	public FloatBuffer verticesBuffer;
-	public ByteBuffer indicesBuffer;
+	public IntBuffer indicesBuffer;
 	
 	public int indicesCount, vboId, vboiId = 0;
 	
 	public Vertex[] vertices;
 	public Vector3f size, center;
 	
-	public int primitiveType = GL_TRIANGLES;
+	public int primitiveType = GL11.GL_TRIANGLES;
 	public Texture texture = defaultTexture;
 	public boolean isTextured;
 	public boolean ignoreLightning = false;
@@ -65,11 +60,11 @@ public class Mesh {
 		isTransparent = (vertices[0].dColor[3] != 1f);
 	}
 	
-	protected Mesh (Vertex[] vertices, byte[] indices, Vector3f size, Vector3f center) {
-		this(vertices, GL_TRIANGLES, size, center);
+	protected Mesh (Vertex[] vertices, int[] indices, Vector3f size, Vector3f center) {
+		this(vertices, GL11.GL_TRIANGLES, size, center);
 		
 		indicesCount = indices.length;
-		indicesBuffer = BufferUtils.createByteBuffer(indices.length);
+		indicesBuffer = BufferUtils.createIntBuffer(indices.length);
 		indicesBuffer.put(indices);
 		indicesBuffer.flip();
 	}
@@ -119,7 +114,7 @@ public class Mesh {
 		}
 		
 		verticesBuffer.flip();
-		primitiveType = GL_TRIANGLES;
+		primitiveType = GL11.GL_TRIANGLES;
 		texture = mtls.get(0).diffuseTextureMap;
 		isTextured = true;
 		isTransparent = (vertices[0].dColor[3] != 1f);

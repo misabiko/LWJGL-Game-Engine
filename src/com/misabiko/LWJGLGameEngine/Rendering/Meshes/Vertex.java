@@ -1,7 +1,5 @@
 package com.misabiko.LWJGLGameEngine.Rendering.Meshes;
 
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 public class Vertex {

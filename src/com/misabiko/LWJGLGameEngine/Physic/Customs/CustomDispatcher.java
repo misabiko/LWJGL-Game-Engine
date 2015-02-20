@@ -1,4 +1,4 @@
-package com.misabiko.LWJGLGameEngine.Physic;
+package com.misabiko.LWJGLGameEngine.Physic.Customs;
 
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
