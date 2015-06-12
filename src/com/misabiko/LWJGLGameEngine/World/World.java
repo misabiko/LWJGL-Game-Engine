@@ -37,7 +37,7 @@ public class World {
 	public void render() {
 		for (Chunk[] chunks2 : chunks) {
 			for (Chunk chunk : chunks2) {
-				chunk.render();
+//				chunk.render();
 			}
 		}
 	}
